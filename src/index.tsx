@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import AuthGuard from "./guards/AuthGuard";
-import UnAuthGuard from "./guards/UnAuthGuard";
 import App from "./pages/App/App";
-import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
+import UnAuthGuard from "./guards/UnAuthGuard";
+import Register from "./pages/Register/Register";
 
 const router = createBrowserRouter([
     {
-        path: "",
+        path: "/",
         element: <AuthGuard component={App} redirectRoute={"/login"}/>,
     },
     {

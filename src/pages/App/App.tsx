@@ -2,9 +2,9 @@ import React from 'react';
 import './App.module.css';
 import db from "../../utils/db";
 import {useCollection} from "react-firebase-hooks/firestore";
-import {User} from "firebase/auth";
 import {useSignOut} from "react-firebase-hooks/auth";
 import {auth} from "../../utils/firebase";
+import User from "../../models/User";
 
 interface Props {
     user: User
@@ -12,7 +12,7 @@ interface Props {
 
 function App({user}: Props) {
 
-    const [value, loading, error] = useCollection(db.tests);
+    const [value, loading, ] = useCollection(db.tests);
     const [signOut, signOutLoading, signOutError] = useSignOut(auth);
 
     return (

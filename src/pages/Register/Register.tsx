@@ -1,11 +1,7 @@
 import React from "react";
 import {useForm} from "react-hook-form";
-import {auth} from "../../utils/firebase";
-import {
-    useCreateUserWithEmailAndPassword,
-    useUpdateProfile
-} from "react-firebase-hooks/auth";
 import {Link} from "react-router-dom";
+import useCreateUser from "../../hooks/createUser";
 
 interface RegisterFieldValues {
     username: string,
@@ -15,16 +11,10 @@ interface RegisterFieldValues {
 
 function Register() {
     const {register, handleSubmit, formState: {errors}} = useForm<RegisterFieldValues>();
-    const [createUserWithEmailAndPassword, , signUpLoading, signUpError] = useCreateUserWithEmailAndPassword(auth)
-    const [updateProfile, updateProfileLoading, updateProfileError] = useUpdateProfile(auth)
+    const [createUser, createUserLoading, createUserError] = useCreateUser()
 
     const onSubmit = async (data: RegisterFieldValues) => {
-        const user = await createUserWithEmailAndPassword(data.email, data.password)
-        if (user) {
-            void updateProfile({
-                displayName: data.username,
-            })
-        }
+        void createUser(data)
     }
 
     return <div>
@@ -57,11 +47,10 @@ function Register() {
                 {errors.password && <label className={"label"}><span className={"label-text-alt text-error"}>Password is required</span></label>}
             </div>
 
-            {signUpError && <p className={"text-error"}>{signUpError.message}</p>}
-            {updateProfileError && <p className={"text-error"}>{updateProfileError.message}</p>}
+            {createUserError && <p className={"text-error"}>{createUserError.message}</p>}
 
-            <button className={"btn btn-primary w-full mt-5"} type={"submit"}
-                    disabled={signUpLoading || updateProfileLoading}>Account erstellen
+            <button className={"btn btn-primary w-full mt-5"} type={"submit"} disabled={createUserLoading}>
+                Account erstellen
             </button>
 
             <div className="divider">oder</div>
