@@ -14,7 +14,7 @@ function App({user}: Props) {
 
     return (
         <div className="flex flex-col items-stretch p-2">
-            <h1>Hallo {user.displayName}</h1>
+            <h1 className="self-center text-2xl mb-2">Hallo {user.displayName}</h1>
 
             <Link to="/games" className="btn mb-2">Meine Challenges</Link>
             <Link to="/game" className="btn mb-2">Neue Challenge starten!</Link>

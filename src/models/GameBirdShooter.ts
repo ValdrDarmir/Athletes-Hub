@@ -1,6 +1,6 @@
-interface Hit {
+export interface Hit {
     playerId: string
-    points: number
+    score: number
 }
 
 interface GameBirdShooter {

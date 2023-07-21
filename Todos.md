@@ -6,5 +6,5 @@ Game base logic:
 
 Sample Game (Shoot the bird):
  - 2 players (for now)
- - players shoot after each other and input their points
+ - players shoot after each other and input their score
  - after 5 rounds (for now) the game ends and shows a winner
