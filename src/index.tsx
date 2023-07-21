@@ -7,11 +7,26 @@ import App from "./pages/App/App";
 import Login from "./pages/Login/Login";
 import UnAuthGuard from "./guards/UnAuthGuard";
 import Register from "./pages/Register/Register";
+import CreateGame from "./pages/CreateGame/CreateGame";
+import MyGames from "./pages/MyGames/MyGames";
+import BirdShooterGame from "./pages/BirdShooterGame/BirdShooterGame";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <AuthGuard component={App} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/game",
+        element: <AuthGuard component={CreateGame} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/games",
+        element: <AuthGuard component={MyGames} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/game/:gameId",
+        element: <AuthGuard component={BirdShooterGame} redirectRoute={"/login"}/>,
     },
     {
         path: "/login",
