@@ -6,7 +6,7 @@ A prototype implementation for the Praxisseminar and MIT Global Startup Labs cou
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run: 
 
 ### `npm start`
 
