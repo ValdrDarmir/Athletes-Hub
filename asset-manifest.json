@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Athletes-Hub/static/css/main.e54f5fb8.css",
-    "main.js": "/Athletes-Hub/static/js/main.d53af5f4.js",
+    "main.js": "/Athletes-Hub/static/js/main.52034a83.js",
     "index.html": "/Athletes-Hub/index.html",
     "main.e54f5fb8.css.map": "/Athletes-Hub/static/css/main.e54f5fb8.css.map",
-    "main.d53af5f4.js.map": "/Athletes-Hub/static/js/main.d53af5f4.js.map"
+    "main.52034a83.js.map": "/Athletes-Hub/static/js/main.52034a83.js.map"
   },
   "entrypoints": [
     "static/css/main.e54f5fb8.css",
-    "static/js/main.d53af5f4.js"
+    "static/js/main.52034a83.js"
   ]
 }
