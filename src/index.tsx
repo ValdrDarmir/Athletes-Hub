@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {createHashRouter, RouterProvider} from "react-router-dom";
 import AuthGuard from "./guards/AuthGuard";
 import App from "./pages/App/App";
 import Login from "./pages/Login/Login";
@@ -11,7 +11,7 @@ import CreateGame from "./pages/CreateGame/CreateGame";
 import MyGames from "./pages/MyGames/MyGames";
 import BirdShooterGame from "./pages/BirdShooterGame/BirdShooterGame";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: "/",
         element: <AuthGuard component={App} redirectRoute={"/login"}/>,
