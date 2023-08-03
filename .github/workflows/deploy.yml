@@ -11,14 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js 18.x
+    
+    - name: Setup Node.js 18.x
       uses: actions/setup-node@v3
       with:
         node-version: 18.x
         cache: 'npm'
-    - name: Setup git user
-      run: |
-        git config --global user.name "Github Runner"
-        git config --global user.email "noreply@github.com"
+        
     - run: npm ci
-    - run: npm run deploy
+    
+    - name: Deploy with gh-pages    
+      run: |
+        git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+        npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
