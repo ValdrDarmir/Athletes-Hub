@@ -18,7 +18,7 @@ jobs:
         cache: 'npm'
     - name: Setup git user
       run: |
-        git config --global user.name "${GITHUB_ACTOR}"
-        git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git config --global user.name "Github Runner"
+        git config --global user.email "noreply@github.com"
     - run: npm ci
     - run: npm run deploy
