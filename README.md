@@ -1,6 +1,6 @@
-<img style="float: right; height: 200px" src="logo.png"></img>
-
 # Athletes-Hub
+
+<img align="right" style="height: 200px" src="logo.png"></img>
 
 A prototype implementation for the Praxisseminar and MIT Global Startup Labs courses of the University of Regensburg.
 
