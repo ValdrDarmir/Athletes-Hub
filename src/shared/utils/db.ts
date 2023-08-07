@@ -1,8 +1,8 @@
 import {firestore} from "./firebase";
 import "firebase/firestore"
 import { collection, DocumentData, FirestoreDataConverter } from "firebase/firestore";
-import User from "../models/User";
-import GameBirdShooter from "../models/GameBirdShooter";
+import User from "../../App/models/User";
+import GameBirdShooter from "../../Games/models/GameBirdShooter";
 
 const dumpConverter = <T extends DocumentData>(): FirestoreDataConverter<T, T> => ({
     toFirestore: (data) => {

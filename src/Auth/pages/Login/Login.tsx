@@ -1,9 +1,9 @@
 import React from "react";
 import {useForm} from "react-hook-form";
-import {auth} from "../../utils/firebase";
 import {useSignInWithEmailAndPassword} from "react-firebase-hooks/auth";
 import {Link} from "react-router-dom";
 import gewehrMann from "../../assets/gewehr_mann.png"
+import { auth } from "../../../shared/utils/firebase";
 
 interface LoginFieldValues {
     email: string,

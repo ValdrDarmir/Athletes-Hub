@@ -1,7 +1,7 @@
 import {useCreateUserWithEmailAndPassword, useUpdateProfile} from "react-firebase-hooks/auth";
-import {auth} from "../utils/firebase";
 import {setDoc, doc} from "firebase/firestore"
-import db from "../utils/db";
+import { auth } from "../../shared/utils/firebase";
+import db from "../../shared/utils/db";
 
 interface CreateUserData {
     email: string

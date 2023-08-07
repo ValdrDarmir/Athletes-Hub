@@ -1,7 +1,7 @@
 import {ChangeEvent} from "react";
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import db from "../../utils/db";
-import User from "../../models/User";
+import User from "../../../App/models/User";
+import db from "../../../shared/utils/db";
 
 interface Props {
     authenticatedUser: User

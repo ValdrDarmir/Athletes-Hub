@@ -1,11 +1,11 @@
-import User from "../../models/User";
 import {Link} from "react-router-dom";
 import React from "react";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {query, where} from "firebase/firestore";
-import db from "../../utils/db";
 import GameBirdShooter from "../../models/GameBirdShooter";
-import nonUndefined from "../../utils/nonUndefined";
+import User from "../../../App/models/User";
+import db from "../../../shared/utils/db";
+import nonUndefined from "../../../shared/utils/nonUndefined";
 
 interface Props {
     user: User

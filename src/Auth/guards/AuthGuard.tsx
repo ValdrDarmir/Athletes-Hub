@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
-import User from "../models/User";
+import User from '../../App/models/User';
 import useAuthenticatedUser from "../hooks/authenticatedUser";
 
 interface Props {

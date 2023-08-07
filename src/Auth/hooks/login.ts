@@ -1,11 +1,11 @@
 import {
     useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
-import {auth} from "../utils/firebase";
 import {updateDoc, doc} from "firebase/firestore"
-import db from "../utils/db";
 import {useEffect} from "react";
 import {useDocumentData} from "react-firebase-hooks/firestore";
+import { auth } from "../../shared/utils/firebase";
+import db from "../../shared/utils/db";
 
 const useLogin = () => {
     const [signInWithEmailAndPassword, authUser, signInLoading, signInError] = useSignInWithEmailAndPassword(auth)

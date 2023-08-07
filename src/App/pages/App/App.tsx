@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.module.css';
 import {useSignOut} from "react-firebase-hooks/auth";
-import {auth} from "../../utils/firebase";
 import User from "../../models/User";
 import {Link} from "react-router-dom";
+import { auth } from '../../../shared/utils/firebase';
 
 interface Props {
     user: User

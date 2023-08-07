@@ -1,9 +1,9 @@
 import {useState} from "react";
 import {doc, DocumentReference, setDoc} from "firebase/firestore";
 import GameBirdShooter from "../models/GameBirdShooter";
-import db from "../utils/db";
-import User from "../models/User";
 import * as uuid from "uuid"
+import User from "../../App/models/User";
+import db from "../../shared/utils/db";
 
 function useCreateNewBirdShooterGame() {
     const [creationLoading, setCreationLoading] = useState(false)

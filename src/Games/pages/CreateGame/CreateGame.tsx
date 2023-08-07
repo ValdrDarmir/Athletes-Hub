@@ -1,8 +1,8 @@
-import User from "../../models/User";
 import React, {useEffect, useState} from "react";
 import PlayerPicker from "../../components/PlayerPicker/PlayerPicker";
 import {useNavigate} from "react-router-dom";
 import useCreateNewBirdShooterGame from "../../hooks/createNewBirdShooterGame";
+import User from "../../../App/models/User";
 
 interface Props {
     user: User

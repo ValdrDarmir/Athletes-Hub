@@ -1,7 +1,7 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {doc, limit, query, updateDoc, where} from "firebase/firestore";
-import db from "../utils/db";
-import User from "../models/User";
+import User from "../../App/models/User";
+import db from "../../shared/utils/db";
 
 interface HitsPlayer {
     player: User
