@@ -23,8 +23,8 @@ const useLogin = () => {
                 // in theory email can be changed externally. This should be reflected in our database (that's why we update it on login)
                 const userDoc = doc(db.users, authUser.user.uid)
                 await updateDoc(userDoc, {
-                    displayName: authUser.user.displayName,
-                    email: authUser.user.email,
+                    displayName: authUser.user.displayName || "",
+                    email: authUser.user.email || "",
                 })
             }
 

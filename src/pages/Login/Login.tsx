@@ -3,6 +3,7 @@ import {useForm} from "react-hook-form";
 import {auth} from "../../utils/firebase";
 import {useSignInWithEmailAndPassword} from "react-firebase-hooks/auth";
 import {Link} from "react-router-dom";
+import gewehrMann from "../../assets/gewehr_mann.png"
 
 interface LoginFieldValues {
     email: string,
@@ -18,7 +19,7 @@ function Login() {
     }
 
     return <div>
-        <div className="hero h-64 bg-cover" style={{backgroundImage: 'url(/assets/gewehr_mann.png)'}}>
+        <div className="hero h-64 bg-cover" style={{backgroundImage: `url(${gewehrMann})`}}>
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content m-10 text-center text-neutral-content flex-col">
                 <h1 className="text-5xl font-bold">Login</h1>

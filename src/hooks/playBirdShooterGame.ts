@@ -1,8 +1,7 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {doc, limit, query, updateDoc, where, UpdateData} from "firebase/firestore";
+import {doc, limit, query, updateDoc, where} from "firebase/firestore";
 import db from "../utils/db";
 import User from "../models/User";
-import GameBirdShooter from "../models/GameBirdShooter";
 
 interface HitsPlayer {
     player: User
@@ -30,14 +29,10 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
     const game = (games && games.length > 0) ? games[0] : null
     const [players, playersLoading, playersError] = useCollectionData(game && query(db.users, where("id", "in", game.playerIds)))
 
-
-    // const [currentRound, setCurrentRound] = useState(1)
-    // const [winner, setWinner] = useState<User | null>(null)
-    // const [currentPlayer, setCurrentPlayer] = useState<User | null>(null)
-
     const loading = gameLoading || playersLoading
     const error = gameError || playersError
 
+    // Error and loading handling
     if (loading || error || !game || !players) {
         const noGameIdError = !gameId && new Error("No game id was given.")
         const noGameOrPlayersError = (!game || !players) && new Error("No game or players found!?")
@@ -50,6 +45,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
         }
     }
 
+    // Determine the current game state
     const currentPlayerIndex = game.hits.length % players.length
     const currentPlayer = players[currentPlayerIndex]
 
@@ -71,39 +67,40 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
     const winner = (currentRound > maxRounds) ? playerHighestScore : null
 
 
-    const newHit = async (score: number) => {
-        
-        
-        const newHits = [
-            ...game.hits,
-            {
-                playerId: currentPlayer.id,
-                score: score,
-            }
-        ]
+    const gameState = {
+        currentPlayer: currentPlayer,
+        currentRound: currentRound,
+        maxRounds: maxRounds,
+        winner: winner,
+        hitsPerPlayer: hitsPerPlayer,
+    }
 
-        const docRef = doc(db.gameBirdShooter, game.id)
-        const updateData: UpdateData<GameBirdShooter> = {
-            hits: newHits,
+    // Define Game actions
+    const newHit = async (score: number) => {
+        const newHit = {
+            playerId: currentPlayer.id,
+            score: score,
         }
 
-        await updateDoc(docRef, updateData)
+        const newHits = [...game.hits, newHit]
+
+        const docRef = doc(db.gameBirdShooter, game.id)
+        await updateDoc(docRef, {
+            hits: newHits,
+        })
+    }
+
+
+    const gameActions = {
+        newHit: newHit,
     }
 
 
     return {
         loading: false,
         error: null,
-        gameState: {
-            currentPlayer,
-            currentRound,
-            maxRounds,
-            winner,
-            hitsPerPlayer,
-        },
-        gameActions: {
-            newHit
-        }
+        gameState: gameState,
+        gameActions: gameActions,
     }
 }
 

@@ -1,20 +1,25 @@
 import {firestore} from "./firebase";
 import "firebase/firestore"
-import { collection, FirestoreDataConverter } from "firebase/firestore";
+import { collection, DocumentData, FirestoreDataConverter } from "firebase/firestore";
 import User from "../models/User";
 import GameBirdShooter from "../models/GameBirdShooter";
 
-const dumpConverter = <T>(): FirestoreDataConverter<T> => ({
-    toFirestore: (data) => data || {},
-    fromFirestore: (snap) => snap.data() as T
+const dumpConverter = <T extends DocumentData>(): FirestoreDataConverter<T, T> => ({
+    toFirestore: (data) => {
+        // This is hacky. Normally you would check every outgoing value here.
+        return data as T
+    },
+    fromFirestore: (snap) => {
+        // This is hacky. Normally you would check every incoming value here.
+        return snap.data() as T
+    }
 })
 
-const dataPoint = <T>(collectionPath: string, converter: FirestoreDataConverter<T>) => collection(firestore, collectionPath).withConverter(converter)
+const dataPoint = <T extends DocumentData>(collectionPath: string, converter: FirestoreDataConverter<T, T>) => collection(firestore, collectionPath).withConverter(converter)
 
 const db = {
-    tests: dataPoint<{name: string}>("tests", dumpConverter()),
-    users: dataPoint<User>("users", dumpConverter()),
-    gameBirdShooter: dataPoint<GameBirdShooter>("gameBirdShooter", dumpConverter())
+    users: dataPoint<User>("users", dumpConverter<User>()),
+    gameBirdShooter: dataPoint<GameBirdShooter>("gameBirdShooter", dumpConverter<GameBirdShooter>())
 }
 
 export default db
