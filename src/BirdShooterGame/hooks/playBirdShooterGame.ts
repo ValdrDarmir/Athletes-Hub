@@ -2,12 +2,13 @@ import {useCollectionData} from "react-firebase-hooks/firestore";
 import {doc, limit, query, updateDoc, where} from "firebase/firestore";
 import User from "../../App/models/User";
 import db from "../../shared/utils/db";
+import {
+    getCurrentRound, getCurrentPlayer,
+    getHitsPerPlayer,
+    getWinner,
+    HitsPlayer
+} from "../models/BirdShooterGameModel";
 
-interface HitsPlayer {
-    player: User
-    hits: number[]
-    currentScore: number
-}
 
 interface PlayBirdShooterGameHook {
     loading: boolean
@@ -16,7 +17,7 @@ interface PlayBirdShooterGameHook {
         currentPlayer: User
         currentRound: number
         maxRounds: number
-        winner: HitsPlayer | null
+        winner: User | null
         hitsPerPlayer: HitsPlayer[]
     } | null,
     gameActions: {
@@ -46,37 +47,18 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
     }
 
     // Determine the current game state
-    const currentPlayerIndex = game.hits.length % players.length
-    const currentPlayer = players[currentPlayerIndex]
-
-    const maxRounds = game.rounds
-    const currentRound = Math.floor(game.hits.length / game.playerIds.length) + 1
-    const hits = game.hits
-
-    const hitsPerPlayer: HitsPlayer[] = players.map(player => {
-        const playersHits = hits
-            .filter(hit => hit.playerId === player.id)
-            .map(hit => hit.score)
-
-        const currentScore = playersHits.reduce((sum, current) => current + sum, 0)
-
-        return {player: player, hits: playersHits, currentScore}
-    })
-
-    const playerHighestScore = hitsPerPlayer.reduce((prev, curr) => prev.currentScore < curr.currentScore ? curr : prev)
-    const winner = (currentRound > maxRounds) ? playerHighestScore : null
-
-
     const gameState = {
-        currentPlayer: currentPlayer,
-        currentRound: currentRound,
-        maxRounds: maxRounds,
-        winner: winner,
-        hitsPerPlayer: hitsPerPlayer,
+        currentPlayer: getCurrentPlayer(game, players),
+        currentRound: getCurrentRound(game),
+        maxRounds: game.rounds,
+        winner: getWinner(game, players),
+        hitsPerPlayer: getHitsPerPlayer(game, players),
     }
 
     // Define Game actions
     const newHit = async (score: number) => {
+        const currentPlayer = getCurrentPlayer(game, players)
+
         const newHit = {
             playerId: currentPlayer.id,
             score: score,

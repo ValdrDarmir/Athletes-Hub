@@ -19,7 +19,7 @@ function BirdShooterGame() {
     }
 
     const scoreClicked = (score: number) => {
-        gameActions.newHit(score)
+        void gameActions.newHit(score)
     }
 
     return <div className="flex items-center flex-col p-2">
@@ -32,8 +32,7 @@ function BirdShooterGame() {
         </h1>
 
         {gameState.winner ?
-            <p>Der Gewinner ist <span className="font-bold">{gameState.winner.player.displayName}</span> mit <span
-                className="font-bold">{gameState.winner.currentScore}</span> Punkten!!!</p> :
+            <p>Der Gewinner ist <span className="font-bold">{gameState.winner.displayName}</span>!!!</p> :
             <>
                 <p>Runde {gameState.currentRound}</p>
                 <p>An der Reihe ist {gameState.currentPlayer.displayName}</p>
