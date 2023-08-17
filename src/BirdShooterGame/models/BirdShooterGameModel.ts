@@ -30,8 +30,14 @@ export function getGameFinished(game: BirdShooterGameModel) {
  * @param game
  * @param players must include all players of this game. Can also include other users.
  */
-export function getHitsPerPlayer(game: BirdShooterGameModel, players: User[]): HitsPlayer[] {
-    return players.map(player => {
+export function getHitsPerPlayer(game: BirdShooterGameModel, players: User[]): HitsPlayer[] | Error {
+    const attendingPlayers = getAttendingPlayers(game, players)
+
+    if(attendingPlayers instanceof Error){
+        return attendingPlayers
+    }
+
+    return attendingPlayers.map(player => {
         const playersHits = game.hits
             .filter(hit => hit.playerId === player.id)
             .map(hit => hit.score)
@@ -44,8 +50,12 @@ export function getHitsPerPlayer(game: BirdShooterGameModel, players: User[]): H
 
 export function getHighestScorePlayer(game: BirdShooterGameModel, players: User[]) {
     const hitsPerPlayer = getHitsPerPlayer(game, players)
-    return hitsPerPlayer.reduce((prev, curr) => prev.currentScore < curr.currentScore ? curr : prev).player
 
+    if(hitsPerPlayer instanceof Error){
+        return hitsPerPlayer
+    }
+
+    return hitsPerPlayer.reduce((prev, curr) => prev.currentScore < curr.currentScore ? curr : prev).player
 }
 
 export function getWinner(game: BirdShooterGameModel, players: User[]) {
@@ -57,13 +67,24 @@ export function getWinner(game: BirdShooterGameModel, players: User[]) {
  * @param players must include all players of this game. Can also include other users.
  */
 export function getAttendingPlayers(game: BirdShooterGameModel, players: User[]) {
-    return players
+    const attendingPlayers = players
         .filter(user => game.playerIds.includes(user.id))
         .sort(compareUserIds)
+
+    if(attendingPlayers.length !== game.playerIds.length){
+        return new Error("Could not resolve all players. Are they all provided in the query?")
+    }
+
+    return attendingPlayers
 }
 
 export function getCurrentPlayer(game: BirdShooterGameModel, players: User[]) {
     const currentPlayerIndex = game.hits.length % game.playerIds.length
     const attendingPlayers = getAttendingPlayers(game, players)
+
+    if(attendingPlayers instanceof Error){
+        return attendingPlayers
+    }
+
     return attendingPlayers[currentPlayerIndex]
 }

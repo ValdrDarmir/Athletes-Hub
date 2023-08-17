@@ -7,6 +7,7 @@ import {
     getCurrentRound,
     getWinner
 } from "../models/BirdShooterGameModel";
+import nonFalsy from "../../shared/utils/nonFalsy";
 
 export interface BirdShooterGameOverview {
     id: string
@@ -20,17 +21,17 @@ type UserBirdShooterGamesHook = [BirdShooterGameOverview[] | null, boolean, Erro
 
 export default function useUserBirdShooterGamesOverview(userId: string | undefined): UserBirdShooterGamesHook {
     const [games, gamesLoading, gamesError] = useCollectionData(query(db.gameBirdShooter, where("playerIds", "array-contains", userId)));
-    const allOpponentsIds = games && games.map(game => game.playerIds).flat().filter(id => id !== userId)
+    const allPlayersIds = games && games.map(game => game.playerIds).flat()
 
-    const [opponents, opponentsLoading, opponentsError] = useCollectionData(allOpponentsIds && query(db.users, where("id", "in", allOpponentsIds)))
+    const [players, playersLoading, playersError] = useCollectionData(allPlayersIds && query(db.users, where("id", "in", allPlayersIds)))
 
-    const loading = gamesLoading || opponentsLoading
-    const error = gamesError || opponentsError
+    const loading = gamesLoading || playersLoading
+    const error = gamesError || playersError
 
     // Error and loading handling
-    if (loading || error || !games || !opponents) {
+    if (loading || error || !games || !players) {
         const noUserIdError = !userId && new Error("No user id was given.")
-        const noGameOrOpponentsError = (!games || !opponents) && new Error("No games or opponents found!?")
+        const noGameOrOpponentsError = (!games || !players) && new Error("No games or opponents found!?")
 
         return [
             null,
@@ -39,13 +40,34 @@ export default function useUserBirdShooterGamesOverview(userId: string | undefin
         ]
     }
 
-    const gameOverviews = games.map((game): BirdShooterGameOverview => ({
-        id: game.id,
-        winner: getWinner(game, opponents),
-        round: getCurrentRound(game),
-        maxRounds: game.rounds,
-        opponents: getAttendingPlayers(game, opponents),
-    }))
+    // TODO error os thrown to often. Initially not all players are loaded. Fix?
+    const gameOverviews: BirdShooterGameOverview[] = games
+        .map(game => {
+
+            const gamePlayers = getAttendingPlayers(game, players)
+            if (gamePlayers instanceof Error) {
+                console.error(gamePlayers.message)
+                return null;
+            }
+
+            const winner = getWinner(game, gamePlayers)
+
+            if (winner instanceof Error) {
+                console.error(winner.message)
+                return null;
+            }
+
+            const opponents = gamePlayers.filter(player => player.id !== userId)
+
+            return {
+                id: game.id,
+                winner: winner,
+                round: getCurrentRound(game),
+                maxRounds: game.rounds,
+                opponents: opponents,
+            }
+        })
+        .filter(nonFalsy)
 
     return [
         gameOverviews,
