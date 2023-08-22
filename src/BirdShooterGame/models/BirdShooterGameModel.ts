@@ -10,6 +10,8 @@ export default interface BirdShooterGameModel {
     rounds: number
     playerIds: string[]
     hits: Hit[]
+    creatorId: string
+    gameRunning: boolean
 }
 
 export interface HitsPlayer {
@@ -87,4 +89,14 @@ export function getCurrentPlayer(game: BirdShooterGameModel, players: User[]) {
     }
 
     return attendingPlayers[currentPlayerIndex]
+}
+
+export function getCreator(game: BirdShooterGameModel, players: User[]) {
+    const creator = players.find(player => player.id === game.creatorId)
+
+    if(!creator){
+        return new Error("Could not find creator. Are all players provided in the query?")
+    }
+
+    return creator
 }

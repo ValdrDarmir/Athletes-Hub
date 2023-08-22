@@ -10,6 +10,9 @@ import BirdShooterGame from './BirdShooterGame/pages/BirdShooterGame/BirdShooter
 import Login from './Auth/pages/Login/Login';
 import Register from './Auth/pages/Register/Register';
 import UnAuthGuard from './Auth/guards/UnAuthGuard';
+import Invitation from "./GamesGeneral/pages/Invitation/Invitation";
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createHashRouter([
     {
@@ -29,6 +32,10 @@ const router = createHashRouter([
         element: <AuthGuard component={BirdShooterGame} redirectRoute={"/login"}/>,
     },
     {
+        path: "/invite/:entityId",
+        element: <AuthGuard component={Invitation} redirectRoute={"/login"}/>,
+    },
+    {
         path: "/login",
         element: <UnAuthGuard component={Login} redirectRoute={"/"}/>,
     },
@@ -44,6 +51,14 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <React.StrictMode>
-        <RouterProvider router={router}/>
+        <div>
+            <RouterProvider router={router}/>
+            <ToastContainer
+                hideProgressBar={true}
+                autoClose={2000}
+                closeButton={false}
+                position="top-right"
+            />
+        </div>
     </React.StrictMode>
 );

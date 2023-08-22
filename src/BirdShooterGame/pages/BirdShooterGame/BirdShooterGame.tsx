@@ -1,10 +1,28 @@
-import {useParams} from "react-router-dom";
+import {useHref, useParams} from "react-router-dom";
 import usePlayBirdShooterGame from "../../hooks/playBirdShooterGame";
-import {Fragment} from "react";
+import {Fragment, useEffect} from "react";
+import {toast} from "react-toastify";
+import User from "../../../App/models/User";
 
-function BirdShooterGame() {
+interface Params {
+    user: User
+}
+
+function BirdShooterGame({user}: Params) {
     const {gameId} = useParams()
     const {loading, error, gameState, gameActions} = usePlayBirdShooterGame(gameId)
+    const invitePath = useHref(`/invite/${gameId}`, {relative: "route"})
+
+    const urlHost = window.location.host
+    const inviteLink = `${urlHost}/${invitePath}`
+
+    // Pop a toast when the game starts
+    // TODO this triggers too often, we should build a useEffect, that provides the previous values
+    useEffect(() => {
+        if (gameState?.gameRunning) {
+            toast.info(`Das Spiel beginnt!`)
+        }
+    }, [gameState?.gameRunning])
 
     if (loading) {
         return <p>loading...</p>
@@ -20,6 +38,15 @@ function BirdShooterGame() {
 
     const scoreClicked = (score: number) => {
         void gameActions.newHit(score)
+    }
+
+    const startGameClicked = () => {
+        void gameActions.startGame()
+    }
+
+    const copyInviteLinkClicked = async () => {
+        await navigator.clipboard.writeText(inviteLink)
+        toast.success("Einladungslink kopiert")
     }
 
     return <div className="flex items-center flex-col p-2">
@@ -41,14 +68,20 @@ function BirdShooterGame() {
 
         <div className="card bg-base-100/90">
             <div className="card-body grid grid-cols-3">
-                <button className="btn" onClick={() => scoreClicked(9)} disabled={Boolean(gameState.winner)}>9</button>
-                <button className="btn" onClick={() => scoreClicked(10)} disabled={Boolean(gameState.winner)}>10
+                <button className="btn" onClick={() => scoreClicked(9)}
+                        disabled={Boolean(gameState.winner) || !gameState.gameRunning}>9
                 </button>
-                <button className="btn" onClick={() => scoreClicked(11)} disabled={Boolean(gameState.winner)}>11
+                <button className="btn" onClick={() => scoreClicked(10)}
+                        disabled={Boolean(gameState.winner) || !gameState.gameRunning}>10
                 </button>
-                <button className="btn" onClick={() => scoreClicked(12)} disabled={Boolean(gameState.winner)}>12
+                <button className="btn" onClick={() => scoreClicked(11)}
+                        disabled={Boolean(gameState.winner) || !gameState.gameRunning}>11
                 </button>
-                <button className="btn" onClick={() => scoreClicked(0)} disabled={Boolean(gameState.winner)}>Daneben
+                <button className="btn" onClick={() => scoreClicked(12)}
+                        disabled={Boolean(gameState.winner) || !gameState.gameRunning}>12
+                </button>
+                <button className="btn" onClick={() => scoreClicked(0)}
+                        disabled={Boolean(gameState.winner) || !gameState.gameRunning}>Daneben
                 </button>
             </div>
         </div>
@@ -90,6 +123,27 @@ function BirdShooterGame() {
                 ))
             }
         </div>
+
+        {(gameState.creator.id === user.id) && !gameState.gameRunning &&
+            <>
+                <div className="divider"></div>
+                <p className="text-center font-bold">Du bist der Spielleiter.</p>
+
+                <p className="text-center">Teile diesen Link mit deinen Freunden, damit sie mitspielen können:</p>
+
+                <div className="flex justify-center">
+                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${inviteLink}`}
+                         alt="QR Code"/>
+                </div>
+
+                <button className="btn btn-secondary" onClick={copyInviteLinkClicked}>
+                    Link kopieren
+                </button>
+
+
+                <button className="btn btn-primary" onClick={startGameClicked}>Spiel starten</button>
+            </>
+        }
 
     </div>
 }

@@ -9,7 +9,7 @@ function useCreateNewBirdShooterGame() {
     const [creationLoading, setCreationLoading] = useState(false)
     const [createdGameDoc, setCreatedGameDoc] = useState<DocumentReference<BirdShooterGameModel> | null>(null)
 
-    const createNewGame = async (opponents: User[]) => {
+    const createNewGame = async (creator: User) => {
 
         setCreationLoading(true)
 
@@ -18,8 +18,10 @@ function useCreateNewBirdShooterGame() {
         await setDoc(newGameDoc, {
             id: newGameDoc.id,
             rounds: 5,
-            playerIds: opponents.map(user => user.id),
+            playerIds: [creator.id],
             hits: [],
+            creatorId: creator.id,
+            gameRunning: false,
         })
 
         setCreatedGameDoc(newGameDoc)

@@ -6,7 +6,7 @@ import {
     getCurrentRound, getCurrentPlayer,
     getHitsPerPlayer,
     getWinner,
-    HitsPlayer
+    HitsPlayer, getCreator
 } from "../models/BirdShooterGameModel";
 import findFirstError from "../../shared/utils/findFirstError";
 
@@ -20,9 +20,12 @@ interface PlayBirdShooterGameHook {
         maxRounds: number
         winner: User | null
         hitsPerPlayer: HitsPlayer[]
+        gameRunning: boolean
+        creator: User
     } | null,
     gameActions: {
         newHit(score: number): Promise<Error | undefined>
+        startGame(): Promise<void>
     } | null,
 }
 
@@ -38,6 +41,7 @@ function newErrorResult(error: Error) {
 function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGameHook {
     const [games, gameLoading, gameError] = useCollectionData(query(db.gameBirdShooter, where("id", "==", gameId), limit(1)))
     const game = (games && games.length > 0) ? games[0] : null
+
     const [players, playersLoading, playersError] = useCollectionData(game && query(db.users, where("id", "in", game.playerIds)))
 
     // Custom Errors
@@ -67,10 +71,16 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
     const maxRounds = game.rounds
     const winner = getWinner(game, players)
     const hitsPerPlayer = getHitsPerPlayer(game, players)
+    const gameRunning = game.gameRunning
+    const creator = getCreator(game, players)
 
     // TODO better streamline throwing errors. This is the only short way I found, that typescript accepts
-    if(currentPlayer instanceof Error || winner instanceof Error || hitsPerPlayer instanceof Error){
-        const error = findFirstError(currentPlayer, winner, hitsPerPlayer)
+    if(currentPlayer instanceof Error ||
+        winner instanceof Error ||
+        hitsPerPlayer instanceof Error ||
+        creator instanceof Error
+    ){
+        const error = findFirstError(currentPlayer, winner, hitsPerPlayer, creator)
         const unknownError = new Error("Some error happened") // This should not happen
         return newErrorResult(error || unknownError)
     }
@@ -82,9 +92,18 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
         maxRounds: maxRounds,
         winner: winner,
         hitsPerPlayer: hitsPerPlayer,
+        gameRunning: gameRunning,
+        creator: creator,
     }
 
     // Define Game actions
+    const startGame = () => {
+        const docRef = doc(db.gameBirdShooter, game.id)
+        return updateDoc(docRef, {
+            gameRunning: true,
+        })
+    }
+
     const newHit = async (score: number) => {
         const currentPlayer = getCurrentPlayer(game, players)
 
@@ -108,6 +127,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
 
     const gameActions = {
         newHit: newHit,
+        startGame: startGame,
     }
 
 
