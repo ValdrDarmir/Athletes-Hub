@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {BirdShooterGameOverview} from "../../hooks/userBirdShooterGamesOverview";
+import {BirdShooterGameOverview} from "../hooks/userBirdShooterGamesOverview";
 
 interface Props {
     overview: BirdShooterGameOverview

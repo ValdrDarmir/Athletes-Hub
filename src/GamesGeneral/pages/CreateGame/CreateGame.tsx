@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import User from "../../../App/models/User";
 import useCreateNewBirdShooterGame from "../../../BirdShooterGame/hooks/createNewBirdShooterGame";
 import Games from "../../models/Games";
-import SelectObject from "../../../shared/components/SelectObject/SelectObject";
+import SelectObject from "../../../shared/components/SelectObject";
 
 interface Props {
     user: User

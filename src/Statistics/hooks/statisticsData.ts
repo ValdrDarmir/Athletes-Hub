@@ -3,7 +3,7 @@ import {query, where} from "firebase/firestore";
 import db from "../../shared/utils/db";
 import {getGameFinished} from "../../BirdShooterGame/models/BirdShooterGame";
 import average from "../../shared/utils/average";
-import {DataPoint} from "../components/LinePlotWithErrorBars/LinePlotWithErrorBars";
+import {DataPoint} from "../components/LinePlotWithErrorBars";
 
 type StatisticsDataHook = [boolean, Error | null, { birdShooterHits: DataPoint[] } | null]
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Chart} from "react-chartjs-2";
 import moment from "moment/moment";
-import extractThemeColorsFromDOM from "../../../shared/utils/extractThemeColorsFromDOM";
+import extractThemeColorsFromDOM from "../../shared/utils/extractThemeColorsFromDOM";
 import {Chart as ChartJS, ChartData, ChartOptions} from "chart.js";
 import {LineWithErrorBarsController, PointWithErrorBar} from "chartjs-chart-error-bars";
 import "chart.js/auto"; // This is needed to make the charts work
