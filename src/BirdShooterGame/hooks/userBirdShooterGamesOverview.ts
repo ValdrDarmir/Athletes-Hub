@@ -40,7 +40,7 @@ export default function useUserBirdShooterGamesOverview(userId: string | undefin
         ]
     }
 
-    // TODO error is thrown to often. Initially not all players are loaded. Fix?
+    // TODO error is thrown too often. Initially not all players are loaded. Fix?
     const gameOverviews: BirdShooterGameOverview[] = games
         .map(game => {
 

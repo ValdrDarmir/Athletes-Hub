@@ -30,7 +30,7 @@ export interface ThemeColors {
     errorContent: string;
 }
 
-function extractThemeColorsFromDOM() {
+function extractThemeColorsFromDOM(): ThemeColors {
     const computedStyles = getComputedStyle(document.querySelector(':root')!);
     return {
         primary: `hsl(${computedStyles.getPropertyValue('--p')}`,

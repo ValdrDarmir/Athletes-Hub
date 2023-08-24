@@ -4,17 +4,17 @@ import './index.css';
 import {createHashRouter, RouterProvider} from "react-router-dom";
 import AuthGuard from './Auth/guards/AuthGuard';
 import App from "./App/pages/App";
-import CreateGame from './GamesGeneral/pages/CreateGame/CreateGame';
-import MyGames from './GamesGeneral/pages/MyGames/MyGames';
+import CreateGame from './GamesGeneral/pages/CreateGame';
+import MyGames from './GamesGeneral/pages/MyGames';
 import BirdShooterGame from './BirdShooterGame/pages/BirdShooterGame';
-import Login from './Auth/pages/Login/Login';
-import Register from './Auth/pages/Register/Register';
+import Login from './Auth/pages/Login';
+import Register from './Auth/pages/Register';
 import UnAuthGuard from './Auth/guards/UnAuthGuard';
-import Invitation from "./GamesGeneral/pages/Invitation/Invitation";
+import Invitation from "./GamesGeneral/pages/Invitation";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Statistics from "./Statistics/page/Statistics";
-import Layout from "./App/components/Layout/Layout";
+import Layout from "./App/components/Layout";
 
 const router = createHashRouter([
     {

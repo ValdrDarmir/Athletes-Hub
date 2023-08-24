@@ -2,8 +2,8 @@ import React from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {arrayUnion, doc, limit, query, setDoc, where} from "firebase/firestore";
-import db from "../../../shared/utils/db";
-import User from "../../../App/models/User";
+import db from "../../shared/utils/db";
+import User from "../../App/models/User";
 
 interface Invitable {
     id: string

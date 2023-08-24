@@ -1,8 +1,8 @@
 import React from "react";
-import User from "../../../App/models/User";
-import useUserBirdShooterGamesOverview from "../../../BirdShooterGame/hooks/userBirdShooterGamesOverview";
+import User from "../../App/models/User";
+import useUserBirdShooterGamesOverview from "../../BirdShooterGame/hooks/userBirdShooterGamesOverview";
 import BirdShooterOverviewButton
-    from "../../../BirdShooterGame/components/BirdShooterOverviewButton";
+    from "../../BirdShooterGame/components/BirdShooterOverviewButton";
 
 interface Props {
     user: User

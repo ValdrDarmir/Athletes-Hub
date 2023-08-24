@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import User from "../../models/User";
-import logo from "../../assets/logo.png";
+import User from "../models/User";
+import logo from "../assets/logo.png";
 
 interface Props {
     user: User | undefined
