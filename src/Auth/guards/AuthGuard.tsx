@@ -1,14 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {ReactNode, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import User from '../../App/models/User';
 import useAuthenticatedUser from "../hooks/authenticatedUser";
 
 interface Props {
     component: React.FC<{ user: User }>,
+    layout: React.FC<{ user: User | undefined, children: ReactNode }>,
     redirectRoute: string,
 }
 
-const AuthGuard = ({component, redirectRoute,}: Props) => {
+const AuthGuard = ({component, layout, redirectRoute,}: Props) => {
     const [user, userLoading, userError] = useAuthenticatedUser()
     const navigate = useNavigate();
 
@@ -27,8 +28,12 @@ const AuthGuard = ({component, redirectRoute,}: Props) => {
         return <p>Error: {userError.message}</p>
     }
 
+    const Layout = layout
     const Component = component
-    return <Component user={user}/>
+
+    return <Layout user={user}>
+        <Component user={user}/>
+    </Layout>
 }
 
 export default AuthGuard;

@@ -14,39 +14,40 @@ import Invitation from "./GamesGeneral/pages/Invitation/Invitation";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Statistics from "./Statistics/page/Statistics/Statistics";
+import Layout from "./App/components/Layout/Layout";
 
 const router = createHashRouter([
     {
         path: "/",
-        element: <AuthGuard component={App} redirectRoute={"/login"}/>,
+        element: <AuthGuard layout={Layout} component={App} redirectRoute={"/login"}/>,
     },
     {
         path: "/game",
-        element: <AuthGuard component={CreateGame} redirectRoute={"/login"}/>,
+        element: <AuthGuard layout={Layout} component={CreateGame} redirectRoute={"/login"}/>,
     },
     {
         path: "/games",
-        element: <AuthGuard component={MyGames} redirectRoute={"/login"}/>,
+        element: <AuthGuard layout={Layout} component={MyGames} redirectRoute={"/login"}/>,
     },
     {
         path: "/game/:gameId",
-        element: <AuthGuard component={BirdShooterGame} redirectRoute={"/login"}/>,
+        element: <AuthGuard layout={Layout} component={BirdShooterGame} redirectRoute={"/login"}/>,
     },
     {
         path: "/invite/:entityId",
-        element: <AuthGuard component={Invitation} redirectRoute={"/login"}/>,
+        element: <AuthGuard layout={Layout} component={Invitation} redirectRoute={"/login"}/>,
     },
     {
         path: "/stats",
-        element: <AuthGuard component={Statistics} redirectRoute={"/login"}/>,
+        element: <AuthGuard layout={Layout} component={Statistics} redirectRoute={"/login"}/>,
     },
     {
         path: "/login",
-        element: <UnAuthGuard component={Login} redirectRoute={"/"}/>,
+        element: <UnAuthGuard layout={Layout} component={Login} redirectRoute={"/"}/>,
     },
     {
         path: "/register",
-        element: <UnAuthGuard component={Register} redirectRoute={"/"}/>,
+        element: <UnAuthGuard layout={Layout} component={Register} redirectRoute={"/"}/>,
     },
 ])
 

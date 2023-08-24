@@ -1,12 +1,20 @@
 import React from 'react';
+import User from "../../models/User";
+import SidebarAndContent from "../SidebarAndContent/SidebarAndContent";
 
 interface Props {
+    user: User | undefined
     children: React.ReactNode
 }
 
-function Layout({children}: Props) {
+function Layout({user, children}: Props) {
+
     return (
-        <div>{children}</div>
+        <div>
+            <SidebarAndContent user={user}>
+                {children}
+            </SidebarAndContent>
+        </div>
     );
 }
 
