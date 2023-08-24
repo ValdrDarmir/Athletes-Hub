@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Athletes-Hub/static/css/main.47e66736.css",
-    "main.js": "/Athletes-Hub/static/js/main.9e58b09a.js",
+    "main.css": "/Athletes-Hub/static/css/main.00fd56cc.css",
+    "main.js": "/Athletes-Hub/static/js/main.5fab51fd.js",
     "static/media/gewehr_mann.png": "/Athletes-Hub/static/media/gewehr_mann.a20911f66841c557dc9d.png",
     "index.html": "/Athletes-Hub/index.html",
-    "main.47e66736.css.map": "/Athletes-Hub/static/css/main.47e66736.css.map",
-    "main.9e58b09a.js.map": "/Athletes-Hub/static/js/main.9e58b09a.js.map"
+    "main.00fd56cc.css.map": "/Athletes-Hub/static/css/main.00fd56cc.css.map",
+    "main.5fab51fd.js.map": "/Athletes-Hub/static/js/main.5fab51fd.js.map"
   },
   "entrypoints": [
-    "static/css/main.47e66736.css",
-    "static/js/main.9e58b09a.js"
+    "static/css/main.00fd56cc.css",
+    "static/js/main.5fab51fd.js"
   ]
 }
