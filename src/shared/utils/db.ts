@@ -1,17 +1,27 @@
 import {firestore} from "./firebase";
 import "firebase/firestore"
-import { collection, DocumentData, FirestoreDataConverter } from "firebase/firestore";
+import {collection, DocumentData, FirestoreDataConverter} from "firebase/firestore";
 import User from "../../App/models/User";
-import BirdShooterGameModel from "../../BirdShooterGame/models/BirdShooterGameModel";
+import BirdShooterGame from "../../BirdShooterGame/models/BirdShooterGame";
+import BaseDBModel from "../models/BaseDBModel";
 
-const dumpConverter = <T extends DocumentData>(): FirestoreDataConverter<T, T> => ({
+const dumpConverter = <T extends BaseDBModel>(): FirestoreDataConverter<T, T> => ({
     toFirestore: (data) => {
-        // This is hacky. Normally you would check every outgoing value here.
-        return data as T
+        // You could check every outgoing value here.
+        // We add the updatedAt field here.
+        return {
+            ...data,
+            updatedAt: new Date()
+        } as T
     },
     fromFirestore: (snap) => {
-        // This is hacky. Normally you would check every incoming value here.
-        return snap.data() as T
+        // You could check every incoming value here, if a value is missing.
+        // We convert firestore timestamps to js dates here.
+        return {
+            ...snap.data(),
+            createdAt: snap.data().createdAt.toDate(),
+            updatedAt: snap.data().updatedAt.toDate(),
+        } as T
     }
 })
 
@@ -19,7 +29,7 @@ const dataPoint = <T extends DocumentData>(collectionPath: string, converter: Fi
 
 const db = {
     users: dataPoint<User>("users", dumpConverter<User>()),
-    gameBirdShooter: dataPoint<BirdShooterGameModel>("gameBirdShooter", dumpConverter<BirdShooterGameModel>())
+    gameBirdShooter: dataPoint<BirdShooterGame>("gameBirdShooter", dumpConverter<BirdShooterGame>())
 }
 
 export default db

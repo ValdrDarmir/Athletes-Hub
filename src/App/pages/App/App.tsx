@@ -18,7 +18,7 @@ function App({user}: Props) {
 
             <Link to="/games" className="btn mb-2">Meine Challenges</Link>
             <Link to="/game" className="btn mb-2">Neue Challenge starten!</Link>
-            <Link to="#" className="btn mb-2">Statistiken (Todo)</Link>
+            <Link to="/stats" className="btn mb-2">Statistiken</Link>
             <div className="divider"></div>
 
             <Link to="#" className="btn mb-2">Profil bearbeiten (Todo)</Link>

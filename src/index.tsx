@@ -13,6 +13,7 @@ import UnAuthGuard from './Auth/guards/UnAuthGuard';
 import Invitation from "./GamesGeneral/pages/Invitation/Invitation";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Statistics from "./Statistics/page/Statistics/Statistics";
 
 const router = createHashRouter([
     {
@@ -34,6 +35,10 @@ const router = createHashRouter([
     {
         path: "/invite/:entityId",
         element: <AuthGuard component={Invitation} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/stats",
+        element: <AuthGuard component={Statistics} redirectRoute={"/login"}/>,
     },
     {
         path: "/login",

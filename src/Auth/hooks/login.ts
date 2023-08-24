@@ -1,7 +1,7 @@
 import {
     useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
-import {updateDoc, doc} from "firebase/firestore"
+import {doc, setDoc} from "firebase/firestore"
 import {useEffect} from "react";
 import {useDocumentData} from "react-firebase-hooks/firestore";
 import { auth } from "../../shared/utils/firebase";
@@ -22,10 +22,10 @@ const useLogin = () => {
             if (authUser) {
                 // in theory email can be changed externally. This should be reflected in our database (that's why we update it on login)
                 const userDoc = doc(db.users, authUser.user.uid)
-                await updateDoc(userDoc, {
+                await setDoc(userDoc, {
                     displayName: authUser.user.displayName || "",
                     email: authUser.user.email || "",
-                })
+                }, {merge: true})
             }
 
         }

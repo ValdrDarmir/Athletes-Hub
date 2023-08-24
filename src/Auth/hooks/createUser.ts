@@ -30,6 +30,8 @@ const useCreateUser = () => {
             id: user.user.uid,
             displayName: data.username,
             email: user.user.email,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         })
     }
 

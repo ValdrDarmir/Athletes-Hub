@@ -1,5 +1,6 @@
-interface User {
-    id: string
+import BaseDBModel from "../../shared/models/BaseDBModel";
+
+interface User extends BaseDBModel {
     displayName: string
     email: string
 }

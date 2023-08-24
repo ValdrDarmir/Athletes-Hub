@@ -11,7 +11,7 @@ interface Params {
 function BirdShooterGame({user}: Params) {
     const {gameId} = useParams()
     const {loading, error, gameState, gameActions} = usePlayBirdShooterGame(gameId)
-    const invitePath = useHref(`/invite/${gameId}`, {relative: "route"})
+    const invitePath = useHref(`/invite/${gameId}`)
 
     const urlHost = window.location.host
     const inviteLink = `${urlHost}/${invitePath}`

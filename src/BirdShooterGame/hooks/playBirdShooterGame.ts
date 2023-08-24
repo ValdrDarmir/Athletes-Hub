@@ -1,5 +1,5 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {doc, limit, query, updateDoc, where} from "firebase/firestore";
+import {doc, limit, query, setDoc, where} from "firebase/firestore";
 import User from "../../App/models/User";
 import db from "../../shared/utils/db";
 import {
@@ -7,7 +7,7 @@ import {
     getHitsPerPlayer,
     getWinner,
     HitsPlayer, getCreator
-} from "../models/BirdShooterGameModel";
+} from "../models/BirdShooterGame";
 import findFirstError from "../../shared/utils/findFirstError";
 
 
@@ -99,9 +99,9 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
     // Define Game actions
     const startGame = () => {
         const docRef = doc(db.gameBirdShooter, game.id)
-        return updateDoc(docRef, {
+        return setDoc(docRef, {
             gameRunning: true,
-        })
+        }, {merge: true})
     }
 
     const newHit = async (score: number) => {
@@ -119,9 +119,9 @@ function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGame
         const newHits = [...game.hits, newHit]
 
         const docRef = doc(db.gameBirdShooter, game.id)
-        await updateDoc(docRef, {
+        await setDoc(docRef, {
             hits: newHits,
-        })
+        }, {merge: true})
     }
 
 

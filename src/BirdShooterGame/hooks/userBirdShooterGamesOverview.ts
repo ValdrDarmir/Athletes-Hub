@@ -6,7 +6,7 @@ import {
     getAttendingPlayers,
     getCurrentRound,
     getWinner
-} from "../models/BirdShooterGameModel";
+} from "../models/BirdShooterGame";
 import nonFalsy from "../../shared/utils/nonFalsy";
 
 export interface BirdShooterGameOverview {

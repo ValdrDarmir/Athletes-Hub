@@ -1,7 +1,7 @@
 import React from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {arrayUnion, doc, limit, query, updateDoc, where} from "firebase/firestore";
+import {arrayUnion, doc, limit, query, setDoc, where} from "firebase/firestore";
 import db from "../../../shared/utils/db";
 import User from "../../../App/models/User";
 
@@ -46,9 +46,9 @@ function Invitation({user}: Props) {
     const addPlayer = async () => {
         // TODO discriminate between collections
         const entityDoc = doc(db.gameBirdShooter, entity.id)
-        await updateDoc(entityDoc, {
+        await setDoc(entityDoc, {
             playerIds: arrayUnion(user.id)
-        })
+        }, {merge: true})
         navigate(`/game/${entity.id}`)
     }
 

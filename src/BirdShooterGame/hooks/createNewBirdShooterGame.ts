@@ -1,13 +1,13 @@
 import {useState} from "react";
 import {doc, DocumentReference, setDoc} from "firebase/firestore";
-import BirdShooterGameModel from "../models/BirdShooterGameModel";
+import BirdShooterGame from "../models/BirdShooterGame";
 import * as uuid from "uuid"
 import User from "../../App/models/User";
 import db from "../../shared/utils/db";
 
 function useCreateNewBirdShooterGame() {
     const [creationLoading, setCreationLoading] = useState(false)
-    const [createdGameDoc, setCreatedGameDoc] = useState<DocumentReference<BirdShooterGameModel> | null>(null)
+    const [createdGameDoc, setCreatedGameDoc] = useState<DocumentReference<BirdShooterGame> | null>(null)
 
     const createNewGame = async (creator: User) => {
 
@@ -22,6 +22,8 @@ function useCreateNewBirdShooterGame() {
             hits: [],
             creatorId: creator.id,
             gameRunning: false,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         })
 
         setCreatedGameDoc(newGameDoc)
