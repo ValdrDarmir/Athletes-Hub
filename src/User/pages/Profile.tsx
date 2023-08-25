@@ -22,7 +22,7 @@ function Profile({user}: Props) {
             <ChangeEmailForm user={user} />
 
             <div className="divider">Passwort</div>
-            <ChangePasswordForm user={user} />
+            <ChangePasswordForm />
         </div>
     );
 }
