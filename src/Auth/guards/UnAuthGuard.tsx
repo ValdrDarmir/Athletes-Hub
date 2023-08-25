@@ -2,6 +2,7 @@ import React, {ReactNode, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import useAuthenticatedUser from "../hooks/authenticatedUser";
 import User from "../../App/models/User";
+import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Props {
     component: React.FC,
@@ -26,7 +27,7 @@ const AuthGuard = ({component, layout, redirectRoute,}: Props) => {
     }
 
     if (userError) {
-        return <p>Error: {userError.message}</p>
+        return <ErrorDisplay error={userError}/>
     }
 
     const Layout = layout

@@ -3,6 +3,7 @@ import {useSignOut} from "react-firebase-hooks/auth";
 import User from "../models/User";
 import {Link} from "react-router-dom";
 import {auth} from '../../shared/utils/firebase';
+import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Props {
     user: User
@@ -20,9 +21,9 @@ function App({user}: Props) {
             <Link to="/stats" className="btn mb-2">Statistiken</Link>
             <div className="divider"></div>
 
-            <Link to="#" className="btn mb-2">Profil bearbeiten (Todo)</Link>
+            <Link to="/profile" className="btn mb-2">Profil bearbeiten</Link>
             <button className="btn btn-outline mb-2" onClick={signOut} disabled={signOutLoading}>Logout</button>
-            {signOutError && <p>{signOutError.message}</p>}
+            {signOutError && <ErrorDisplay error={signOutError} />}
         </div>
     );
 }

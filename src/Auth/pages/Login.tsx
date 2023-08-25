@@ -4,6 +4,7 @@ import {useSignInWithEmailAndPassword} from "react-firebase-hooks/auth";
 import {Link} from "react-router-dom";
 import gewehrMann from "../assets/gewehr_mann.png"
 import { auth } from "../../shared/utils/firebase";
+import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface LoginFieldValues {
     email: string,
@@ -43,7 +44,7 @@ function Login() {
 
             <Link to={"#"} className="link text-right">Passwort vergessen?</Link>
 
-            {signinError && <p className={"text-error"}>{signinError.message}</p>}
+            {signinError && <ErrorDisplay error={signinError}/>}
 
             <button className={"btn btn-primary w-full"} type={"submit"} disabled={signInLoading}>Login</button>
 

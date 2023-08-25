@@ -13,7 +13,7 @@ const sidebarLinksAuthenticated = [
     {route: "/game", label: "🎯 Neue Challenge"},
     {route: "/games", label: "🏆 Meine Challenges"},
     {route: "/stats", label: "📈 Statistiken"},
-    {route: "#", label: "👤 Mein Profil (TODO)"},
+    {route: "/profile", label: "👤 Mein Profil"},
 ]
 
 const sidebarLinksUnAuthenticated = [

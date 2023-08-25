@@ -1,7 +1,8 @@
-import {useCreateUserWithEmailAndPassword, useUpdateProfile} from "react-firebase-hooks/auth";
 import {setDoc, doc} from "firebase/firestore"
-import { auth } from "../../shared/utils/firebase";
+import {auth} from "../../shared/utils/firebase";
 import db from "../../shared/utils/db";
+import {useState} from "react";
+import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 
 interface CreateUserData {
     email: string
@@ -9,33 +10,46 @@ interface CreateUserData {
     username: string
 }
 
-const useCreateUser = () => {
-    const [createUserWithEmailAndPassword, , signUpLoading, signUpError] = useCreateUserWithEmailAndPassword(auth)
-    const [updateProfile, updateProfileLoading, updateProfileError] = useUpdateProfile(auth)
+type CreateUserHook = [
+    (data: CreateUserData) => Promise<void> | null,
+    boolean,
+        Error | null,
+]
 
-    const loading = signUpLoading || updateProfileLoading
-    const error = signUpError || updateProfileError
+const useCreateUser = (): CreateUserHook => {
+    const [error, setError] = useState<Error | null>(null)
+    const [loading, setLoading] = useState<boolean>(false)
 
-    const createUser = async (data: CreateUserData) => {
-        const user = await createUserWithEmailAndPassword(data.email, data.password)
-        if (!user) return Error("user was undefined during creation!?");
+    const createUser = async (data: CreateUserData): Promise<void> => {
+        try {
+            setLoading(true)
+            setError(null)
 
-        await updateProfile({
-            displayName: data.username,
-        })
+            const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password)
+            await updateProfile(userCredential.user, {
+                displayName: data.username,
+            })
 
-        const newDoc = doc(db.users, user.user.uid)
+            const newDoc = doc(db.users, userCredential.user.uid)
 
-        await setDoc(newDoc, {
-            id: user.user.uid,
-            displayName: data.username,
-            email: user.user.email,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        })
+            await setDoc(newDoc, {
+                id: userCredential.user.uid,
+                displayName: data.username,
+                email: userCredential.user.email,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            })
+
+            setLoading(false)
+        } catch (error) {
+            if(error instanceof Error) {
+                setError(error)
+            }
+            setLoading(false)
+        }
     }
 
-    return [createUser, loading, error] as const
+    return [createUser, loading, error]
 }
 
 export default useCreateUser

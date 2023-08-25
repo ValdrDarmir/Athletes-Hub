@@ -1,8 +1,9 @@
 import {useHref, useParams} from "react-router-dom";
 import usePlayBirdShooterGame from "../hooks/playBirdShooterGame";
-import {Fragment, useEffect} from "react";
+import React, {Fragment, useEffect} from "react";
 import {toast} from "react-toastify";
 import User from "../../App/models/User";
+import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Params {
     user: User
@@ -29,7 +30,7 @@ function BirdShooterGame({user}: Params) {
     }
 
     if (error) {
-        return <p className="text-error">{error.message}</p>
+        return <ErrorDisplay error={error}/>
     }
 
     if (!gameState || !gameActions) {

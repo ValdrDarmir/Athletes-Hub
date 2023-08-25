@@ -3,6 +3,7 @@ import {useForm} from "react-hook-form";
 import {Link} from "react-router-dom";
 import useCreateUser from "../hooks/createUser";
 import gewehrMann from "../assets/gewehr_mann.png"
+import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface RegisterFieldValues {
     username: string,
@@ -31,7 +32,7 @@ function Register() {
                 <label className="label"><span className="label-text">Username</span></label>
                 <input className={"input input-bordered"} {...register("username", {required: true})}/>
                 {errors.username &&
-									<label className={"label"}><span className={"label-text-alt text-error"}>Username is required and must be valid</span></label>}
+                    <label className={"label"}><span className={"label-text-alt text-error"}>Username is required and must be valid</span></label>}
 
             </div>
 
@@ -39,16 +40,17 @@ function Register() {
                 <label className="label"><span className="label-text">Email</span></label>
                 <input className={"input input-bordered"} {...register("email", {required: true})}/>
                 {errors.email &&
-									<label className={"label"}><span className={"label-text-alt text-error"}>Email is required and must be valid</span></label>}
+                    <label className={"label"}><span className={"label-text-alt text-error"}>Email is required and must be valid</span></label>}
             </div>
 
             <div className={"form-control"}>
                 <label className="label"><span className="label-text">Password</span></label>
                 <input className={"input input-bordered"} type="password" {...register("password", {required: true})}/>
-                {errors.password && <label className={"label"}><span className={"label-text-alt text-error"}>Password is required</span></label>}
+                {errors.password &&
+                    <label className={"label"}><span className={"label-text-alt text-error"}>Password is required</span></label>}
             </div>
 
-            {createUserError && <p className={"text-error"}>{createUserError.message}</p>}
+            {createUserError && <ErrorDisplay error={createUserError}/>}
 
             <button className={"btn btn-primary w-full mt-5"} type={"submit"} disabled={createUserLoading}>
                 Account erstellen

@@ -3,6 +3,7 @@ import User from "../../App/models/User";
 import useUserBirdShooterGamesOverview from "../../BirdShooterGame/hooks/userBirdShooterGamesOverview";
 import BirdShooterOverviewButton
     from "../../BirdShooterGame/components/BirdShooterOverviewButton";
+import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Props {
     user: User
@@ -19,7 +20,7 @@ function MyGames({user}: Props) {
     }
 
     if (error) {
-        return <p className="text-error">{error.message}</p>
+        return <ErrorDisplay error={error}/>
     }
 
     return <div className="flex flex-col items-stretch w-full p-2">
