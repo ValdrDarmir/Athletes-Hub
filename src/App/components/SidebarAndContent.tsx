@@ -33,7 +33,7 @@ function SidebarAndContent({user, children}: Props) {
             <input id="my-drawer" type="checkbox" className="drawer-toggle" checked={open} onChange={toggleDrawer}/>
             <div className="drawer-content">
                 {/*<div className="absolute right-0">*/}
-                <div className="flex items-center justify-between m-1">
+                <div className="flex items-center justify-between m-2">
                     <Link to="/" className="w-1/6">
                         <img src={logo} alt="Logo"/>
                     </Link>

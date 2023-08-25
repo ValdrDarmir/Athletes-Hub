@@ -15,6 +15,7 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Statistics from "./Statistics/page/Statistics";
 import Layout from "./App/components/Layout";
+import Profile from "./User/pages/Profile";
 
 const router = createHashRouter([
     {
@@ -40,6 +41,10 @@ const router = createHashRouter([
     {
         path: "/stats",
         element: <AuthGuard layout={Layout} component={Statistics} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/profile",
+        element: <AuthGuard layout={Layout} component={Profile} redirectRoute={"/login"}/>,
     },
     {
         path: "/login",
