@@ -1,6 +1,6 @@
 import React from 'react';
 import User from "../models/User";
-import SidebarAndContent from "./SidebarAndContent";
+import SidebarWrapper from "./SidebarWrapper";
 
 interface Props {
     user: User | undefined
@@ -11,9 +11,9 @@ function Layout({user, children}: Props) {
 
     return (
         <div>
-            <SidebarAndContent user={user}>
+            <SidebarWrapper user={user}>
                 {children}
-            </SidebarAndContent>
+            </SidebarWrapper>
         </div>
     );
 }

@@ -13,8 +13,6 @@ function Profile({user}: Props) {
         <div className="m-2 flex flex-col gap-2">
             <h1 className="text-2xl">Mein Profil</h1>
 
-
-
             <div className="divider">Nutzername</div>
             <ChangeUsernameForm user={user} />
 
