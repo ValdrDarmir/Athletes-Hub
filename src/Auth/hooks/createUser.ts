@@ -35,7 +35,8 @@ const useCreateUser = (): CreateUserHook => {
             await setDoc(newDoc, {
                 id: userCredential.user.uid,
                 displayName: data.username,
-                email: userCredential.user.email,
+                email: data.email,
+                disciplines: [],
                 createdAt: new Date(),
                 updatedAt: new Date(),
             })

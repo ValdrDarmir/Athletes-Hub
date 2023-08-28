@@ -1,7 +1,7 @@
 import React from 'react';
-import User from "../models/User";
 import Header from "./Header";
 import SidebarContent from "./SidebarContent";
+import User from "../../User/models/User";
 
 interface Props {
     user: User | undefined
