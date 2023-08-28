@@ -1,5 +1,5 @@
 import React from 'react';
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import LinePlotWithErrorBars from "../components/LinePlotWithErrorBars";
 import useStatisticsData from "../hooks/statisticsData";  // This needs to be imported when using charts
 

@@ -1,7 +1,7 @@
 import React, {ReactNode, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import useAuthenticatedUser from "../hooks/authenticatedUser";
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Props {

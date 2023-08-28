@@ -1,7 +1,7 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {FirestoreError, query, where} from "firebase/firestore";
 import db from "../../shared/utils/db";
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import {
     getAttendingPlayers,
     getCurrentRound,

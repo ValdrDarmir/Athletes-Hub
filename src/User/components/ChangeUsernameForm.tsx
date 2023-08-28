@@ -1,5 +1,5 @@
 import React from 'react';
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import useChangeUsername from "../../Auth/hooks/changeUsername";
 import {auth} from "../../shared/utils/firebase";
 import {useForm} from "react-hook-form";

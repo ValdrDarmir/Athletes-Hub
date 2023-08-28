@@ -1,7 +1,7 @@
 import {firestore} from "./firebase";
 import "firebase/firestore"
 import {collection, DocumentData, FirestoreDataConverter} from "firebase/firestore";
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import BirdShooterGame from "../../BirdShooterGame/models/BirdShooterGame";
 import BaseDBModel from "../models/BaseDBModel";
 

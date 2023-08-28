@@ -1,5 +1,5 @@
 import React from 'react';
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import {auth} from "../../shared/utils/firebase";
 import {useForm} from "react-hook-form";
 import useEffectWithPrevious from "../../shared/hooks/effectWithPrevious";

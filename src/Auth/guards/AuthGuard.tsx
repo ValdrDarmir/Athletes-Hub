@@ -1,6 +1,6 @@
 import React, {ReactNode, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
-import User from '../../App/models/User';
+import User from '../../User/models/User';
 import useAuthenticatedUser from "../hooks/authenticatedUser";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 

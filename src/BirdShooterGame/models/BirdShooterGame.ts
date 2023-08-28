@@ -1,4 +1,4 @@
-import User, {compareUserIds} from "../../App/models/User";
+import User, {compareUserIds} from "../../User/models/User";
 import BaseDBModel from "../../shared/models/BaseDBModel";
 
 export interface Hit {

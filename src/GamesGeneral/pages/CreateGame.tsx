@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import useCreateNewBirdShooterGame from "../../BirdShooterGame/hooks/createNewBirdShooterGame";
 import Games from "../models/Games";
 import SelectObject from "../../shared/components/SelectObject";

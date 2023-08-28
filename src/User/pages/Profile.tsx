@@ -1,5 +1,5 @@
 import React from 'react';
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import ChangeUsernameForm from "../components/ChangeUsernameForm";
 import ChangeEmailForm from "../components/ChangeEmailForm";
 import ChangePasswordForm from "../components/ChangePasswordForm";

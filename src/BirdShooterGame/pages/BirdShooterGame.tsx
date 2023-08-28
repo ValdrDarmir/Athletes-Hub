@@ -2,7 +2,7 @@ import {useHref, useParams} from "react-router-dom";
 import usePlayBirdShooterGame from "../hooks/playBirdShooterGame";
 import React, {Fragment, useEffect} from "react";
 import {toast} from "react-toastify";
-import User from "../../App/models/User";
+import User from "../../User/models/User";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Params {

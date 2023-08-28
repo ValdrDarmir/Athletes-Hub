@@ -1,6 +1,6 @@
 import React from 'react';
-import User from "../models/User";
 import SidebarWrapper from "./SidebarWrapper";
+import User from "../../User/models/User";
 
 interface Props {
     user: User | undefined
