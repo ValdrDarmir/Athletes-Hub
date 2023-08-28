@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="src" pattern="file[athletes-hub]:*/&amp;&amp;!file[athletes-hub]:.github//*&amp;&amp;!file[athletes-hub]:.idea//*&amp;&amp;!file[athletes-hub]:build//*&amp;&amp;!file:package-lock.json" />
+</component>
