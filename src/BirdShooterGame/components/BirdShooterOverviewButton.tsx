@@ -12,16 +12,17 @@ function BirdShooterOverviewButton({overview}: Props) {
         <Link to={`/game/${overview.id}`} className="btn flex content-center justify-between">
             <span>
                 <span>gegen </span>
-                {overview.opponents
-                    .map(op =>
+                {overview.opponents.length > 0 ?
+                    overview.opponents.map(op =>
                         <span className="font-bold">{op.displayName}</span>
                     )
-                    .reduce((prev, curr) => <>{prev}, {curr}</>)
+                        .reduce((prev, curr) => <>{prev}, {curr}</>) :
+                    <span className="font-bold">bisher niemanden 😥</span>
                 }
             </span>
             {overview.winner ?
                 <span>Gewinner: {overview.winner.displayName}</span> :
-                <span> Runde: {overview.round}/{overview.maxRounds}</span>
+                <span>Runde: {overview.round}/{overview.maxRounds}</span>
             }
         </Link>
     )

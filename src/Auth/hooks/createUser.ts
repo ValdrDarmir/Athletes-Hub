@@ -36,7 +36,6 @@ const useCreateUser = (): CreateUserHook => {
                 id: userCredential.user.uid,
                 displayName: data.username,
                 email: data.email,
-                disciplines: [],
                 createdAt: new Date(),
                 updatedAt: new Date(),
             })

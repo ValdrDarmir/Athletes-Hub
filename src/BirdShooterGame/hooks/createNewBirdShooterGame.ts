@@ -1,37 +1,42 @@
 import {useState} from "react";
-import {doc, DocumentReference, setDoc} from "firebase/firestore";
-import BirdShooterGame from "../models/BirdShooterGame";
+import {doc, setDoc} from "firebase/firestore";
 import * as uuid from "uuid"
 import User from "../../User/models/User";
 import db from "../../shared/utils/db";
+import Disciplines from "../../User/models/Disciplines";
+import BirdShooterGame from "../models/BirdShooterGame";
 
 function useCreateNewBirdShooterGame() {
     const [creationLoading, setCreationLoading] = useState(false)
-    const [createdGameDoc, setCreatedGameDoc] = useState<DocumentReference<BirdShooterGame> | null>(null)
+    const [creationError, setCreationError] = useState<Error | null>(null)
 
-    const createNewGame = async (creator: User) => {
+    const createNewGame = async (creator: User, discipline: Disciplines) => {
 
         setCreationLoading(true)
+        setCreationError(null)
 
         const newGameDoc = doc(db.gameBirdShooter, uuid.v4())
 
-        await setDoc(newGameDoc, {
+        const newGameData: BirdShooterGame = {
             id: newGameDoc.id,
             rounds: 5,
-            playerIds: [creator.id],
-            hits: [],
+            participants: [],
+            series: [],
             creatorId: creator.id,
+            discipline: discipline,
             gameRunning: false,
             createdAt: new Date(),
             updatedAt: new Date(),
-        })
+        }
 
-        setCreatedGameDoc(newGameDoc)
+        await setDoc(newGameDoc, newGameData)
 
         setCreationLoading(false)
+
+        return newGameData;
     }
 
-    return [createNewGame, createdGameDoc, creationLoading] as const
+    return [createNewGame, creationLoading, creationError] as const
 }
 
 export default useCreateNewBirdShooterGame

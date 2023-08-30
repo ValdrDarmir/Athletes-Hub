@@ -15,8 +15,10 @@ function useStatisticsData(userId: string): StatisticsDataHook {
     }
 
     if (birdShooterGamesError || !birdShooterGames) {
+        const noBirdShooterGamesError = !birdShooterGames && new Error("No bird shooter games found")
         const unknownError = birdShooterGamesError || new Error("Unknown error")
-        const error = birdShooterGamesError || unknownError
+
+        const error = birdShooterGamesError || noBirdShooterGamesError || unknownError
 
         return [false, error, null]
     }
@@ -25,7 +27,7 @@ function useStatisticsData(userId: string): StatisticsDataHook {
     const hitsData = birdShooterGames
         .filter(game => getGameFinished(game))
         .map(game => {
-            const scores = game.hits
+            const scores = game.series
                 .filter(hit => hit.playerId === userId)
                 .map(hit => hit.score)
 

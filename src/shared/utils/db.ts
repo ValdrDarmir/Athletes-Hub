@@ -4,6 +4,7 @@ import {collection, DocumentData, FirestoreDataConverter} from "firebase/firesto
 import User from "../../User/models/User";
 import BirdShooterGame from "../../BirdShooterGame/models/BirdShooterGame";
 import BaseDBModel from "../models/BaseDBModel";
+import ClubDiscipline from "../../User/models/ClubDiscipline";
 
 const dumpConverter = <T extends BaseDBModel>(): FirestoreDataConverter<T, T> => ({
     toFirestore: (data) => {
@@ -29,7 +30,8 @@ const dataPoint = <T extends DocumentData>(collectionPath: string, converter: Fi
 
 const db = {
     users: dataPoint<User>("users", dumpConverter<User>()),
-    gameBirdShooter: dataPoint<BirdShooterGame>("gameBirdShooter", dumpConverter<BirdShooterGame>())
+    clubDisciplines: dataPoint<ClubDiscipline>("clubDisciplines", dumpConverter<ClubDiscipline>()),
+    gameBirdShooter: dataPoint<BirdShooterGame>("gameBirdShooter", dumpConverter<BirdShooterGame>()),
 }
 
 export default db

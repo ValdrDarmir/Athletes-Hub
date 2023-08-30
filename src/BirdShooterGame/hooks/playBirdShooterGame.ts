@@ -6,136 +6,196 @@ import {
     getCurrentRound, getCurrentPlayer,
     getHitsPerPlayer,
     getWinner,
-    HitsPlayer, getCreator
+    SeriesPlayer
 } from "../models/BirdShooterGame";
 import findFirstError from "../../shared/utils/findFirstError";
+import Disciplines from "../../User/models/Disciplines";
 
 
-interface PlayBirdShooterGameHook {
-    loading: boolean
-    error: Error | null
-    gameState: {
+export enum GameStates {
+    Loading, Error, BeforeGame, InGame, AfterGame
+}
+
+export interface LoadingState {
+    state: GameStates.Loading
+    data: null
+    actions: null
+}
+
+export interface ErrorState {
+    state: GameStates.Error
+    data: Error | false | undefined // false/undefined means we missed an error
+    actions: null
+}
+
+export interface BeforeGameState {
+    state: GameStates.BeforeGame
+    data: {
+        players: User[]
+        creator: User
+        maxRounds: number
+        discipline: Disciplines
+    }
+    actions: {
+        startGame(): Promise<Error | void>
+    }
+}
+
+export interface InGameState {
+    state: GameStates.InGame
+    data: {
+        players: User[]
+        creator: User
+        maxRounds: number
+        discipline: Disciplines
         currentPlayer: User
         currentRound: number
-        maxRounds: number
-        winner: User | null
-        hitsPerPlayer: HitsPlayer[]
-        gameRunning: boolean
+        hitsPerPlayer: SeriesPlayer[]
+    }
+    actions: {
+        newHit(score: number): Promise<Error | void>
+    }
+}
+
+export interface AfterGameState {
+    state: GameStates.AfterGame
+    data: {
+        players: User[]
         creator: User
-    } | null,
-    gameActions: {
-        newHit(score: number): Promise<Error | undefined>
-        startGame(): Promise<void>
-    } | null,
-}
-
-function newErrorResult(error: Error) {
-    return {
-        loading: false,
-        error: error,
-        gameActions: null,
-        gameState: null,
+        maxRounds: number
+        discipline: Disciplines
+        hitsPerPlayer: SeriesPlayer[]
+        winner: User
     }
+    actions: null
 }
 
-function usePlayBirdShooterGame(gameId: string | undefined): PlayBirdShooterGameHook {
+type AllGameStates = LoadingState | ErrorState | BeforeGameState | InGameState | AfterGameState
+
+function usePlayBirdShooterGame(gameId: string | undefined): AllGameStates {
     const [games, gameLoading, gameError] = useCollectionData(query(db.gameBirdShooter, where("id", "==", gameId), limit(1)))
-    const game = (games && games.length > 0) ? games[0] : null
+    const game = games?.at(0)
 
-    const [players, playersLoading, playersError] = useCollectionData(game && query(db.users, where("id", "in", game.playerIds)))
+    const allPlayersIds = game && game.participants
+        .map(participant => participant.userId)
+        .concat("") // to prevent an empty array (firebase doesn't allow that)
 
-    // Custom Errors
-    const noGameIdError = !gameId && new Error("No game id was given.")
-    const noGameOrPlayersError = (!game || !players) && new Error("No game or players found!?")
+    const [players, playersLoading, playersError] = useCollectionData(game &&
+        query(db.users, where("id", "in", allPlayersIds))
+    )
 
-    const loading = gameLoading || playersLoading
-    const error = gameError || playersError || noGameIdError || noGameOrPlayersError
+    const [creators, creatorsLoading, creatorsError] = useCollectionData(game &&
+        query(db.users, where("id", "==", game.creatorId), limit(1))
+    )
+    const creator = creators?.at(0)
 
-    // Initial error and loading handling
-    if(loading){
-        return {
-            loading: loading,
-            error: null,
-            gameActions: null,
-            gameState: null,
-        }
+    // Initial loading
+    const loading = gameLoading || playersLoading || creatorsLoading
+    if (loading) {
+        return {state: GameStates.Loading, data: null, actions: null}
     }
 
-    if (error || !game || !players) {
-        const unknownError = new Error("Some error happened") // This should not happen
-        return newErrorResult(error || unknownError)
+    // Initial Errors
+    if (!gameId || !game || !players || !creator) {
+        const noGameIdError = !gameId && new Error("No game id was given.")
+        const noGameError = !game && new Error("No game found")
+        const noPlayersError = !players && new Error("No players found")
+        const noCreatorError = !creator && new Error("Creator not found");
+
+        const error = gameError || playersError || creatorsError || noGameIdError || noGameError || noPlayersError || noCreatorError
+
+        return {state: GameStates.Error, data: error, actions: null}
     }
 
+    // Determine game state in logical order and handle errors
     const currentPlayer = getCurrentPlayer(game, players)
     const currentRound = getCurrentRound(game)
     const maxRounds = game.rounds
     const winner = getWinner(game, players)
     const hitsPerPlayer = getHitsPerPlayer(game, players)
     const gameRunning = game.gameRunning
-    const creator = getCreator(game, players)
 
-    // TODO better streamline throwing errors. This is the only short way I found, that typescript accepts
-    if(currentPlayer instanceof Error ||
-        winner instanceof Error ||
-        hitsPerPlayer instanceof Error ||
-        creator instanceof Error
-    ){
-        const error = findFirstError(currentPlayer, winner, hitsPerPlayer, creator)
-        const unknownError = new Error("Some error happened") // This should not happen
-        return newErrorResult(error || unknownError)
-    }
+    if (!gameRunning) {
+        return {
+            state: GameStates.BeforeGame,
+            data: {
+                players: players,
+                creator: creator,
+                maxRounds: maxRounds,
+                discipline: game.discipline,
+            },
+            actions: {
+                async startGame() {
+                    if (players.length === 0) {
+                        return new Error("No players in game")
+                    }
 
-    // Determine the current game state
-    const gameState = {
-        currentPlayer: currentPlayer,
-        currentRound: currentRound,
-        maxRounds: maxRounds,
-        winner: winner,
-        hitsPerPlayer: hitsPerPlayer,
-        gameRunning: gameRunning,
-        creator: creator,
-    }
+                    const docRef = doc(db.gameBirdShooter, game.id)
+                    await setDoc(docRef, {
+                        gameRunning: true,
+                    }, {merge: true})
+                }
+            }
 
-    // Define Game actions
-    const startGame = () => {
-        const docRef = doc(db.gameBirdShooter, game.id)
-        return setDoc(docRef, {
-            gameRunning: true,
-        }, {merge: true})
-    }
-
-    const newHit = async (score: number) => {
-        const currentPlayer = getCurrentPlayer(game, players)
-
-        if (currentPlayer instanceof Error) {
-            return currentPlayer
         }
+    }
 
-        const newHit = {
-            playerId: currentPlayer.id,
-            score: score,
+    if (currentPlayer instanceof Error || hitsPerPlayer instanceof Error) {
+        const error = findFirstError(currentPlayer, hitsPerPlayer)
+        return {state: GameStates.Error, data: error, actions: null}
+    }
+
+    if (!winner) {
+        return {
+            state: GameStates.InGame,
+            data: {
+                players: players,
+                creator: creator,
+                maxRounds: maxRounds,
+                discipline: game.discipline,
+                currentPlayer: currentPlayer,
+                currentRound: currentRound,
+                hitsPerPlayer: hitsPerPlayer,
+            },
+            actions: {
+                async newHit(score: number) {
+                    const currentPlayer = getCurrentPlayer(game, players)
+
+                    if (currentPlayer instanceof Error) {
+                        return currentPlayer
+                    }
+
+                    const newHit = {
+                        playerId: currentPlayer.id,
+                        score: score,
+                    }
+
+                    const newHits = [...game.series, newHit]
+
+                    const docRef = doc(db.gameBirdShooter, game.id)
+                    await setDoc(docRef, {
+                        series: newHits,
+                    }, {merge: true})
+                }
+            }
         }
-
-        const newHits = [...game.hits, newHit]
-
-        const docRef = doc(db.gameBirdShooter, game.id)
-        await setDoc(docRef, {
-            hits: newHits,
-        }, {merge: true})
     }
 
-
-    const gameActions = {
-        newHit: newHit,
-        startGame: startGame,
+    if (winner instanceof Error) {
+        return {state: GameStates.Error, data: winner, actions: null}
     }
-
 
     return {
-        loading: false,
-        error: null,
-        gameState: gameState,
-        gameActions: gameActions,
+        state: GameStates.AfterGame,
+        data: {
+            players: players,
+            creator: creator,
+            maxRounds: maxRounds,
+            discipline: game.discipline,
+            hitsPerPlayer: hitsPerPlayer,
+            winner: winner!,
+        },
+        actions: null,
     }
 }
 

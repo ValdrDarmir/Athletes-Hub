@@ -1,5 +1,5 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {FirestoreError, query, where} from "firebase/firestore";
+import {FirestoreError, or, query, where} from "firebase/firestore";
 import db from "../../shared/utils/db";
 import User from "../../User/models/User";
 import {
@@ -20,8 +20,18 @@ export interface BirdShooterGameOverview {
 type UserBirdShooterGamesHook = [BirdShooterGameOverview[] | null, boolean, Error | FirestoreError | null]
 
 export default function useUserBirdShooterGamesOverview(userId: string | undefined): UserBirdShooterGamesHook {
-    const [games, gamesLoading, gamesError] = useCollectionData(query(db.gameBirdShooter, where("playerIds", "array-contains", userId)));
-    const allPlayersIds = games && games.map(game => game.playerIds).flat()
+    const [games, gamesLoading, gamesError] = useCollectionData(query(db.gameBirdShooter,
+            or(where("playerIds", "array-contains", userId),
+                where("creatorId", "==", userId))
+        )
+    );
+    const allPlayersIds = games && games
+        .map(game => game.participants
+            .map(participant => participant.userId)
+        )
+        .flat()
+        .concat("") // to prevent an empty array (firebase doesn't allow that)
+
 
     const [players, playersLoading, playersError] = useCollectionData(allPlayersIds && query(db.users, where("id", "in", allPlayersIds)))
 
@@ -31,14 +41,16 @@ export default function useUserBirdShooterGamesOverview(userId: string | undefin
     // Error and loading handling
     if (loading || error || !games || !players) {
         const noUserIdError = !userId && new Error("No user id was given.")
-        const noGameOrOpponentsError = (!games || !players) && new Error("No games or opponents found!?")
+        const noGamesError = !games && new Error("No games found")
+        const noOpponentsError = !players && new Error("No opponents found")
 
         return [
             null,
             loading,
-            error || noUserIdError || noGameOrOpponentsError || null,
+            error || noUserIdError || noGamesError || noOpponentsError || null,
         ]
     }
+
 
     // TODO error is thrown too often. Initially not all players are loaded. Fix?
     const gameOverviews: BirdShooterGameOverview[] = games

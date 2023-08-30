@@ -1,15 +1,12 @@
 import React from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import {useCollectionData} from "react-firebase-hooks/firestore";
-import {arrayUnion, doc, limit, query, setDoc, where} from "firebase/firestore";
-import db from "../../shared/utils/db";
 import User from "../../User/models/User";
-
-interface Invitable {
-    id: string
-    playerIds: string[]
-    // TODO define some attributes, that all games, tournament and other stuff, that players can be invited to must have
-}
+import ClubDiscipline from "../../User/models/ClubDiscipline";
+import ErrorDisplay from "../../shared/components/ErrorDisplay";
+import SelectObject from "../../shared/components/SelectObject";
+import OptionObject from "../../shared/components/OptionObject";
+import {disciplineNames} from "../../User/models/Disciplines";
+import useInvitation from "../hooks/invitation";
 
 interface Props {
     user: User
@@ -17,50 +14,62 @@ interface Props {
 
 function Invitation({user}: Props) {
     const {entityId} = useParams()
+    const {
+        entity,
+        isUserAlreadyAttending,
+        validUserClubDisciplines,
+        loading,
+        error,
+        addPlayer,
+    } = useInvitation(entityId, user);
 
     const navigate = useNavigate()
-    // query all collections, where invitations are possible
-    const [bsGame, bsLoading, bsError] = useCollectionData(query(db.gameBirdShooter, where("id", "==", entityId), limit(1)))
-    // TODO add other stuff, like tournaments here
 
-    const entity: Invitable | null = bsGame?.at(0) || null
-
-
-    const entityNotFoundError = !entity && new Error("Entity not found")
-
-    const loading = bsLoading
-    const error = bsError || entityNotFoundError
+    const [selectedClubDiscipline, setSelectedClubDiscipline] = React.useState<ClubDiscipline | null>(null)
 
 
     if (loading) {
         return <p>{loading}</p>
     }
 
-    if (error || !entity) {
-        const unknownError = new Error("Unknown error happened") // This should not happen
-        return <p className="text-error">{(error || unknownError).message}</p>
+    if (error) {
+        return <ErrorDisplay error={error}/>
     }
 
-    const isAlreadyAttending = entity.playerIds.includes(user.id)
+    const onJoinButtonClicked = async () => {
+        if (!selectedClubDiscipline) {
+            return
+        }
+        await addPlayer(selectedClubDiscipline.id);
+        navigate(`/game/${entityId}`)
+    }
 
-    const addPlayer = async () => {
-        // TODO discriminate between collections
-        const entityDoc = doc(db.gameBirdShooter, entity.id)
-        await setDoc(entityDoc, {
-            playerIds: arrayUnion(user.id)
-        }, {merge: true})
-        navigate(`/game/${entity.id}`)
+    if (isUserAlreadyAttending) {
+        return <p>Du bist bereits dabei!</p>
+    }
+
+    if (validUserClubDisciplines.length === 0) {
+        return <p>Du hast keinen Verein, der bei dieser Disziplin mitmachen kann.</p>
     }
 
     return (
         <div>
-            {isAlreadyAttending ?
-                <span>Du bist dabei!</span> :
-                <>
-                    <span>Willst du mitmachen?</span>
-                    <button className="btn" onClick={addPlayer}>Bin dabei!</button>
-                </>
-            }
+            <div className="flex flex-col gap-2">
+                <p>Willst du mitmachen? Die Disziplin ist {disciplineNames[entity.discipline]}</p>
+                <p>Mit welchem Verein trittst du an?</p>
+
+                <SelectObject className="input input-bordered select" value={selectedClubDiscipline}
+                              onChange={setSelectedClubDiscipline}>
+                    <OptionObject value={null} disabled>Wähle deinen Verein</OptionObject>
+                    {validUserClubDisciplines.map((clubDiscipline, i) =>
+                        <OptionObject key={i} value={clubDiscipline}>{clubDiscipline.club}</OptionObject>
+                    )}
+                </SelectObject>
+
+                <button className="btn" onClick={onJoinButtonClicked} disabled={selectedClubDiscipline === null}>
+                    Bin dabei!
+                </button>
+            </div>
         </div>
     );
 }
