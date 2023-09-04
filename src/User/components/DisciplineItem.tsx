@@ -1,13 +1,13 @@
 import React from 'react';
-import User from "../models/User";
+import UserModel from "../models/User.model";
 import useChangeClubDisciplines from '../hooks/changeClubDisciplines';
 import {toast} from "react-toastify";
 import {disciplineNames} from "../models/Disciplines";
-import ClubDiscipline from '../models/ClubDiscipline';
+import ClubDisciplineModel from '../models/ClubDiscipline.model';
 
 interface PropsDisciplineItem {
-    user: User
-    clubDiscipline: ClubDiscipline
+    user: UserModel
+    clubDiscipline: ClubDisciplineModel
 }
 
 function DisciplineItem({user, clubDiscipline}: PropsDisciplineItem) {

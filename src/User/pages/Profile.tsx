@@ -1,5 +1,5 @@
 import React from 'react';
-import User from "../../User/models/User";
+import UserModel from "../models/User.model";
 import ChangeUsernameForm from "../components/ChangeUsernameForm";
 import ChangeEmailForm from "../components/ChangeEmailForm";
 import ChangePasswordForm from "../components/ChangePasswordForm";
@@ -11,7 +11,7 @@ import {query, where} from 'firebase/firestore';
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 function Profile({user}: Props) {

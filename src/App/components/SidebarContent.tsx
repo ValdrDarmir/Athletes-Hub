@@ -1,10 +1,10 @@
 import React from 'react';
 import logo from "../assets/logo.png";
 import {Link} from "react-router-dom";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 
 interface Props {
-    user: User | undefined;
+    user: UserModel | undefined;
 
     toggleSidebar(): void;
 }

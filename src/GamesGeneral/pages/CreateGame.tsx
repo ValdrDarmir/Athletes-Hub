@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 import useCreateNewBirdShooterGame from "../../BirdShooterGame/hooks/createNewBirdShooterGame";
 import Games from "../models/Games";
 import SelectObject from "../../shared/components/SelectObject";
@@ -9,7 +9,7 @@ import OptionObject from "../../shared/components/OptionObject";
 import {toast} from "react-toastify";
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 function CreateGame({user}: Props) {

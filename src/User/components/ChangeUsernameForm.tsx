@@ -1,5 +1,5 @@
 import React from 'react';
-import User from "../../User/models/User";
+import UserModel from "../models/User.model";
 import useChangeUsername from "../../Auth/hooks/changeUsername";
 import {auth} from "../../shared/utils/firebase";
 import {useForm} from "react-hook-form";
@@ -11,7 +11,7 @@ interface UsernameFieldValues {
 }
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 function ChangeUsernameForm({user}: Props) {

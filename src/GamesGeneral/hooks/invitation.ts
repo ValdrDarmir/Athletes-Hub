@@ -1,10 +1,10 @@
-import {arrayUnion, doc, limit, query, setDoc, where} from "firebase/firestore";
+import {arrayUnion, doc, query, setDoc, where} from "firebase/firestore";
 import db from "../../shared/utils/db";
 import Participant from "../models/Participant";
-import ClubDiscipline from "../../User/models/ClubDiscipline";
-import {useCollectionData} from "react-firebase-hooks/firestore";
+import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
+import {useCollectionData, useDocumentData} from "react-firebase-hooks/firestore";
 import Disciplines from "../../User/models/Disciplines";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 
 interface Invitable {
     id: string
@@ -35,7 +35,7 @@ interface useInvitationHookData {
     loading: false
     error: null
     entity: Invitable
-    validUserClubDisciplines: ClubDiscipline[]
+    validUserClubDisciplines: ClubDisciplineModel[]
     isUserAlreadyAttending: boolean
 
     addPlayer(clubDisciplineId: string): Promise<void>
@@ -43,11 +43,11 @@ interface useInvitationHookData {
 
 type useInvitationHook = useInvitationHookLoading | useInvitationHookError | useInvitationHookData
 
-function useInvitation(entityId: string | undefined, user: User): useInvitationHook {
+function useInvitation(entityId: string | undefined, user: UserModel): useInvitationHook {
     // query all collections, where invitations are possible
-    const [bsGame, bsLoading, bsError] = useCollectionData(query(db.gameBirdShooter, where("id", "==", entityId), limit(1)))
+    const [bsGame, bsLoading, bsError] = useDocumentData(doc(db.gameBirdShooter, entityId))
     // TODO add other stuff, like tournaments here
-    const entity: Invitable | undefined = bsGame?.at(0)
+    const entity: Invitable | undefined = bsGame
 
     const [clubDisciplines, clubDisciplinesLoading, clubDisciplinesError] = useCollectionData(query(db.clubDisciplines, where("userId", "==", user.id)))
 

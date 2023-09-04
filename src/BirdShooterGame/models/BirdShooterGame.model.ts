@@ -1,5 +1,5 @@
-import User, {compareUserIds} from "../../User/models/User";
-import BaseDBModel from "../../shared/models/BaseDBModel";
+import UserModel, {compareUserIds} from "../../User/models/User.model";
+import BaseDBModel from "../../shared/models/BaseDB.model";
 import Disciplines from "../../User/models/Disciplines";
 import Participant from "../../GamesGeneral/models/Participant";
 
@@ -8,7 +8,7 @@ export interface Series {
     score: number
 }
 
-export default interface BirdShooterGame extends BaseDBModel {
+export default interface BirdShooterGameModel extends BaseDBModel {
     rounds: number
     participants: Participant[]
     series: Series[]
@@ -18,16 +18,16 @@ export default interface BirdShooterGame extends BaseDBModel {
 }
 
 export interface SeriesPlayer {
-    player: User
+    player: UserModel
     series: number[]
     currentScore: number
 }
 
-export function getCurrentRound(game: BirdShooterGame) {
+export function getCurrentRound(game: BirdShooterGameModel) {
     return Math.floor(game.series.length / game.participants.length) + 1
 }
 
-export function getGameFinished(game: BirdShooterGame) {
+export function getGameFinished(game: BirdShooterGameModel) {
     return getCurrentRound(game) > game.rounds
 }
 
@@ -35,7 +35,7 @@ export function getGameFinished(game: BirdShooterGame) {
  * @param game
  * @param players must include all players of this game. Can also include other users.
  */
-export function getHitsPerPlayer(game: BirdShooterGame, players: User[]): SeriesPlayer[] | Error {
+export function getHitsPerPlayer(game: BirdShooterGameModel, players: UserModel[]): SeriesPlayer[] | Error {
     const attendingPlayers = getAttendingPlayers(game, players)
 
     if (attendingPlayers instanceof Error) {
@@ -53,7 +53,7 @@ export function getHitsPerPlayer(game: BirdShooterGame, players: User[]): Series
     })
 }
 
-export function getHighestScorePlayer(game: BirdShooterGame, players: User[]) {
+export function getHighestScorePlayer(game: BirdShooterGameModel, players: UserModel[]) {
     const hitsPerPlayer = getHitsPerPlayer(game, players)
 
     if (hitsPerPlayer instanceof Error) {
@@ -63,7 +63,7 @@ export function getHighestScorePlayer(game: BirdShooterGame, players: User[]) {
     return hitsPerPlayer.reduce((prev, curr) => prev.currentScore < curr.currentScore ? curr : prev).player
 }
 
-export function getWinner(game: BirdShooterGame, players: User[]) {
+export function getWinner(game: BirdShooterGameModel, players: UserModel[]) {
     return (getCurrentRound(game) > game.rounds) ? getHighestScorePlayer(game, players) : null
 }
 
@@ -71,7 +71,7 @@ export function getWinner(game: BirdShooterGame, players: User[]) {
  * @param game
  * @param players must include all players of this game. Can also include other users.
  */
-export function getAttendingPlayers(game: BirdShooterGame, players: User[]) {
+export function getAttendingPlayers(game: BirdShooterGameModel, players: UserModel[]) {
     const attendingPlayers = players
         .filter(user => game.participants.some(participant => participant.userId === user.id))
         .sort(compareUserIds)
@@ -83,7 +83,7 @@ export function getAttendingPlayers(game: BirdShooterGame, players: User[]) {
     return attendingPlayers
 }
 
-export function getCurrentPlayer(game: BirdShooterGame, players: User[]) {
+export function getCurrentPlayer(game: BirdShooterGameModel, players: UserModel[]) {
     const currentPlayerIndex = game.series.length % game.participants.length
     const attendingPlayers = getAttendingPlayers(game, players)
 
@@ -94,7 +94,7 @@ export function getCurrentPlayer(game: BirdShooterGame, players: User[]) {
     return attendingPlayers[currentPlayerIndex]
 }
 
-export function getCreator(game: BirdShooterGame, players: User[]) {
+export function getCreator(game: BirdShooterGameModel, players: UserModel[]) {
     const creator = players.find(player => player.id === game.creatorId)
 
     if (!creator) {

@@ -1,12 +1,12 @@
 import React, {ReactNode, useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
 import useAuthenticatedUser from "../hooks/authenticatedUser";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Props {
     component: React.FC,
-    layout: React.FC<{ user: User | undefined, children: ReactNode }>,
+    layout: React.FC<{ user: UserModel | undefined, children: ReactNode }>,
     redirectRoute: string,
 }
 

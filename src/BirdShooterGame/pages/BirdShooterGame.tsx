@@ -2,12 +2,12 @@ import {useHref, useParams} from "react-router-dom";
 import usePlayBirdShooterGame, {GameStates} from "../hooks/playBirdShooterGame";
 import React, {Fragment} from "react";
 import {toast} from "react-toastify";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 import useEffectWithPrevious from "../../shared/hooks/effectWithPrevious";
 
 interface Params {
-    user: User
+    user: UserModel
 }
 
 function BirdShooterGame({user}: Params) {

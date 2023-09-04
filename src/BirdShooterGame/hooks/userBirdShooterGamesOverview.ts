@@ -1,30 +1,35 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {FirestoreError, or, query, where} from "firebase/firestore";
+import {or, query, where} from "firebase/firestore";
 import db from "../../shared/utils/db";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 import {
     getAttendingPlayers,
     getCurrentRound,
     getWinner
-} from "../models/BirdShooterGame";
+} from "../models/BirdShooterGame.model";
 import nonFalsy from "../../shared/utils/nonFalsy";
 
 export interface BirdShooterGameOverview {
     id: string
-    winner: User | null
-    opponents: User[]
+    winner: UserModel | null
+    opponents: UserModel[]
     round: number
     maxRounds: number
 }
 
-type UserBirdShooterGamesHook = [BirdShooterGameOverview[] | null, boolean, Error | FirestoreError | null]
+type UserBirdShooterGamesHook =
+    [BirdShooterGameOverview[], false, null] |
+    [null, true, null] |
+    [null, false, Error] |
+    [null, false, null]
 
-export default function useUserBirdShooterGamesOverview(userId: string | undefined): UserBirdShooterGamesHook {
+export default function useUserBirdShooterGamesOverview(userId: string): UserBirdShooterGamesHook {
     const [games, gamesLoading, gamesError] = useCollectionData(query(db.gameBirdShooter,
             or(where("playerIds", "array-contains", userId),
                 where("creatorId", "==", userId))
         )
     );
+
     const allPlayersIds = games && games
         .map(game => game.participants
             .map(participant => participant.userId)
@@ -38,19 +43,20 @@ export default function useUserBirdShooterGamesOverview(userId: string | undefin
     const loading = gamesLoading || playersLoading
     const error = gamesError || playersError
 
-    // Error and loading handling
-    if (loading || error || !games || !players) {
+    if (loading) {
+        return [null, true, null,]
+    }
+
+    if (error || !games || !players) {
         const noUserIdError = !userId && new Error("No user id was given.")
         const noGamesError = !games && new Error("No games found")
         const noOpponentsError = !players && new Error("No opponents found")
+        const unknownError = new Error("Unknown error")
 
-        return [
-            null,
-            loading,
-            error || noUserIdError || noGamesError || noOpponentsError || null,
-        ]
+        const error = gamesError || playersError || noUserIdError || noGamesError || noOpponentsError || unknownError
+
+        return [null, false, error,]
     }
-
 
     // TODO error is thrown too often. Initially not all players are loaded. Fix?
     const gameOverviews: BirdShooterGameOverview[] = games

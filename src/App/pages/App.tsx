@@ -3,13 +3,13 @@ import {useSignOut} from "react-firebase-hooks/auth";
 import {Link} from "react-router-dom";
 import {auth} from '../../shared/utils/firebase';
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 import {query, where} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import db from "../../shared/utils/db";
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 function App({user}: Props) {

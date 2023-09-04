@@ -1,10 +1,10 @@
 import {firestore} from "./firebase";
 import "firebase/firestore"
 import {collection, DocumentData, FirestoreDataConverter} from "firebase/firestore";
-import User from "../../User/models/User";
-import BirdShooterGame from "../../BirdShooterGame/models/BirdShooterGame";
-import BaseDBModel from "../models/BaseDBModel";
-import ClubDiscipline from "../../User/models/ClubDiscipline";
+import UserModel from "../../User/models/User.model";
+import BirdShooterGameModel from "../../BirdShooterGame/models/BirdShooterGame.model";
+import BaseDBModel from "../models/BaseDB.model";
+import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 
 const dumpConverter = <T extends BaseDBModel>(): FirestoreDataConverter<T, T> => ({
     toFirestore: (data) => {
@@ -29,9 +29,9 @@ const dumpConverter = <T extends BaseDBModel>(): FirestoreDataConverter<T, T> =>
 const dataPoint = <T extends DocumentData>(collectionPath: string, converter: FirestoreDataConverter<T, T>) => collection(firestore, collectionPath).withConverter(converter)
 
 const db = {
-    users: dataPoint<User>("users", dumpConverter<User>()),
-    clubDisciplines: dataPoint<ClubDiscipline>("clubDisciplines", dumpConverter<ClubDiscipline>()),
-    gameBirdShooter: dataPoint<BirdShooterGame>("gameBirdShooter", dumpConverter<BirdShooterGame>()),
+    users: dataPoint<UserModel>("users", dumpConverter<UserModel>()),
+    clubDisciplines: dataPoint<ClubDisciplineModel>("clubDisciplines", dumpConverter<ClubDisciplineModel>()),
+    gameBirdShooter: dataPoint<BirdShooterGameModel>("gameBirdShooter", dumpConverter<BirdShooterGameModel>()),
 }
 
 export default db

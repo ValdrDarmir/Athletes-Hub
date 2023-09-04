@@ -1,12 +1,12 @@
 import React from 'react';
-import User from "../models/User";
+import UserModel from "../models/User.model";
 import {useForm} from "react-hook-form";
 import Disciplines, {disciplineNames} from "../models/Disciplines";
 import useChangeClubDisciplines from '../hooks/changeClubDisciplines';
 import {toast} from "react-toastify";
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 interface ClubDisciplineFieldValues {

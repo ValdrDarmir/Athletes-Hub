@@ -1,5 +1,5 @@
 import React from 'react';
-import User from "../../User/models/User";
+import UserModel from "../models/User.model";
 import {auth} from "../../shared/utils/firebase";
 import {useForm} from "react-hook-form";
 import useEffectWithPrevious from "../../shared/hooks/effectWithPrevious";
@@ -12,7 +12,7 @@ interface EmailFieldValues {
 }
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 function ChangeEmailForm({user}: Props) {

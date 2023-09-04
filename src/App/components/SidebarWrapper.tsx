@@ -1,10 +1,10 @@
 import React from 'react';
 import Header from "./Header";
 import SidebarContent from "./SidebarContent";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 
 interface Props {
-    user: User | undefined
+    user: UserModel | undefined
     children: React.ReactNode
 }
 

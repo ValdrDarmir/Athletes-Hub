@@ -1,12 +1,12 @@
 import React from "react";
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 import useUserBirdShooterGamesOverview from "../../BirdShooterGame/hooks/userBirdShooterGamesOverview";
 import BirdShooterOverviewButton
     from "../../BirdShooterGame/components/BirdShooterOverviewButton";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 function MyGames({user}: Props) {

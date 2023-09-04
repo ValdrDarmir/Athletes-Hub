@@ -1,11 +1,11 @@
 import React from 'react';
-import User from "../../User/models/User";
+import UserModel from "../../User/models/User.model";
 import LinePlotWithErrorBars from "../components/LinePlotWithErrorBars";
 import useStatisticsData from "../hooks/statisticsData";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";  // This needs to be imported when using charts
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 function Statistics({user}: Props) {

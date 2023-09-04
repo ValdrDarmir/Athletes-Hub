@@ -1,7 +1,7 @@
 import {deleteDoc, doc, setDoc} from "firebase/firestore";
 import db from "../../shared/utils/db";
 import * as uuid from "uuid"
-import ClubDiscipline from "../models/ClubDiscipline";
+import ClubDisciplineModel from "../models/ClubDiscipline.model";
 import Disciplines from "../models/Disciplines";
 
 
@@ -25,7 +25,7 @@ function useChangeClubDisciplines(userId: string) {
     }
 
 
-    const updateClubDiscipline = async (clubDiscipline: ClubDiscipline) => {
+    const updateClubDiscipline = async (clubDiscipline: ClubDisciplineModel) => {
         const newDocRef = doc(db.clubDisciplines, clubDiscipline.id)
         await setDoc(newDocRef, {
             club: clubDiscipline.club,

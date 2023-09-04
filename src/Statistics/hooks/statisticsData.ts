@@ -1,7 +1,7 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import {query, where} from "firebase/firestore";
 import db from "../../shared/utils/db";
-import {getGameFinished} from "../../BirdShooterGame/models/BirdShooterGame";
+import {getGameFinished} from "../../BirdShooterGame/models/BirdShooterGame.model";
 import average from "../../shared/utils/average";
 import {DataPoint} from "../components/LinePlotWithErrorBars";
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import User from "../../User/models/User";
-import ClubDiscipline from "../../User/models/ClubDiscipline";
+import UserModel from "../../User/models/User.model";
+import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 import SelectObject from "../../shared/components/SelectObject";
 import OptionObject from "../../shared/components/OptionObject";
@@ -9,7 +9,7 @@ import {disciplineNames} from "../../User/models/Disciplines";
 import useInvitation from "../hooks/invitation";
 
 interface Props {
-    user: User
+    user: UserModel
 }
 
 function Invitation({user}: Props) {
@@ -25,7 +25,7 @@ function Invitation({user}: Props) {
 
     const navigate = useNavigate()
 
-    const [selectedClubDiscipline, setSelectedClubDiscipline] = React.useState<ClubDiscipline | null>(null)
+    const [selectedClubDiscipline, setSelectedClubDiscipline] = React.useState<ClubDisciplineModel | null>(null)
 
 
     if (loading) {

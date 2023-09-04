@@ -1,13 +1,13 @@
-import {useCollectionData} from "react-firebase-hooks/firestore";
-import {doc, limit, query, setDoc, where} from "firebase/firestore";
-import User from "../../User/models/User";
+import {useCollectionData, useDocumentData} from "react-firebase-hooks/firestore";
+import {doc, query, setDoc, where} from "firebase/firestore";
+import UserModel from "../../User/models/User.model";
 import db from "../../shared/utils/db";
 import {
     getCurrentRound, getCurrentPlayer,
     getHitsPerPlayer,
     getWinner,
     SeriesPlayer
-} from "../models/BirdShooterGame";
+} from "../models/BirdShooterGame.model";
 import findFirstError from "../../shared/utils/findFirstError";
 import Disciplines from "../../User/models/Disciplines";
 
@@ -31,8 +31,8 @@ export interface ErrorState {
 export interface BeforeGameState {
     state: GameStates.BeforeGame
     data: {
-        players: User[]
-        creator: User
+        players: UserModel[]
+        creator: UserModel
         maxRounds: number
         discipline: Disciplines
     }
@@ -44,11 +44,11 @@ export interface BeforeGameState {
 export interface InGameState {
     state: GameStates.InGame
     data: {
-        players: User[]
-        creator: User
+        players: UserModel[]
+        creator: UserModel
         maxRounds: number
         discipline: Disciplines
-        currentPlayer: User
+        currentPlayer: UserModel
         currentRound: number
         hitsPerPlayer: SeriesPlayer[]
     }
@@ -60,12 +60,12 @@ export interface InGameState {
 export interface AfterGameState {
     state: GameStates.AfterGame
     data: {
-        players: User[]
-        creator: User
+        players: UserModel[]
+        creator: UserModel
         maxRounds: number
         discipline: Disciplines
         hitsPerPlayer: SeriesPlayer[]
-        winner: User
+        winner: UserModel
     }
     actions: null
 }
@@ -73,8 +73,7 @@ export interface AfterGameState {
 type AllGameStates = LoadingState | ErrorState | BeforeGameState | InGameState | AfterGameState
 
 function usePlayBirdShooterGame(gameId: string | undefined): AllGameStates {
-    const [games, gameLoading, gameError] = useCollectionData(query(db.gameBirdShooter, where("id", "==", gameId), limit(1)))
-    const game = games?.at(0)
+    const [game, gameLoading, gameError] = useDocumentData(doc(db.gameBirdShooter, gameId))
 
     const allPlayersIds = game && game.participants
         .map(participant => participant.userId)
@@ -84,10 +83,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStates {
         query(db.users, where("id", "in", allPlayersIds))
     )
 
-    const [creators, creatorsLoading, creatorsError] = useCollectionData(game &&
-        query(db.users, where("id", "==", game.creatorId), limit(1))
-    )
-    const creator = creators?.at(0)
+    const [creator, creatorsLoading, creatorsError] = useDocumentData(game && doc(db.users, game.creatorId))
 
     // Initial loading
     const loading = gameLoading || playersLoading || creatorsLoading
