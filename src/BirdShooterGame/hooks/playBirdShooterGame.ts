@@ -73,7 +73,7 @@ export interface AfterGameState {
 type AllGameStates = LoadingState | ErrorState | BeforeGameState | InGameState | AfterGameState
 
 function usePlayBirdShooterGame(gameId: string | undefined): AllGameStates {
-    const [game, gameLoading, gameError] = useDocumentData(doc(db.gameBirdShooter, gameId))
+    const [game, gameLoading, gameError] = useDocumentData(gameId ? doc(db.gameBirdShooter, gameId) : null)
 
     const allPlayersIds = game && game.participants
         .map(participant => participant.userId)
