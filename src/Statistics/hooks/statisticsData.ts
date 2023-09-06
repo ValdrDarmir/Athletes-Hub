@@ -1,14 +1,15 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {query, where} from "firebase/firestore";
+import {query} from "firebase/firestore";
 import db from "../../shared/utils/db";
-import {getGameFinished} from "../../BirdShooterGame/models/BirdShooterGame.model";
 import average from "../../shared/utils/average";
 import {DataPoint} from "../components/LinePlotWithErrorBars";
+import BirdShooterGameModel, {BirdShooterGameStates, getState} from "../../BirdShooterGame/models/BirdShooterGame.model";
+import whereTyped from "../../shared/utils/whereTyped";
 
 type StatisticsDataHook = [boolean, Error | null, { birdShooterHits: DataPoint[] } | null]
 
 function useStatisticsData(userId: string): StatisticsDataHook {
-    const [birdShooterGames, birdShooterGamesLoading, birdShooterGamesError] = useCollectionData(query(db.gameBirdShooter, where("playerIds", "array-contains", userId)));
+    const [birdShooterGames, birdShooterGamesLoading, birdShooterGamesError] = useCollectionData(query(db.gameBirdShooter, whereTyped<BirdShooterGameModel>("participantIds", "array-contains", userId)));
 
     if (birdShooterGamesLoading) {
         return [true, null, null]
@@ -23,13 +24,13 @@ function useStatisticsData(userId: string): StatisticsDataHook {
         return [false, error, null]
     }
 
-    // all hits from one user
-    const hitsData = birdShooterGames
-        .filter(game => getGameFinished(game))
+    const seriesData = birdShooterGames
+        .filter(game => getState(game) === BirdShooterGameStates.AfterGame)
         .map(game => {
-            const scores = game.series
-                .filter(hit => hit.playerId === userId)
-                .map(hit => hit.score)
+            const scores = game.participantSeries
+                .filter(p => p.participant.userId === userId)
+                .map(p => p.series)
+                .flat()
 
             return {
                 date: game.createdAt,
@@ -40,7 +41,7 @@ function useStatisticsData(userId: string): StatisticsDataHook {
         })
 
 
-    return [false, null, {birdShooterHits: hitsData,}]
+    return [false, null, {birdShooterHits: seriesData,}]
 }
 
 export default useStatisticsData

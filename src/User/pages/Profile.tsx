@@ -7,15 +7,17 @@ import DisciplineItem from '../components/DisciplineItem';
 import NewDiscipline from "../components/NewDiscipline";
 import {useCollectionData} from 'react-firebase-hooks/firestore';
 import db from "../../shared/utils/db";
-import {query, where} from 'firebase/firestore';
+import {query} from 'firebase/firestore';
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
+import whereTyped from "../../shared/utils/whereTyped";
+import ClubDisciplineModel from "../models/ClubDiscipline.model";
 
 interface Props {
     user: UserModel
 }
 
 function Profile({user}: Props) {
-    const [clubDisciplines, clubDisciplinesLoading, clubDisciplinesError] = useCollectionData(query(db.clubDisciplines, where("userId", "==", user.id)))
+    const [clubDisciplines, clubDisciplinesLoading, clubDisciplinesError] = useCollectionData(query(db.clubDisciplines, whereTyped<ClubDisciplineModel>("userId", "==", user.id)))
 
     if(clubDisciplinesLoading) return <div>Loading...</div>
 

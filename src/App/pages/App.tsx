@@ -4,9 +4,11 @@ import {Link} from "react-router-dom";
 import {auth} from '../../shared/utils/firebase';
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 import UserModel from "../../User/models/User.model";
-import {query, where} from "firebase/firestore";
+import {query} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import db from "../../shared/utils/db";
+import whereTyped from "../../shared/utils/whereTyped";
+import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 
 interface Props {
     user: UserModel
@@ -14,7 +16,7 @@ interface Props {
 
 function App({user}: Props) {
     const [signOut, signOutLoading, signOutError] = useSignOut(auth);
-    const [clubDisciplines, clubDisciplinesLoading,] = useCollectionData(query(db.clubDisciplines, where("userId", "==", user.id)))
+    const [clubDisciplines, clubDisciplinesLoading,] = useCollectionData(query(db.clubDisciplines, whereTyped<ClubDisciplineModel>("userId", "==", user.id)))
 
     const userHasNoDisciplines = !clubDisciplinesLoading &&
         (clubDisciplines !== undefined) &&

@@ -1,20 +1,15 @@
 import {useCollectionData} from "react-firebase-hooks/firestore";
-import {or, query, where} from "firebase/firestore";
+import {or, query} from "firebase/firestore";
 import db from "../../shared/utils/db";
 import UserModel from "../../User/models/User.model";
-import {
-    getAttendingPlayers,
-    getCurrentRound,
-    getWinner
-} from "../models/BirdShooterGame.model";
 import nonFalsy from "../../shared/utils/nonFalsy";
+import separateErrors from "../../shared/utils/separateErrors";
+import whereTyped from "../../shared/utils/whereTyped";
+import BirdShooterGameModel from "../models/BirdShooterGame.model";
 
 export interface BirdShooterGameOverview {
     id: string
-    winner: UserModel | null
     opponents: UserModel[]
-    round: number
-    maxRounds: number
 }
 
 type UserBirdShooterGamesHook =
@@ -25,20 +20,20 @@ type UserBirdShooterGamesHook =
 
 export default function useUserBirdShooterGamesOverview(userId: string): UserBirdShooterGamesHook {
     const [games, gamesLoading, gamesError] = useCollectionData(query(db.gameBirdShooter,
-            or(where("playerIds", "array-contains", userId),
-                where("creatorId", "==", userId))
+            or(whereTyped<BirdShooterGameModel>("participantIds", "array-contains", userId),
+                whereTyped<BirdShooterGameModel>("creatorId", "==", userId))
         )
     );
 
     const allPlayersIds = games && games
-        .map(game => game.participants
-            .map(participant => participant.userId)
+        .map(game => game.participantSeries
+            .map(ps => ps.participant.userId)
         )
         .flat()
         .concat("") // to prevent an empty array (firebase doesn't allow that)
 
 
-    const [players, playersLoading, playersError] = useCollectionData(allPlayersIds && query(db.users, where("id", "in", allPlayersIds)))
+    const [players, playersLoading, playersError] = useCollectionData(allPlayersIds && query(db.users, whereTyped<UserModel>("id", "in", allPlayersIds)))
 
     const loading = gamesLoading || playersLoading
     const error = gamesError || playersError
@@ -62,26 +57,30 @@ export default function useUserBirdShooterGamesOverview(userId: string): UserBir
     const gameOverviews: BirdShooterGameOverview[] = games
         .map(game => {
 
-            const gamePlayers = getAttendingPlayers(game, players)
-            if (gamePlayers instanceof Error) {
-                console.error(gamePlayers.message)
-                return null;
+
+            const [joinedParticipantSeries, joinErrors] = separateErrors(game.participantSeries.map(participantSeries => {
+                    const user = players.find(user => user.id === participantSeries.participant.userId)
+                    if (!user) {
+                        return new Error(`User ${participantSeries.participant.userId} not found`)
+                    }
+
+                    return {
+                        ...participantSeries,
+                        user: user,
+                    }
+                }
+            ))
+
+            if (joinErrors.length > 0) {
+                console.error(joinErrors)
             }
 
-            const winner = getWinner(game, gamePlayers)
-
-            if (winner instanceof Error) {
-                console.error(winner.message)
-                return null;
-            }
-
-            const opponents = gamePlayers.filter(player => player.id !== userId)
+            const opponents = joinedParticipantSeries
+                .filter(ps => ps.participant.userId !== userId)
+                .map(ps => ps.user)
 
             return {
                 id: game.id,
-                winner: winner,
-                round: getCurrentRound(game),
-                maxRounds: game.rounds,
                 opponents: opponents,
             }
         })

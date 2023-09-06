@@ -1,105 +1,86 @@
-import UserModel, {compareUserIds} from "../../User/models/User.model";
 import BaseDBModel from "../../shared/models/BaseDB.model";
 import Disciplines from "../../User/models/Disciplines";
 import Participant from "../../GamesGeneral/models/Participant";
+import sum from "../../shared/utils/sum";
 
-export interface Series {
-    playerId: string
-    score: number
+export interface ParticipantSeriesModel {
+    participant: Participant
+    series: number[]
 }
 
 export default interface BirdShooterGameModel extends BaseDBModel {
-    rounds: number
-    participants: Participant[]
-    series: Series[]
-    discipline: Disciplines
-    creatorId: string
-    gameRunning: boolean
+    seriesCount: number                       // set at creation
+    shootingTimeLimitMillis: number           // set at creation
+    discipline: Disciplines                   // set at creation
+    creatorId: string                         // set at creation
+    participantIds: string[]                  // filled, before game starts
+    startTimeMillis: number | null            // set, when the creator starts the game
+    participantSeries: ParticipantSeriesModel[]    // created before game starts, updated during game
 }
 
-export interface SeriesPlayer {
-    player: UserModel
-    series: number[]
-    currentScore: number
+export enum BirdShooterGameStates {
+    BeforeGame = "BeforeGame",
+    PreGameCountDown = "PreGameCountDown",
+    TimeRunning = "TimeRunning",
+    TurnIn = "TurnIn",
+    AfterGame = "AfterGame",
 }
 
-export function getCurrentRound(game: BirdShooterGameModel) {
-    return Math.floor(game.series.length / game.participants.length) + 1
+export function getTimeUpTimeMillis(game: BirdShooterGameModel) {
+    if (!game.startTimeMillis) {
+        return null
+    }
+    return game.startTimeMillis + game.shootingTimeLimitMillis
 }
 
-export function getGameFinished(game: BirdShooterGameModel) {
-    return getCurrentRound(game) > game.rounds
+export function getTurnInTimeMillis(game: BirdShooterGameModel) {
+    const timeUpTimeMillis = getTimeUpTimeMillis(game)
+    if (!timeUpTimeMillis) {
+        return null
+    }
+    return timeUpTimeMillis + (5 * 60 * 1000)   // 5 minutes after time is up
 }
 
-/**
- * @param game
- * @param players must include all players of this game. Can also include other users.
- */
-export function getHitsPerPlayer(game: BirdShooterGameModel, players: UserModel[]): SeriesPlayer[] | Error {
-    const attendingPlayers = getAttendingPlayers(game, players)
-
-    if (attendingPlayers instanceof Error) {
-        return attendingPlayers
+export function getState(game: BirdShooterGameModel) {
+    if (!game.startTimeMillis) {
+        return BirdShooterGameStates.BeforeGame
     }
 
-    return attendingPlayers.map(player => {
-        const playersHits = game.series
-            .filter(hit => hit.playerId === player.id)
-            .map(hit => hit.score)
+    const nowMillis = (new Date()).getTime()
+    const startTimeDiffMillis = game.startTimeMillis - nowMillis
+    const timeUpTimeDiffMillis = getTimeUpTimeMillis(game)! - nowMillis
+    const turnInEndTimeDiffMillis = getTurnInTimeMillis(game)! - nowMillis
 
-        const currentScore = playersHits.reduce((sum, current) => current + sum, 0)
+    const isTimeBeforeStart = startTimeDiffMillis > 0
+    const isTimeBeforeLimit = timeUpTimeDiffMillis > 0
+    const isTimeBeforeTurnInEnd = turnInEndTimeDiffMillis > 0
 
-        return {player: player, series: playersHits, currentScore}
-    })
-}
+    const participantsFinished = game.participantSeries.every(participantSeries => participantSeries.series.length === game.seriesCount)
 
-export function getHighestScorePlayer(game: BirdShooterGameModel, players: UserModel[]) {
-    const hitsPerPlayer = getHitsPerPlayer(game, players)
-
-    if (hitsPerPlayer instanceof Error) {
-        return hitsPerPlayer
+    if (isTimeBeforeStart) {
+        return BirdShooterGameStates.PreGameCountDown
     }
 
-    return hitsPerPlayer.reduce((prev, curr) => prev.currentScore < curr.currentScore ? curr : prev).player
-}
-
-export function getWinner(game: BirdShooterGameModel, players: UserModel[]) {
-    return (getCurrentRound(game) > game.rounds) ? getHighestScorePlayer(game, players) : null
-}
-
-/**
- * @param game
- * @param players must include all players of this game. Can also include other users.
- */
-export function getAttendingPlayers(game: BirdShooterGameModel, players: UserModel[]) {
-    const attendingPlayers = players
-        .filter(user => game.participants.some(participant => participant.userId === user.id))
-        .sort(compareUserIds)
-
-    if (attendingPlayers.length !== game.participants.length) {
-        return new Error("Could not resolve all players. Are they all provided in the query?")
+    if (isTimeBeforeLimit && !participantsFinished) {
+        return BirdShooterGameStates.TimeRunning
     }
 
-    return attendingPlayers
-}
-
-export function getCurrentPlayer(game: BirdShooterGameModel, players: UserModel[]) {
-    const currentPlayerIndex = game.series.length % game.participants.length
-    const attendingPlayers = getAttendingPlayers(game, players)
-
-    if (attendingPlayers instanceof Error) {
-        return attendingPlayers
+    if (isTimeBeforeTurnInEnd && !participantsFinished) {
+        return BirdShooterGameStates.TurnIn
     }
 
-    return attendingPlayers[currentPlayerIndex]
+    return BirdShooterGameStates.AfterGame
 }
 
-export function getCreator(game: BirdShooterGameModel, players: UserModel[]) {
-    const creator = players.find(player => player.id === game.creatorId)
+export function getScoreSum(participantSeries: ParticipantSeriesModel) {
+    return sum(...participantSeries.series)
+}
 
-    if (!creator) {
-        return new Error("Could not find creator. Are all players provided in the query?")
-    }
+export function getHighestScoreParticipantId(game: BirdShooterGameModel) {
+    const highestScoreSeries = game.participantSeries
+        .reduce((prev, curr) => {
+            return getScoreSum(prev) > getScoreSum(curr) ? prev : curr
+        })
 
-    return creator
+    return highestScoreSeries.participant.userId
 }

@@ -19,12 +19,13 @@ function useCreateNewBirdShooterGame() {
 
         const newGameData: BirdShooterGameModel = {
             id: newGameDoc.id,
-            rounds: 5,
-            participants: [],
-            series: [],
+            participantIds: [],
+            participantSeries: [],
             creatorId: creator.id,
+            seriesCount: 4,                             // == 40 shots
+            shootingTimeLimitMillis: 15 * 60 * 1000,    // 15 minutes
+            startTimeMillis: null,
             discipline: discipline,
-            gameRunning: false,
             createdAt: new Date(),
             updatedAt: new Date(),
         }

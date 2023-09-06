@@ -1,5 +1,5 @@
 import React from 'react';
-import {BeforeGameState} from "../hooks/playBirdShooterGame";
+import {BeforeGameStateHook} from "../hooks/playBirdShooterGame";
 import {toast} from "react-toastify";
 import {useHref} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
@@ -8,7 +8,7 @@ import CreatorJoin from "./CreatorJoin";
 interface Props {
     user: UserModel
     gameId: string
-    game: BeforeGameState
+    game: BeforeGameStateHook
 }
 
 function BeforeBirdShooterGame({user, game, gameId}: Props) {
@@ -32,8 +32,8 @@ function BeforeBirdShooterGame({user, game, gameId}: Props) {
         <p>Das Spiel hat noch nicht begonnen.</p>
         <p>Bisher angemeldet sind:</p>
         <ul>
-            {game.data.players.map(player =>
-                <li key={player.id}>{player.displayName}</li>)
+            {game.data.participantSeries.map(p =>
+                <li key={p.user.id}>{p.user.displayName}</li>)
             }
         </ul>
         {(game.data.creator.id === user.id) &&

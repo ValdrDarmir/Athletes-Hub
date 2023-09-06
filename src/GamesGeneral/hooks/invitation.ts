@@ -1,14 +1,16 @@
-import {arrayUnion, doc, query, setDoc, where} from "firebase/firestore";
+import {arrayUnion, doc, query, setDoc} from "firebase/firestore";
 import db from "../../shared/utils/db";
-import Participant from "../models/Participant";
 import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import {useCollectionData, useDocumentData} from "react-firebase-hooks/firestore";
 import Disciplines from "../../User/models/Disciplines";
 import UserModel from "../../User/models/User.model";
+import {ParticipantSeriesModel} from "../../BirdShooterGame/models/BirdShooterGame.model";
+import whereTyped from "../../shared/utils/whereTyped";
 
 interface Invitable {
     id: string
-    participants: Participant[]
+    participantIds: string[]
+    participantSeries: ParticipantSeriesModel[]
     discipline: Disciplines
     // TODO define some attributes, that all games, tournament and other stuff, that players can be invited to must have
 }
@@ -49,7 +51,7 @@ function useInvitation(entityId: string | undefined, user: UserModel): useInvita
     // TODO add other stuff, like tournaments here
     const entity: Invitable | undefined = bsGame
 
-    const [clubDisciplines, clubDisciplinesLoading, clubDisciplinesError] = useCollectionData(query(db.clubDisciplines, where("userId", "==", user.id)))
+    const [clubDisciplines, clubDisciplinesLoading, clubDisciplinesError] = useCollectionData(query(db.clubDisciplines, whereTyped<ClubDisciplineModel>("userId", "==", user.id)))
 
 
     // Loading state
@@ -80,7 +82,7 @@ function useInvitation(entityId: string | undefined, user: UserModel): useInvita
         }
     }
 
-    const isUserAlreadyAttending = entity.participants.some(participant => participant.userId === user.id)
+    const isUserAlreadyAttending = entity.participantSeries.some(ps => ps.participant.userId === user.id)
 
     const validUserClubDisciplines = clubDisciplines.filter(clubDiscipline => clubDiscipline.discipline === entity.discipline)
 
@@ -88,13 +90,17 @@ function useInvitation(entityId: string | undefined, user: UserModel): useInvita
         // TODO discriminate between collections
         const entityDoc = doc(db.gameBirdShooter, entityId)
 
-        const newParticipant: Participant = {
-            userId: user.id,
-            clubDisciplineId: clubDisciplineId,
+        const newParticipant: ParticipantSeriesModel = {
+            participant: {
+                userId: user.id,
+                clubDisciplineId: clubDisciplineId,
+            },
+            series: [],
         }
 
         await setDoc(entityDoc, {
-            participants: arrayUnion(newParticipant),
+            participantIds: arrayUnion(user.id),
+            participantSeries: arrayUnion(newParticipant)
         }, {merge: true})
     }
 

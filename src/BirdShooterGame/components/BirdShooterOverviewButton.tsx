@@ -20,10 +20,6 @@ function BirdShooterOverviewButton({overview}: Props) {
                     <span className="font-bold">bisher niemanden 😥</span>
                 }
             </span>
-            {overview.winner ?
-                <span>Gewinner: {overview.winner.displayName}</span> :
-                <span>Runde: {overview.round}/{overview.maxRounds}</span>
-            }
         </Link>
     )
 }
