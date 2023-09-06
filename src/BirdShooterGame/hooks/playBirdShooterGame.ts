@@ -1,5 +1,5 @@
 import {useCollectionData, useDocumentData} from "react-firebase-hooks/firestore";
-import {arrayRemove, arrayUnion, doc, query, setDoc} from "firebase/firestore";
+import {arrayRemove, arrayUnion, doc, query, runTransaction, setDoc} from "firebase/firestore";
 import UserModel from "../../User/models/User.model";
 import db from "../../shared/utils/db";
 import {
@@ -12,6 +12,7 @@ import Disciplines from "../../User/models/Disciplines";
 import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
 import useTimeNowSeconds from "../../shared/hooks/timeNowSeconds";
+import {firestore} from "../../shared/utils/firebase";
 
 export interface ParticipantSeriesJoined extends Omit<ParticipantSeriesModel, "userId"> {
     user: UserModel
@@ -179,13 +180,16 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
 
         // update participant series
         const docRef = doc(db.gameBirdShooter, game.id)
-        await setDoc(docRef, {
-            participantSeries: arrayRemove(oldParticipantSeries),
-        }, {merge: true})
 
-        await setDoc(docRef, {
-            participantSeries: arrayUnion(newParticipantSeries),
-        }, {merge: true})
+        await runTransaction(firestore, async (transaction) => {
+            transaction.set(docRef, {
+                participantSeries: arrayRemove(oldParticipantSeries),
+            }, {merge: true})
+
+            transaction.set(docRef, {
+                participantSeries: arrayUnion(newParticipantSeries),
+            }, {merge: true})
+        })
     }
 
     // Determine game state in logical order and handle errors

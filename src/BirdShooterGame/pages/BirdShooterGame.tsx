@@ -27,7 +27,6 @@ function BirdShooterGame({user}: Params) {
             return <p>loading...</p>
 
         case AdditionalHookStates.Error:
-            console.log(game.data)
             return <ErrorDisplay error={game.data}/>
 
         case BirdShooterGameStates.BeforeGame:

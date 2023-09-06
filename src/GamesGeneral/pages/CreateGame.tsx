@@ -22,9 +22,8 @@ function CreateGame({user}: Props) {
     const startGameClicked = async () => {
         const newGameDoc = await createNewBirdShooterGame(user, discipline)
         if (newGameDoc) {
-            // navigate(`/game/${newGameDoc.id}`)
-            toast.success("Challenge erstellt")
-            navigate(`/`)
+            toast.success("Challenge erstellt 👍")
+            navigate(`/game/${newGameDoc.id}`)
         }
     }
 
