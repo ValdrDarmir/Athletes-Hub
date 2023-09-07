@@ -15,7 +15,9 @@ interface Props {
 function BeforeBirdShooterGame({user, game, gameId}: Props) {
     const invitePath = useHref(`/invite/${gameId}`)
     const urlHost = window.location.host
-    const inviteLink = `${urlHost}/${invitePath}`
+
+    // TODO this is a workaround fix this
+    const inviteLink = `${urlHost}/Athletes-Hub/${invitePath}`
 
     const [qrDataURL, setQrDataURL] = React.useState<string | null>(null)
 
