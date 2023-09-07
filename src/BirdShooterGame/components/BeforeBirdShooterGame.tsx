@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BeforeGameStateHook} from "../hooks/playBirdShooterGame";
 import {toast} from "react-toastify";
 import {useHref} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
 import CreatorJoin from "./CreatorJoin";
+import {toDataURL} from "qrcode";
 
 interface Props {
     user: UserModel
@@ -15,6 +16,16 @@ function BeforeBirdShooterGame({user, game, gameId}: Props) {
     const invitePath = useHref(`/invite/${gameId}`)
     const urlHost = window.location.host
     const inviteLink = `${urlHost}/${invitePath}`
+
+    const [qrDataURL, setQrDataURL] = React.useState<string | null>(null)
+
+    useEffect(() => {
+        (async () => {
+            const qrImage = await toDataURL(inviteLink, {margin: 1, width: 200})
+            setQrDataURL(qrImage)
+        })()
+    }, [inviteLink])
+
 
     const copyInviteLinkClicked = async () => {
         await navigator.clipboard.writeText(inviteLink)
@@ -46,8 +57,7 @@ function BeforeBirdShooterGame({user, game, gameId}: Props) {
                         können:</p>
 
                     <div className="flex justify-center">
-                        <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${inviteLink}`}
-                             alt="QR Code"/>
+                        <img src={qrDataURL || ""} alt="QR Code"/>
                     </div>
 
                     <button className="btn btn-secondary" onClick={copyInviteLinkClicked}>
