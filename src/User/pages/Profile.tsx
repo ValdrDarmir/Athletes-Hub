@@ -19,9 +19,9 @@ interface Props {
 function Profile({user}: Props) {
     const [clubDisciplines, clubDisciplinesLoading, clubDisciplinesError] = useCollectionData(query(db.clubDisciplines, whereTyped<ClubDisciplineModel>("userId", "==", user.id)))
 
-    if(clubDisciplinesLoading) return <div>Loading...</div>
+    if (clubDisciplinesLoading) return <div>Loading...</div>
 
-    if(clubDisciplinesError || !clubDisciplines) {
+    if (clubDisciplinesError || !clubDisciplines) {
         const noClubDisciplinesError = !clubDisciplines && new Error("No club disciplines found")
         const error = clubDisciplinesError || noClubDisciplinesError
 
@@ -30,22 +30,39 @@ function Profile({user}: Props) {
 
     return (
         <div className="m-2 flex flex-col gap-2">
-            <h1 className="text-2xl">Mein Profil</h1>
+            <h1 className="text-2xl self-center">Mein Profil</h1>
 
             <div className="divider">Meine Disziplinen</div>
             {clubDisciplines.map((discipline, i) =>
-                <DisciplineItem key={i} user={user} clubDiscipline={discipline}/>)
+                <DisciplineItem key={i} clubDiscipline={discipline}/>)
             }
             <NewDiscipline user={user}/>
 
-            <div className="divider">Nutzername</div>
-            <ChangeUsernameForm user={user}/>
+            <div className="divider">Account</div>
 
-            <div className="divider">Email Adresse</div>
-            <ChangeEmailForm user={user}/>
+            <div className="collapse collapse-arrow border border-base-300">
+                <input type="checkbox"/>
+                <summary className="collapse-title">Nutzername ändern</summary>
+                <div className="collapse-content">
+                    <ChangeUsernameForm user={user}/>
+                </div>
+            </div>
 
-            <div className="divider">Passwort</div>
-            <ChangePasswordForm/>
+            <div className="collapse collapse-arrow border border-base-300">
+                <input type="checkbox"/>
+                <summary className="collapse-title">Email Adresse ändern</summary>
+                <div className="collapse-content">
+                    <ChangeEmailForm user={user}/>
+                </div>
+            </div>
+
+            <div className="collapse collapse-arrow border border-base-300">
+                <input type="checkbox"/>
+                <summary className="collapse-title">Passwort ändern</summary>
+                <div className="collapse-content">
+                    <ChangePasswordForm/>
+                </div>
+            </div>
         </div>
     );
 }

@@ -6,8 +6,8 @@ enum Disciplines {
 
 export const disciplineNames = {
     [Disciplines.None]: "None",
-    [Disciplines.AirRifle]: "Air Rifle",
-    [Disciplines.Pistol]: "Pistol",
+    [Disciplines.AirRifle]: "Luftgewehr",
+    [Disciplines.Pistol]: "Luftpistole",
 }
 
 export default Disciplines;

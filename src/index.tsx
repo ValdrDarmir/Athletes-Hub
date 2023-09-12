@@ -16,6 +16,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Statistics from "./Statistics/page/Statistics";
 import Layout from "./App/components/Layout";
 import Profile from "./User/pages/Profile";
+import Training from "./Training/pages/Training";
+import AddTrainingEntry from "./Training/pages/AddTrainingEntry";
 
 const router = createHashRouter([
     {
@@ -37,6 +39,14 @@ const router = createHashRouter([
     {
         path: "/invite/:entityId",
         element: <AuthGuard layout={Layout} component={Invitation} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/training",
+        element: <AuthGuard layout={Layout} component={Training} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/training/new",
+        element: <AuthGuard layout={Layout} component={AddTrainingEntry} redirectRoute={"/login"}/>,
     },
     {
         path: "/stats",

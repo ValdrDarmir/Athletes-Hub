@@ -27,8 +27,10 @@ function App({user}: Props) {
             <h1 className="self-center text-2xl mb-2">Hallo {user.displayName}</h1>
 
             <Link to="/games" className="btn mb-2">Meine Challenges</Link>
-            <Link to="/game" className="btn mb-2">Neue Challenge starten!</Link>
+            <Link to="/game" className="btn mb-2">Neue Challenge starten</Link>
+            <Link to="/training" className="btn mb-2">Trainingsdaten</Link>
             <Link to="/stats" className="btn mb-2">Statistiken</Link>
+
             <div className="divider"></div>
 
             <div className={`${userHasNoDisciplines && "tooltip tooltip-open tooltip-info"}`}
