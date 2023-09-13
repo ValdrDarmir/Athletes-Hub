@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Disciplines, {disciplineNames} from "../../User/models/Disciplines";
 import {useFieldArray, useForm} from "react-hook-form";
 import setTimeOfDate from "../../shared/utils/setTimeOfDate";

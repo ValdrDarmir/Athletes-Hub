@@ -11,7 +11,7 @@ interface Props {
 }
 
 function Training({user}: Props) {
-    const {trainingEntries, loading, error, addTrainingEntry} = useTrainingEntries(user.id)
+    const {trainingEntries} = useTrainingEntries(user.id)
 
     const trainingEntriesByDiscipline = trainingEntries && groupObjects("discipline", ...trainingEntries)
 

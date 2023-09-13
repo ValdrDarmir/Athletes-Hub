@@ -8,7 +8,7 @@ interface Props {
 }
 
 function AddTrainingEntry({user}: Props) {
-    const {trainingEntries, loading, error, addTrainingEntry} = useTrainingEntries(user.id)
+    const {addTrainingEntry} = useTrainingEntries(user.id)
 
     return (
         <div className="m-2">
