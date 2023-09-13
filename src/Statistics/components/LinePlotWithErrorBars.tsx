@@ -52,8 +52,7 @@ function LinePlotWithErrorBars({xTitle, yTitle, dataPoints}: Props) {
     };
 
     const labels = dataPoints
-        .map(({date}) => moment(date)
-            .format("MMM DD"))
+        .map(({date}) => moment(date).format("MMM DD"))
 
     const data: ChartData<"lineWithErrorBars"> = {
         labels: labels,

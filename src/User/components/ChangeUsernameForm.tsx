@@ -17,7 +17,13 @@ interface Props {
 function ChangeUsernameForm({user}: Props) {
     const [changeUsername, changeUsernameLoading, changeUsernameError] = useChangeUsername(auth, user.id)
 
-    const {register, handleSubmit, formState: {errors}} = useForm<UsernameFieldValues>();
+    const {
+        register,
+        handleSubmit,
+        formState: {
+            errors
+        }
+    } = useForm<UsernameFieldValues>();
 
     useEffectWithPrevious(([prevChangeUsernameLoading]) => {
         if (changeUsernameLoading !== prevChangeUsernameLoading && !changeUsernameLoading) {
@@ -42,7 +48,9 @@ function ChangeUsernameForm({user}: Props) {
             </div>
             {errors.username &&
                 <label className={"label"}><span
-                    className={"label-text-alt text-error"}>Username is required</span></label>}
+                    className={"label-text-alt text-error"}>Username is required</span>
+                </label>
+            }
         </form>
     );
 }

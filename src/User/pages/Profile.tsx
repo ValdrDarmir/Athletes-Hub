@@ -34,8 +34,8 @@ function Profile({user}: Props) {
 
             <div className="divider">Meine Disziplinen</div>
             {clubDisciplines.map((discipline, i) =>
-                <DisciplineItem key={i} clubDiscipline={discipline}/>)
-            }
+                <DisciplineItem key={i} clubDiscipline={discipline}/>
+            )}
             <NewDiscipline user={user}/>
 
             <div className="divider">Account</div>

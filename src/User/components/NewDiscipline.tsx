@@ -14,7 +14,7 @@ interface ClubDisciplineFieldValues {
     discipline: Disciplines
 }
 
-function DisciplineItem({user}: Props) {
+function NewDiscipline({user}: Props) {
     const {addClubDiscipline} = useChangeClubDisciplines(user.id)
     const {register, handleSubmit, formState: {errors}, reset} = useForm<ClubDisciplineFieldValues>();
 
@@ -42,4 +42,4 @@ function DisciplineItem({user}: Props) {
     </form>
 }
 
-export default DisciplineItem;
+export default NewDiscipline;
