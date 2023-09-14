@@ -13,6 +13,7 @@ import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
 import useTimeNowSeconds from "../../shared/hooks/timeNowSeconds";
 import {firestore} from "../../shared/utils/firebase";
+import useDebounceHook from "../../shared/hooks/debounceHook";
 
 export interface ParticipantSeriesJoined extends Omit<ParticipantSeriesModel, "userId"> {
     user: UserModel
@@ -116,8 +117,8 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
         .map(ps => ps.participant.userId)
         .concat("") // to prevent an empty array (firebase doesn't allow that)
 
-    const [participants, participantsLoading, participantsError] = useCollectionData(game &&
-        query(db.users, whereTyped<UserModel>("id", "in", participantIds))
+    const [participants, participantsLoading, participantsError] = useDebounceHook(useCollectionData(game &&
+        query(db.users, whereTyped<UserModel>("id", "in", participantIds)))
     )
 
     const [creator, creatorsLoading, creatorsError] = useDocumentData(game && doc(db.users, game.creatorId))

@@ -22,7 +22,7 @@ const dumpConverter = <T extends BaseDBModel>(): FirestoreDataConverter<T, T> =>
         // We convert all firestore timestamps to js dates here.
         const convertedDates: Record<string, Date> = {}
         Object.keys(data).forEach(key => {
-                if (data[key].toDate) {
+                if (typeof data[key] === "object" && data[key] && "toDate" in data[key]) {
                     convertedDates[key] = data[key].toDate()
                 }
             }

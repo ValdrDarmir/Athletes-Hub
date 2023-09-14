@@ -6,6 +6,7 @@ import nonFalsy from "../../shared/utils/nonFalsy";
 import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
 import BirdShooterGameModel from "../models/BirdShooterGame.model";
+import useDebounceHook from "../../shared/hooks/debounceHook";
 
 export interface BirdShooterGameOverview {
     id: string
@@ -23,7 +24,7 @@ export default function useUserBirdShooterGamesOverview(userId: string): UserBir
             or(whereTyped<BirdShooterGameModel>("participantIds", "array-contains", userId),
                 whereTyped<BirdShooterGameModel>("creatorId", "==", userId))
         )
-    );
+    )
 
     const allPlayersIds = games && games
         .map(game => game.participantSeries
@@ -33,7 +34,7 @@ export default function useUserBirdShooterGamesOverview(userId: string): UserBir
         .concat("") // to prevent an empty array (firebase doesn't allow that)
 
 
-    const [players, playersLoading, playersError] = useCollectionData(allPlayersIds && query(db.users, whereTyped<UserModel>("id", "in", allPlayersIds)))
+    const [players, playersLoading, playersError] = useDebounceHook(useCollectionData(allPlayersIds && query(db.users, whereTyped<UserModel>("id", "in", allPlayersIds))))
 
     const loading = gamesLoading || playersLoading
     const error = gamesError || playersError
