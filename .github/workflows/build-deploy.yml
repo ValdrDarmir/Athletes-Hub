@@ -3,8 +3,6 @@ name: Deploy to Github Pages
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   deploy:
@@ -20,7 +18,7 @@ jobs:
         
     - run: npm ci
     
-    - name: Deploy with gh-pages    
+    - name: Build and Deploy with gh-pages
       run: |
         git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
         npm run deploy -- -u "github-actions-bot <support+actions@github.com>"
