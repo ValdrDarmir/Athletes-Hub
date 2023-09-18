@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {BeforeGameStateHook} from "../hooks/playBirdShooterGame";
+import {BeforeStartStateHook} from "../hooks/playCompetition";
 import {toast} from "react-toastify";
 import {useHref} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
@@ -9,10 +9,10 @@ import {toDataURL} from "qrcode";
 interface Props {
     user: UserModel
     gameId: string
-    game: BeforeGameStateHook
+    game: BeforeStartStateHook
 }
 
-function BeforeBirdShooterGame({user, game, gameId}: Props) {
+function BeforeStartCompetition({user, game, gameId}: Props) {
     const invitePath = useHref(`/invite/${gameId}`)
     const urlHost = window.location.host
 
@@ -78,4 +78,4 @@ function BeforeBirdShooterGame({user, game, gameId}: Props) {
 
 }
 
-export default BeforeBirdShooterGame;
+export default BeforeStartCompetition;

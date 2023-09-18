@@ -1,15 +1,15 @@
 import React, {Fragment} from 'react';
-import {TimeRunningStateHook} from "../hooks/playBirdShooterGame";
+import {TurnInStateHook} from "../hooks/playCompetition";
 import UserModel from "../../User/models/User.model";
 import {formatSecondsMMSS} from "../../shared/utils/formatSeconds";
 import Scoreboard from "./Scoreboard";
 
 interface Props {
     user: UserModel
-    game: TimeRunningStateHook
+    game: TurnInStateHook
 }
 
-function TimeRunningBirdShooterGame({user, game}: Props) {
+function TurnIn({user, game}: Props) {
 
     const scoreClicked = (score: number) => {
         void game.actions.newHit(user.id, score)
@@ -28,9 +28,9 @@ function TimeRunningBirdShooterGame({user, game}: Props) {
             )}
         </h1>
 
-        <p>Los gehts. Schieß, was das Zeug hält!</p>
+        <p>Die Zeit ist abgelaufen! Trage deine Ergebnisse ein.</p>
 
-        <p>{formatSecondsMMSS(game.data.timeUpCountdownSeconds)}</p>
+        <p>{formatSecondsMMSS(game.data.turnInCountdownSeconds)}</p>
 
         {participantFinished ?
             <p>Du bist fertig. Warten wir auf die anderen.</p> :
@@ -49,4 +49,4 @@ function TimeRunningBirdShooterGame({user, game}: Props) {
     </div>
 }
 
-export default TimeRunningBirdShooterGame;
+export default TurnIn;

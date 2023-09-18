@@ -1,13 +1,13 @@
 import React, {Fragment} from 'react';
-import {PreGameCountDownStateHook} from "../hooks/playBirdShooterGame";
+import {PreStartCountDownStateHook} from "../hooks/playCompetition";
 import {formatSecondsMMSS} from "../../shared/utils/formatSeconds";
 import Scoreboard from "./Scoreboard";
 
 interface Props {
-    game: PreGameCountDownStateHook
+    game: PreStartCountDownStateHook
 }
 
-function PreGameCountdownBirdShooterGame({game}: Props) {
+function PreStartCountdown({game}: Props) {
 
 
     return <div className="flex items-center flex-col p-2">
@@ -28,4 +28,4 @@ function PreGameCountdownBirdShooterGame({game}: Props) {
     </div>
 }
 
-export default PreGameCountdownBirdShooterGame;
+export default PreStartCountdown;

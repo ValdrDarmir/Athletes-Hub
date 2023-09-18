@@ -5,24 +5,24 @@ import UserModel from "../../User/models/User.model";
 import nonFalsy from "../../shared/utils/nonFalsy";
 import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
-import BirdShooterGameModel from "../models/BirdShooterGame.model";
+import CompetitionModel from "../models/CompetitionModel";
 import useDebounceHook from "../../shared/hooks/debounceHook";
 
-export interface BirdShooterGameOverview {
+export interface CompetitionOverview {
     id: string
     opponents: UserModel[]
 }
 
-type UserBirdShooterGamesHook =
-    [BirdShooterGameOverview[], false, null] |
+type UserCompetitionsOverviewHook =
+    [CompetitionOverview[], false, null] |
     [null, true, null] |
     [null, false, Error] |
     [null, false, null]
 
-export default function useUserBirdShooterGamesOverview(userId: string): UserBirdShooterGamesHook {
-    const [games, gamesLoading, gamesError] = useCollectionData(query(db.gameBirdShooter,
-            or(whereTyped<BirdShooterGameModel>("participantIds", "array-contains", userId),
-                whereTyped<BirdShooterGameModel>("creatorId", "==", userId))
+export default function useUserCompetitionsOverview(userId: string): UserCompetitionsOverviewHook {
+    const [games, gamesLoading, gamesError] = useCollectionData(query(db.competition,
+            or(whereTyped<CompetitionModel>("participantIds", "array-contains", userId),
+                whereTyped<CompetitionModel>("creatorId", "==", userId))
         )
     )
 
@@ -55,7 +55,7 @@ export default function useUserBirdShooterGamesOverview(userId: string): UserBir
     }
 
     // TODO error is thrown too often. Initially not all players are loaded. Fix?
-    const gameOverviews: BirdShooterGameOverview[] = games
+    const gameOverviews: CompetitionOverview[] = games
         .map(game => {
 
 

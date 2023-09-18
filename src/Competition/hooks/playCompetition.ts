@@ -3,11 +3,11 @@ import {arrayRemove, arrayUnion, doc, query, runTransaction, setDoc} from "fireb
 import UserModel from "../../User/models/User.model";
 import db from "../../shared/utils/db";
 import {
-    BirdShooterGameStates,
+    CompetitionStates,
     getHighestScoreParticipantId,
     getState, getTimeUpTimeMillis, getTurnInTimeMillis,
     ParticipantSeriesModel
-} from "../models/BirdShooterGame.model";
+} from "../models/CompetitionModel";
 import Disciplines from "../../User/models/Disciplines";
 import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
@@ -36,8 +36,8 @@ export interface ErrorStateHook {
     actions: null
 }
 
-export interface BeforeGameStateHook {
-    state: BirdShooterGameStates.BeforeGame
+export interface BeforeStartStateHook {
+    state: CompetitionStates.BeforeStart
     data: {
         creator: UserModel
         seriesCount: number
@@ -49,8 +49,8 @@ export interface BeforeGameStateHook {
     }
 }
 
-export interface PreGameCountDownStateHook {
-    state: BirdShooterGameStates.PreGameCountDown
+export interface PreStartCountDownStateHook {
+    state: CompetitionStates.PreStartCountDown
     data: {
         creator: UserModel
         seriesCount: number
@@ -62,7 +62,7 @@ export interface PreGameCountDownStateHook {
 }
 
 export interface TimeRunningStateHook {
-    state: BirdShooterGameStates.TimeRunning
+    state: CompetitionStates.TimeRunning
     data: {
         creator: UserModel
         seriesCount: number
@@ -76,7 +76,7 @@ export interface TimeRunningStateHook {
 }
 
 export interface TurnInStateHook {
-    state: BirdShooterGameStates.TurnIn
+    state: CompetitionStates.TurnIn
     data: {
         creator: UserModel
         seriesCount: number
@@ -89,8 +89,8 @@ export interface TurnInStateHook {
     }
 }
 
-export interface AfterGameStateHook {
-    state: BirdShooterGameStates.AfterGame
+export interface AfterCompetitionStateHook {
+    state: CompetitionStates.AfterCompetition
     data: {
         creator: UserModel
         seriesCount: number
@@ -101,17 +101,17 @@ export interface AfterGameStateHook {
     actions: null
 }
 
-type AllGameStatesHook =
+type AllCompetitionStatesHook =
     LoadingStateHook
     | ErrorStateHook
-    | BeforeGameStateHook
-    | PreGameCountDownStateHook
+    | BeforeStartStateHook
+    | PreStartCountDownStateHook
     | TimeRunningStateHook
     | TurnInStateHook
-    | AfterGameStateHook
+    | AfterCompetitionStateHook
 
-function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
-    const [game, gameLoading, gameError] = useDocumentData(gameId ? doc(db.gameBirdShooter, gameId) : null)
+function usePlayCompetition(gameId: string | undefined): AllCompetitionStatesHook {
+    const [game, gameLoading, gameError] = useDocumentData(gameId ? doc(db.competition, gameId) : null)
 
     const participantIds = game && game.participantSeries
         .map(ps => ps.participant.userId)
@@ -180,7 +180,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
         }
 
         // update participant series
-        const docRef = doc(db.gameBirdShooter, game.id)
+        const docRef = doc(db.competition, game.id)
 
         await runTransaction(firestore, async (transaction) => {
             transaction.set(docRef, {
@@ -195,9 +195,9 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
 
     // Determine game state in logical order and handle errors
     switch (getState(game)) {
-        case BirdShooterGameStates.BeforeGame:
+        case CompetitionStates.BeforeStart:
             return {
-                state: BirdShooterGameStates.BeforeGame,
+                state: CompetitionStates.BeforeStart,
                 data: {
                     creator: creator,
                     seriesCount: game.seriesCount,
@@ -213,7 +213,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
                         const nowMillis = (new Date()).getTime()
                         const startTimeMillis = nowMillis + (30 * 1000)
 
-                        const docRef = doc(db.gameBirdShooter, game.id)
+                        const docRef = doc(db.competition, game.id)
                         await setDoc(docRef, {
                             startTimeMillis: startTimeMillis,
                         }, {merge: true})
@@ -221,7 +221,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
                 }
             }
 
-        case BirdShooterGameStates.PreGameCountDown:
+        case CompetitionStates.PreStartCountDown:
             if (!game.startTimeMillis) {
                 return {state: AdditionalHookStates.Error, data: new Error("No start time set"), actions: null}
             }
@@ -230,7 +230,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
 
 
             return {
-                state: BirdShooterGameStates.PreGameCountDown,
+                state: CompetitionStates.PreStartCountDown,
                 data: {
                     creator: creator,
                     seriesCount: game.seriesCount,
@@ -241,7 +241,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
                 actions: null
             }
 
-        case BirdShooterGameStates.TimeRunning:
+        case CompetitionStates.TimeRunning:
             const timeUpTimeMillis = getTimeUpTimeMillis(game)
             if (!timeUpTimeMillis) {
                 return {state: AdditionalHookStates.Error, data: new Error("No time up time set"), actions: null}
@@ -250,7 +250,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
             const timeUpCountdownSeconds = Math.floor((timeUpTimeMillis / 1000)) - timeNowSeconds
 
             return {
-                state: BirdShooterGameStates.TimeRunning,
+                state: CompetitionStates.TimeRunning,
                 data: {
                     creator: creator,
                     seriesCount: game.seriesCount,
@@ -263,7 +263,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
                 }
             }
 
-        case BirdShooterGameStates.TurnIn:
+        case CompetitionStates.TurnIn:
             const turnInTimeMillis = getTurnInTimeMillis(game)
             if (!turnInTimeMillis) {
                 return {state: AdditionalHookStates.Error, data: new Error("No turn in time set"), actions: null}
@@ -273,7 +273,7 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
 
 
             return {
-                state: BirdShooterGameStates.TurnIn,
+                state: CompetitionStates.TurnIn,
                 data: {
                     creator: creator,
                     seriesCount: game.seriesCount,
@@ -286,14 +286,14 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
                 }
             }
 
-        case BirdShooterGameStates.AfterGame:
+        case CompetitionStates.AfterCompetition:
             const joinedWinner = participants.find(user => user.id === getHighestScoreParticipantId(game))
             if (!joinedWinner) {
                 return {state: AdditionalHookStates.Error, data: new Error("No winner found"), actions: null}
             }
 
             return {
-                state: BirdShooterGameStates.AfterGame,
+                state: CompetitionStates.AfterCompetition,
                 data: {
                     creator: creator,
                     seriesCount: game.seriesCount,
@@ -307,4 +307,4 @@ function usePlayBirdShooterGame(gameId: string | undefined): AllGameStatesHook {
 
 }
 
-export default usePlayBirdShooterGame
+export default usePlayCompetition

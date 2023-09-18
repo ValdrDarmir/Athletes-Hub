@@ -3,13 +3,13 @@ import {query} from "firebase/firestore";
 import db from "../../shared/utils/db";
 import average from "../../shared/utils/average";
 import {DataPoint} from "../components/LinePlotWithErrorBars";
-import BirdShooterGameModel, {BirdShooterGameStates, getState} from "../../BirdShooterGame/models/BirdShooterGame.model";
+import CompetitionModel, {CompetitionStates, getState} from "../../Competition/models/CompetitionModel";
 import whereTyped from "../../shared/utils/whereTyped";
 
 type StatisticsDataHook = [boolean, Error | null, { birdShooterHits: DataPoint[] } | null]
 
 function useStatisticsData(userId: string): StatisticsDataHook {
-    const [birdShooterGames, birdShooterGamesLoading, birdShooterGamesError] = useCollectionData(query(db.gameBirdShooter, whereTyped<BirdShooterGameModel>("participantIds", "array-contains", userId)));
+    const [birdShooterGames, birdShooterGamesLoading, birdShooterGamesError] = useCollectionData(query(db.competition, whereTyped<CompetitionModel>("participantIds", "array-contains", userId)));
 
     if (birdShooterGamesLoading) {
         return [true, null, null]
@@ -25,7 +25,7 @@ function useStatisticsData(userId: string): StatisticsDataHook {
     }
 
     const seriesData = birdShooterGames
-        .filter(game => getState(game) === BirdShooterGameStates.AfterGame)
+        .filter(game => getState(game) === CompetitionStates.AfterCompetition)
         .sort((a, b) => a.createdAt < b.createdAt ? -1 : 1)
         .map(game => {
             const scores = game.participantSeries

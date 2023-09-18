@@ -11,8 +11,8 @@ interface Props {
 
 const sidebarLinksAuthenticated = [
     {route: "/", label: "🏡 Home"},
-    {route: "/game", label: "🎯 Neue Challenge"},
-    {route: "/games", label: "🏆 Meine Challenges"},
+    {route: "/game", label: "🎯 Neues Spiel"},
+    {route: "/games", label: "🏆 Meine Spiele"},
     {route: "/stats", label: "📈 Statistiken"},
     {route: "/profile", label: "👤 Mein Profil"},
 ]

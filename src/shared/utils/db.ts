@@ -2,7 +2,7 @@ import {firestore} from "./firebase";
 import "firebase/firestore"
 import {collection, DocumentData, FirestoreDataConverter} from "firebase/firestore";
 import UserModel from "../../User/models/User.model";
-import BirdShooterGameModel from "../../BirdShooterGame/models/BirdShooterGame.model";
+import CompetitionModel from "../../Competition/models/CompetitionModel";
 import BaseDBModel from "../models/BaseDB.model";
 import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import TrainingEntryModel from "../../Training/models/TrainingEntry.model";
@@ -40,7 +40,7 @@ const dataPoint = <T extends DocumentData>(collectionPath: string, converter: Fi
 const db = {
     users: dataPoint<UserModel>("users", dumpConverter<UserModel>()),
     clubDisciplines: dataPoint<ClubDisciplineModel>("clubDisciplines", dumpConverter<ClubDisciplineModel>()),
-    gameBirdShooter: dataPoint<BirdShooterGameModel>("gameBirdShooter", dumpConverter<BirdShooterGameModel>()),
+    competition: dataPoint<CompetitionModel>("gameBirdShooter", dumpConverter<CompetitionModel>()),
     training: dataPoint<TrainingEntryModel>("training", dumpConverter<TrainingEntryModel>()),
 }
 

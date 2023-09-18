@@ -1,12 +1,12 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {BirdShooterGameOverview} from "../hooks/userBirdShooterGamesOverview";
+import {CompetitionOverview} from "../hooks/userCompetitionsOverview";
 
 interface Props {
-    overview: BirdShooterGameOverview
+    overview: CompetitionOverview
 }
 
-function BirdShooterOverviewButton({overview}: Props) {
+function CompetitionOverviewButton({overview}: Props) {
 
     return (
         <Link to={`/game/${overview.id}`} className="btn flex content-center justify-between">
@@ -24,4 +24,4 @@ function BirdShooterOverviewButton({overview}: Props) {
     )
 }
 
-export default BirdShooterOverviewButton;
+export default CompetitionOverviewButton;

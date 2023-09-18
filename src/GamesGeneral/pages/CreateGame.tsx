@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
-import useCreateNewBirdShooterGame from "../../BirdShooterGame/hooks/createNewBirdShooterGame";
-import Games from "../models/Games";
+import useCreateNewCompetition from "../../Competition/hooks/createNewCompetition";
+import Games, {gameNames} from "../models/Games";
 import SelectObject from "../../shared/components/SelectObject";
 import Disciplines, {disciplineNames} from "../../User/models/Disciplines";
 import OptionObject from "../../shared/components/OptionObject";
@@ -14,15 +14,15 @@ interface Props {
 
 function CreateGame({user}: Props) {
 
-    const [createNewBirdShooterGame, creationBirdShooterGameLoading, creationBirdShooterGameError] = useCreateNewBirdShooterGame()
+    const [createNewCompetition, creationCompetitionLoading, creationCompetitionError] = useCreateNewCompetition()
     const navigate = useNavigate()
-    const [selectedGame, setSelectedGame] = useState<Games>(Games.BirdShooter)
+    const [selectedGame, setSelectedGame] = useState<Games>(Games.StairClimbing)
     const [discipline, setDiscipline] = useState<Disciplines>(Disciplines.AirRifle)
 
     const startGameClicked = async () => {
-        const newGameDoc = await createNewBirdShooterGame(user, discipline)
+        const newGameDoc = await createNewCompetition(user, discipline)
         if (newGameDoc) {
-            toast.success("Challenge erstellt 👍")
+            toast.success("Spiel erstellt 👍")
             navigate(`/game/${newGameDoc.id}`)
         }
     }
@@ -39,7 +39,7 @@ function CreateGame({user}: Props) {
         <h1 className="text-2xl">Was willst du spielen?</h1>
         <div className="w-full">
             <SelectObject className="select select-bordered w-full" onChange={gameSelectChanged} value={selectedGame}>
-                <OptionObject value={Games.BirdShooter}>Vogelschießen</OptionObject>
+                <OptionObject value={Games.StairClimbing}>{gameNames[Games.StairClimbing]}</OptionObject>
                 <OptionObject disabled value="">Mehr kommt noch</OptionObject>
             </SelectObject>
         </div>
@@ -52,10 +52,10 @@ function CreateGame({user}: Props) {
                 <OptionObject value={Disciplines.Pistol}>{disciplineNames[Disciplines.Pistol]}</OptionObject>
             </SelectObject>
         </div>
-        {creationBirdShooterGameError &&
-            <div className="text-error">{creationBirdShooterGameError.message}</div>
+        {creationCompetitionError &&
+            <div className="text-error">{creationCompetitionError.message}</div>
         }
-        <button className="btn btn-primary" disabled={!selectedGame || creationBirdShooterGameLoading}
+        <button className="btn btn-primary" disabled={!selectedGame || creationCompetitionLoading}
                 onClick={startGameClicked}>Los geht's!
         </button>
     </div>
