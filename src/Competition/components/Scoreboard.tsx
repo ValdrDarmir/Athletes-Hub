@@ -1,6 +1,6 @@
 import React from 'react';
 import sum from "../../shared/utils/sum";
-import {ParticipantSeriesJoined} from "../hooks/playBirdShooterGame";
+import {ParticipantSeriesJoined} from "../hooks/playCompetition";
 
 interface Props {
     participantSeries: ParticipantSeriesJoined[]

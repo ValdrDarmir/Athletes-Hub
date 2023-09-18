@@ -8,7 +8,7 @@ export interface ParticipantSeriesModel {
     series: number[]
 }
 
-export default interface BirdShooterGameModel extends BaseDBModel {
+export default interface CompetitionModel extends BaseDBModel {
     seriesCount: number                       // set at creation
     shootingTimeLimitMillis: number           // set at creation
     discipline: Disciplines                   // set at creation
@@ -18,22 +18,22 @@ export default interface BirdShooterGameModel extends BaseDBModel {
     participantSeries: ParticipantSeriesModel[]    // created before game starts, updated during game
 }
 
-export enum BirdShooterGameStates {
-    BeforeGame = "BeforeGame",
-    PreGameCountDown = "PreGameCountDown",
+export enum CompetitionStates {
+    BeforeStart = "BeforeStart",
+    PreStartCountDown = "PreStartCountDown",
     TimeRunning = "TimeRunning",
     TurnIn = "TurnIn",
-    AfterGame = "AfterGame",
+    AfterCompetition = "AfterCompetition",
 }
 
-export function getTimeUpTimeMillis(game: BirdShooterGameModel) {
+export function getTimeUpTimeMillis(game: CompetitionModel) {
     if (!game.startTimeMillis) {
         return null
     }
     return game.startTimeMillis + game.shootingTimeLimitMillis
 }
 
-export function getTurnInTimeMillis(game: BirdShooterGameModel) {
+export function getTurnInTimeMillis(game: CompetitionModel) {
     const timeUpTimeMillis = getTimeUpTimeMillis(game)
     if (!timeUpTimeMillis) {
         return null
@@ -41,9 +41,9 @@ export function getTurnInTimeMillis(game: BirdShooterGameModel) {
     return timeUpTimeMillis + (5 * 60 * 1000)   // 5 minutes after time is up
 }
 
-export function getState(game: BirdShooterGameModel) {
+export function getState(game: CompetitionModel) {
     if (!game.startTimeMillis) {
-        return BirdShooterGameStates.BeforeGame
+        return CompetitionStates.BeforeStart
     }
 
     const nowMillis = (new Date()).getTime()
@@ -58,25 +58,25 @@ export function getState(game: BirdShooterGameModel) {
     const participantsFinished = game.participantSeries.every(participantSeries => participantSeries.series.length === game.seriesCount)
 
     if (isTimeBeforeStart) {
-        return BirdShooterGameStates.PreGameCountDown
+        return CompetitionStates.PreStartCountDown
     }
 
     if (isTimeBeforeLimit && !participantsFinished) {
-        return BirdShooterGameStates.TimeRunning
+        return CompetitionStates.TimeRunning
     }
 
     if (isTimeBeforeTurnInEnd && !participantsFinished) {
-        return BirdShooterGameStates.TurnIn
+        return CompetitionStates.TurnIn
     }
 
-    return BirdShooterGameStates.AfterGame
+    return CompetitionStates.AfterCompetition
 }
 
 export function getScoreSum(participantSeries: ParticipantSeriesModel) {
     return sum(...participantSeries.series)
 }
 
-export function getHighestScoreParticipantId(game: BirdShooterGameModel) {
+export function getHighestScoreParticipantId(game: CompetitionModel) {
     const highestScoreSeries = game.participantSeries
         .reduce((prev, curr) => {
             return getScoreSum(prev) > getScoreSum(curr) ? prev : curr

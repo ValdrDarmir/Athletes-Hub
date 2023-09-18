@@ -1,19 +1,20 @@
 import React from "react";
 import UserModel from "../../User/models/User.model";
-import useUserBirdShooterGamesOverview from "../../BirdShooterGame/hooks/userBirdShooterGamesOverview";
-import BirdShooterOverviewButton
-    from "../../BirdShooterGame/components/BirdShooterOverviewButton";
+import useUserCompetitionsOverview from "../../Competition/hooks/userCompetitionsOverview";
+import CompetitionOverviewButton
+    from "../../Competition/components/CompetitionOverviewButton";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
+import Games, {gameNames} from "../models/Games";
 
 interface Props {
     user: UserModel
 }
 
 function MyGames({user}: Props) {
-    const [birdShooterOverviews, birdShooterOverviewsLoading, birdShooterOverviewsError] = useUserBirdShooterGamesOverview(user.id)
+    const [competitionOverviews, competitionOverviewsLoading, competitionOverviewsError] = useUserCompetitionsOverview(user.id)
 
-    const loading = birdShooterOverviewsLoading
-    const error = birdShooterOverviewsError
+    const loading = competitionOverviewsLoading
+    const error = competitionOverviewsError
 
     if (loading) {
         return <p>{loading}</p>
@@ -24,12 +25,12 @@ function MyGames({user}: Props) {
     }
 
     return <div className="flex flex-col items-stretch w-full p-2">
-        {birdShooterOverviews && birdShooterOverviews.length > 0 &&
+        {competitionOverviews && competitionOverviews.length > 0 &&
             <>
-                <h1 className="text-2xl">Vogelschützen</h1>
+                <h1 className="text-2xl">{gameNames[Games.StairClimbing]}</h1>
                 <ul className="menu">
-                    {birdShooterOverviews.map(overview =>
-                        <li key={overview.id} className="mb-2"><BirdShooterOverviewButton overview={overview}/></li>
+                    {competitionOverviews.map(overview =>
+                        <li key={overview.id} className="mb-2"><CompetitionOverviewButton overview={overview}/></li>
                     )}
                 </ul>
             </>

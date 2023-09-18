@@ -4,9 +4,9 @@ import * as uuid from "uuid"
 import UserModel from "../../User/models/User.model";
 import db from "../../shared/utils/db";
 import Disciplines from "../../User/models/Disciplines";
-import BirdShooterGameModel from "../models/BirdShooterGame.model";
+import CompetitionModel from "../models/CompetitionModel";
 
-function useCreateNewBirdShooterGame() {
+function useCreateNewCompetition() {
     const [creationLoading, setCreationLoading] = useState(false)
     const [creationError, setCreationError] = useState<Error | null>(null)
 
@@ -15,9 +15,9 @@ function useCreateNewBirdShooterGame() {
         setCreationLoading(true)
         setCreationError(null)
 
-        const newGameDoc = doc(db.gameBirdShooter, uuid.v4())
+        const newGameDoc = doc(db.competition, uuid.v4())
 
-        const newGameData: BirdShooterGameModel = {
+        const newGameData: CompetitionModel = {
             id: newGameDoc.id,
             participantIds: [],
             participantSeries: [],
@@ -40,4 +40,4 @@ function useCreateNewBirdShooterGame() {
     return [createNewGame, creationLoading, creationError] as const
 }
 
-export default useCreateNewBirdShooterGame
+export default useCreateNewCompetition

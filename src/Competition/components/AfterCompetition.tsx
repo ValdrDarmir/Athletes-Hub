@@ -1,13 +1,13 @@
 import React from 'react';
-import {AfterGameStateHook} from "../hooks/playBirdShooterGame";
+import {AfterCompetitionStateHook} from "../hooks/playCompetition";
 import sum from "../../shared/utils/sum";
 import Scoreboard from "./Scoreboard";
 
 interface Props {
-    game: AfterGameStateHook
+    game: AfterCompetitionStateHook
 }
 
-function AfterBirdShooterGame({game}: Props) {
+function AfterCompetition({game}: Props) {
         const winnerScore = sum(...game.data.participantSeries
             .find(p => p.user.id === game.data.winner.id)
             ?.series ?? []
@@ -21,4 +21,4 @@ function AfterBirdShooterGame({game}: Props) {
         </div>
 }
 
-export default AfterBirdShooterGame;
+export default AfterCompetition;

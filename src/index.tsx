@@ -6,7 +6,7 @@ import AuthGuard from './Auth/guards/AuthGuard';
 import App from "./App/pages/App";
 import CreateGame from './GamesGeneral/pages/CreateGame';
 import MyGames from './GamesGeneral/pages/MyGames';
-import BirdShooterGame from './BirdShooterGame/pages/BirdShooterGame';
+import Competition from './Competition/pages/Competition';
 import Login from './Auth/pages/Login';
 import Register from './Auth/pages/Register';
 import UnAuthGuard from './Auth/guards/UnAuthGuard';
@@ -34,7 +34,7 @@ const router = createHashRouter([
     },
     {
         path: "/game/:gameId",
-        element: <AuthGuard layout={Layout} component={BirdShooterGame} redirectRoute={"/login"}/>,
+        element: <AuthGuard layout={Layout} component={Competition} redirectRoute={"/login"}/>,
     },
     {
         path: "/invite/:entityId",

@@ -4,7 +4,7 @@ import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import {useCollectionData, useDocumentData} from "react-firebase-hooks/firestore";
 import Disciplines from "../../User/models/Disciplines";
 import UserModel from "../../User/models/User.model";
-import {ParticipantSeriesModel} from "../../BirdShooterGame/models/BirdShooterGame.model";
+import {ParticipantSeriesModel} from "../../Competition/models/CompetitionModel";
 import whereTyped from "../../shared/utils/whereTyped";
 
 interface Invitable {
@@ -47,7 +47,7 @@ type useInvitationHook = useInvitationHookLoading | useInvitationHookError | use
 
 function useInvitation(entityId: string | undefined, user: UserModel): useInvitationHook {
     // query all collections, where invitations are possible
-    const [bsGame, bsLoading, bsError] = useDocumentData(doc(db.gameBirdShooter, entityId))
+    const [bsGame, bsLoading, bsError] = useDocumentData(doc(db.competition, entityId))
     // TODO add other stuff, like tournaments here
     const entity: Invitable | undefined = bsGame
 
@@ -88,7 +88,7 @@ function useInvitation(entityId: string | undefined, user: UserModel): useInvita
 
     const addPlayer = async (clubDisciplineId: string) => {
         // TODO discriminate between collections
-        const entityDoc = doc(db.gameBirdShooter, entityId)
+        const entityDoc = doc(db.competition, entityId)
 
         const newParticipant: ParticipantSeriesModel = {
             participant: {
