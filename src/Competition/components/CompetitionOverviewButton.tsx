@@ -9,7 +9,7 @@ interface Props {
 function CompetitionOverviewButton({overview}: Props) {
 
     return (
-        <Link to={`/game/${overview.id}`} className="btn flex content-center justify-between">
+        <Link to={`/competition/${overview.id}`} className="btn flex content-center justify-between">
             <span>
                 <span>gegen </span>
                 {overview.opponents.length > 0 ?

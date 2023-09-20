@@ -10,8 +10,9 @@ interface Props {
     user: UserModel
 }
 
-function MyGames({user}: Props) {
+function MyGamesAndCompetitions({user}: Props) {
     const [competitionOverviews, competitionOverviewsLoading, competitionOverviewsError] = useUserCompetitionsOverview(user.id)
+    // TODO load games
 
     const loading = competitionOverviewsLoading
     const error = competitionOverviewsError
@@ -27,7 +28,7 @@ function MyGames({user}: Props) {
     return <div className="flex flex-col items-stretch w-full p-2">
         {competitionOverviews && competitionOverviews.length > 0 &&
             <>
-                <h1 className="text-2xl">{gameNames[Games.StairClimbing]}</h1>
+                <h1 className="text-2xl">Wettbewerbe</h1>
                 <ul className="menu">
                     {competitionOverviews.map(overview =>
                         <li key={overview.id} className="mb-2"><CompetitionOverviewButton overview={overview}/></li>
@@ -36,7 +37,11 @@ function MyGames({user}: Props) {
             </>
 
         }
+        {/*TODO show games*/}
+        <h1 className="text-2xl">{gameNames[Games.StairClimbing]}</h1>
+        <p>...</p>
+
     </div>
 }
 
-export default MyGames
+export default MyGamesAndCompetitions

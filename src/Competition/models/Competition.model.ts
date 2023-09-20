@@ -1,6 +1,6 @@
 import BaseDBModel from "../../shared/models/BaseDB.model";
 import Disciplines from "../../User/models/Disciplines";
-import Participant from "../../GamesGeneral/models/Participant";
+import Participant from "../../ChallengeGeneral/models/Participant";
 import sum from "../../shared/utils/sum";
 
 export interface ParticipantSeriesModel {

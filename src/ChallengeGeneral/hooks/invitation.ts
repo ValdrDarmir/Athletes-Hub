@@ -4,7 +4,7 @@ import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import {useCollectionData, useDocumentData} from "react-firebase-hooks/firestore";
 import Disciplines from "../../User/models/Disciplines";
 import UserModel from "../../User/models/User.model";
-import {ParticipantSeriesModel} from "../../Competition/models/CompetitionModel";
+import {ParticipantSeriesModel} from "../../Competition/models/Competition.model";
 import whereTyped from "../../shared/utils/whereTyped";
 
 interface Invitable {

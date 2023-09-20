@@ -4,13 +4,13 @@ import './index.css';
 import {createHashRouter, RouterProvider} from "react-router-dom";
 import AuthGuard from './Auth/guards/AuthGuard';
 import App from "./App/pages/App";
-import CreateGame from './GamesGeneral/pages/CreateGame';
-import MyGames from './GamesGeneral/pages/MyGames';
+import CreateGame from './ChallengeGeneral/pages/CreateGame';
+import MyGamesAndCompetitions from './ChallengeGeneral/pages/MyGamesAndCompetitions';
 import Competition from './Competition/pages/Competition';
 import Login from './Auth/pages/Login';
 import Register from './Auth/pages/Register';
 import UnAuthGuard from './Auth/guards/UnAuthGuard';
-import Invitation from "./GamesGeneral/pages/Invitation";
+import Invitation from "./ChallengeGeneral/pages/Invitation";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Statistics from "./Statistics/page/Statistics";
@@ -18,6 +18,7 @@ import Layout from "./App/components/Layout";
 import Profile from "./User/pages/Profile";
 import Training from "./Training/pages/Training";
 import AddTrainingEntry from "./Training/pages/AddTrainingEntry";
+import CreateCompetition from "./ChallengeGeneral/pages/CreateCompetition";
 
 const router = createHashRouter([
     {
@@ -30,10 +31,18 @@ const router = createHashRouter([
     },
     {
         path: "/games",
-        element: <AuthGuard layout={Layout} component={MyGames} redirectRoute={"/login"}/>,
+        element: <AuthGuard layout={Layout} component={MyGamesAndCompetitions} redirectRoute={"/login"}/>,
     },
     {
         path: "/game/:gameId",
+        element: <AuthGuard layout={Layout} component={() => <p>TODO Game</p>} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/competition",
+        element: <AuthGuard layout={Layout} component={CreateCompetition} redirectRoute={"/login"}/>,
+    },
+    {
+        path: "/competition/:competitionId",
         element: <AuthGuard layout={Layout} component={Competition} redirectRoute={"/login"}/>,
     },
     {

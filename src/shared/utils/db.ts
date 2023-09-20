@@ -2,10 +2,11 @@ import {firestore} from "./firebase";
 import "firebase/firestore"
 import {collection, DocumentData, FirestoreDataConverter} from "firebase/firestore";
 import UserModel from "../../User/models/User.model";
-import CompetitionModel from "../../Competition/models/CompetitionModel";
+import CompetitionModel from "../../Competition/models/Competition.model";
 import BaseDBModel from "../models/BaseDB.model";
 import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import TrainingEntryModel from "../../Training/models/TrainingEntry.model";
+import StairClimbingModel from "../../StairClimbing/models/StairClimbing.model";
 
 const dumpConverter = <T extends BaseDBModel>(): FirestoreDataConverter<T, T> => ({
     toFirestore: (data) => {
@@ -41,6 +42,7 @@ const db = {
     users: dataPoint<UserModel>("users", dumpConverter<UserModel>()),
     clubDisciplines: dataPoint<ClubDisciplineModel>("clubDisciplines", dumpConverter<ClubDisciplineModel>()),
     competition: dataPoint<CompetitionModel>("gameBirdShooter", dumpConverter<CompetitionModel>()),
+    stairClimbing: dataPoint<StairClimbingModel>("stairClimbing", dumpConverter<StairClimbingModel>()),
     training: dataPoint<TrainingEntryModel>("training", dumpConverter<TrainingEntryModel>()),
 }
 

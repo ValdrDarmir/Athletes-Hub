@@ -7,7 +7,7 @@ import {
     getHighestScoreParticipantId,
     getState, getTimeUpTimeMillis, getTurnInTimeMillis,
     ParticipantSeriesModel
-} from "../models/CompetitionModel";
+} from "../models/Competition.model";
 import Disciplines from "../../User/models/Disciplines";
 import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
@@ -45,7 +45,7 @@ export interface BeforeStartStateHook {
         discipline: Disciplines
     }
     actions: {
-        startGame(): Promise<Error | void>
+        startCompetition(): Promise<Error | void>
     }
 }
 
@@ -110,11 +110,10 @@ type AllCompetitionStatesHook =
     | TurnInStateHook
     | AfterCompetitionStateHook
 
-function usePlayCompetition(gameId: string | undefined): AllCompetitionStatesHook {
-    const [game, gameLoading, gameError] = useDocumentData(gameId ? doc(db.competition, gameId) : null)
+function usePlayCompetition(competitionId: string | undefined): AllCompetitionStatesHook {
+    const [game, gameLoading, gameError] = useDocumentData(competitionId ? doc(db.competition, competitionId) : null)
 
-    const participantIds = game && game.participantSeries
-        .map(ps => ps.participant.userId)
+    const participantIds = game && game.participantIds
         .concat("") // to prevent an empty array (firebase doesn't allow that)
 
     const [participants, participantsLoading, participantsError] = useDebounceHook(useCollectionData(game &&
@@ -132,8 +131,8 @@ function usePlayCompetition(gameId: string | undefined): AllCompetitionStatesHoo
     }
 
     // Initial Errors
-    if (!gameId || !game || !participants || !creator) {
-        const noGameIdError = !gameId && new Error("No game id was given.")
+    if (!competitionId || !game || !participants || !creator) {
+        const noGameIdError = !competitionId && new Error("No game id was given.")
         const noGameError = !game && new Error("No game found")
         const noPlayersError = !participants && new Error("No players found")
         const noCreatorError = !creator && new Error("Creator not found");
@@ -205,7 +204,7 @@ function usePlayCompetition(gameId: string | undefined): AllCompetitionStatesHoo
                     participantSeries: sortedParticipantSeries,
                 },
                 actions: {
-                    async startGame() {
+                    async startCompetition() {
                         if (participants.length === 0) {
                             return new Error("No players in game")
                         }

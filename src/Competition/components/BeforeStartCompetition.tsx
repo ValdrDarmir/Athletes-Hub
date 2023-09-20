@@ -8,12 +8,12 @@ import {toDataURL} from "qrcode";
 
 interface Props {
     user: UserModel
-    gameId: string
+    competitionId: string
     game: BeforeStartStateHook
 }
 
-function BeforeStartCompetition({user, game, gameId}: Props) {
-    const invitePath = useHref(`/invite/${gameId}`)
+function BeforeStartCompetition({user, game, competitionId}: Props) {
+    const invitePath = useHref(`/invite/${competitionId}`)
     const urlHost = window.location.host
 
     // TODO this is a workaround fix this
@@ -35,7 +35,7 @@ function BeforeStartCompetition({user, game, gameId}: Props) {
     }
 
     const startGameClicked = async () => {
-        const result = await game.actions.startGame()
+        const result = await game.actions.startCompetition()
         if (result instanceof Error) {
             toast.error(result.message)
         }
@@ -70,7 +70,7 @@ function BeforeStartCompetition({user, game, gameId}: Props) {
 
                     <div className="divider"></div>
 
-                    <CreatorJoin gameId={gameId} user={user}/>
+                    <CreatorJoin competitionId={competitionId} user={user}/>
                 </div>
             </>
         }

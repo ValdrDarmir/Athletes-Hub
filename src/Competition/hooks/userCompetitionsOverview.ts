@@ -5,7 +5,7 @@ import UserModel from "../../User/models/User.model";
 import nonFalsy from "../../shared/utils/nonFalsy";
 import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
-import CompetitionModel from "../models/CompetitionModel";
+import CompetitionModel from "../models/Competition.model";
 import useDebounceHook from "../../shared/hooks/debounceHook";
 
 export interface CompetitionOverview {

@@ -3,7 +3,7 @@ import {query} from "firebase/firestore";
 import db from "../../shared/utils/db";
 import average from "../../shared/utils/average";
 import {DataPoint} from "../components/LinePlotWithErrorBars";
-import CompetitionModel, {CompetitionStates, getState} from "../../Competition/models/CompetitionModel";
+import CompetitionModel, {CompetitionStates, getState} from "../../Competition/models/Competition.model";
 import whereTyped from "../../shared/utils/whereTyped";
 
 type StatisticsDataHook = [boolean, Error | null, { birdShooterHits: DataPoint[] } | null]
