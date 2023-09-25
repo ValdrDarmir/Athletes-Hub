@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import gewehrMann from "../assets/gewehr_mann.png"
 import { auth } from "../../shared/utils/firebase";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
+import { ROUTES } from "../..";
 
 interface LoginFieldValues {
     email: string,
@@ -42,7 +43,7 @@ function Login() {
                 {errors.password && <label className={"label"}><span className={"label-text-alt text-error"}>Password is required</span></label>}
             </div>
 
-            <Link to={"#"} className="link text-right">Passwort vergessen?</Link>
+            {/*<Link to={"#"} className="link text-right">Passwort vergessen?</Link>*/}
 
             {signinError && <ErrorDisplay error={signinError}/>}
 
@@ -50,7 +51,7 @@ function Login() {
 
             <div className="divider">oder</div>
 
-            <Link to={"/register"} className="btn w-full">Account erstellen</Link>
+            <Link to={ROUTES.register.path} className="btn w-full">Account erstellen</Link>
         </form>
     </div>
 }

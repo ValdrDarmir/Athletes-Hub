@@ -1,17 +1,18 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
-import Games, {gameNames} from "../models/Games";
 import SelectObject from "../../shared/components/SelectObject";
 import OptionObject from "../../shared/components/OptionObject";
 import {toast} from "react-toastify";
 import useCreateNewStairClimbing from "../../StairClimbing/hooks/createNewStairClimbing";
+import Games, {gameNames} from "../../ChallengeGeneral/models/Games";
+import {ROUTES} from "../../index";
 
 interface Props {
     user: UserModel
 }
 
-function CreateGame({user}: Props) {
+function CreateStairClimbing({user}: Props) {
 
     const [createNewStairClimbing, creationStairClimbingLoading, creationStairClimbingError] = useCreateNewStairClimbing()
     const navigate = useNavigate()
@@ -21,7 +22,7 @@ function CreateGame({user}: Props) {
         const newGameDoc = await createNewStairClimbing(user)
         if (newGameDoc) {
             toast.success("Spiel erstellt 👍")
-            navigate(`/game/${newGameDoc.id}`)
+            navigate(ROUTES.playStairClimbing.buildPath({gameId: newGameDoc.id}))
         }
     }
 
@@ -49,4 +50,4 @@ function CreateGame({user}: Props) {
 
 }
 
-export default CreateGame
+export default CreateStairClimbing

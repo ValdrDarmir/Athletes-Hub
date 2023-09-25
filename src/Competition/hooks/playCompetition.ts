@@ -5,7 +5,7 @@ import db from "../../shared/utils/db";
 import {
     CompetitionStates,
     getHighestScoreParticipantId,
-    getState, getTimeUpTimeMillis, getTurnInTimeMillis,
+    getState, getTimeUpTimeMillis, getTurnInTimeMillis, JoinedParticipantSeriesModel,
     ParticipantSeriesModel
 } from "../models/Competition.model";
 import Disciplines from "../../User/models/Disciplines";
@@ -14,10 +14,6 @@ import whereTyped from "../../shared/utils/whereTyped";
 import useTimeNowSeconds from "../../shared/hooks/timeNowSeconds";
 import {firestore} from "../../shared/utils/firebase";
 import useDebounceHook from "../../shared/hooks/debounceHook";
-
-export interface ParticipantSeriesJoined extends Omit<ParticipantSeriesModel, "userId"> {
-    user: UserModel
-}
 
 export enum AdditionalHookStates {
     Loading = "loading",
@@ -41,7 +37,7 @@ export interface BeforeStartStateHook {
     data: {
         creator: UserModel
         seriesCount: number
-        participantSeries: ParticipantSeriesJoined[]
+        participantSeries: JoinedParticipantSeriesModel[]
         discipline: Disciplines
     }
     actions: {
@@ -55,7 +51,7 @@ export interface PreStartCountDownStateHook {
         creator: UserModel
         seriesCount: number
         discipline: Disciplines
-        participantSeries: ParticipantSeriesJoined[]
+        participantSeries: JoinedParticipantSeriesModel[]
         startTimeCountdownSeconds: number
     }
     actions: null
@@ -67,7 +63,7 @@ export interface TimeRunningStateHook {
         creator: UserModel
         seriesCount: number
         discipline: Disciplines
-        participantSeries: ParticipantSeriesJoined[]
+        participantSeries: JoinedParticipantSeriesModel[]
         timeUpCountdownSeconds: number
     }
     actions: {
@@ -81,7 +77,7 @@ export interface TurnInStateHook {
         creator: UserModel
         seriesCount: number
         discipline: Disciplines
-        participantSeries: ParticipantSeriesJoined[]
+        participantSeries: JoinedParticipantSeriesModel[]
         turnInCountdownSeconds: number
     }
     actions: {
@@ -95,7 +91,7 @@ export interface AfterCompetitionStateHook {
         creator: UserModel
         seriesCount: number
         discipline: Disciplines
-        participantSeries: ParticipantSeriesJoined[]
+        participantSeries: JoinedParticipantSeriesModel[]
         winner: UserModel
     }
     actions: null
@@ -151,14 +147,17 @@ function usePlayCompetition(competitionId: string | undefined): AllCompetitionSt
 
             return {
                 ...participantSeries,
-                user: user,
-            }
+                participant: {
+                    ...participantSeries.participant,
+                    user: user
+                }
+            } as JoinedParticipantSeriesModel
         }
     ))
 
     const sortedParticipantSeries = joinedParticipantSeries.sort((a, b) => {
-        const aId = a.participant.userId
-        const bId = b.participant.userId
+        const aId = a.participant.user.id
+        const bId = b.participant.user.id
         return aId < bId ? -1 : 1;
     })
 

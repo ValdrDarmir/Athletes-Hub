@@ -12,9 +12,9 @@ function PreStartCountdown({game}: Props) {
 
     return <div className="flex items-center flex-col p-2">
         <h1 className="text-2xl">
-            {game.data.participantSeries.map((p, index) => <Fragment key={`names-${p.user.id}`}>
+            {game.data.participantSeries.map((p, index) => <Fragment key={`names-${p.participant.user.id}`}>
                     {(index > 0) && <span> vs </span>}
-                    <span className="font-bold">{p.user.displayName}</span>
+                    <span className="font-bold">{p.participant.user.displayName}</span>
                 </Fragment>
             )}
         </h1>

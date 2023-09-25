@@ -1,18 +1,20 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {CompetitionOverview} from "../hooks/userCompetitionsOverview";
+import Games, {gameNames} from "../../ChallengeGeneral/models/Games";
+import {StairClimbingOverview} from "../hooks/userStairClimbingOverview";
 import {ROUTES} from "../../index";
 
 interface Props {
-    overview: CompetitionOverview
+    overview: StairClimbingOverview
 }
 
-function CompetitionOverviewButton({overview}: Props) {
+function StairClimbingOverviewButton({overview}: Props) {
 
     return (
-        <Link to={ROUTES.playCompetition.buildPath({competitionId: overview.id})} className="btn flex content-center justify-between">
+        <Link to={ROUTES.playStairClimbing.buildPath({gameId: overview.id})} className="btn flex content-center justify-between">
             <span>
-                <span>gegen </span>
+                {gameNames[Games.StairClimbing]}
+                <span> gegen </span>
                 {overview.opponents.length > 0 ?
                     overview.opponents.map(op =>
                         <span className="font-bold">{op.displayName}</span>
@@ -25,4 +27,4 @@ function CompetitionOverviewButton({overview}: Props) {
     )
 }
 
-export default CompetitionOverviewButton;
+export default StairClimbingOverviewButton;

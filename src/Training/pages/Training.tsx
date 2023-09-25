@@ -5,6 +5,7 @@ import groupObjects from "../../shared/utils/groupObjects";
 import {disciplineNames} from "../../User/models/Disciplines";
 import TrainingEntryRow from '../components/TrainingEntryRow';
 import {Link} from "react-router-dom";
+import {ROUTES} from "../../index";
 
 interface Props {
     user: UserModel
@@ -19,7 +20,7 @@ function Training({user}: Props) {
         <div className="m-2 flex flex-col items-center">
             <h1 className="text-3xl mb-2">Trainingsdaten</h1>
 
-            <Link to="/training/new" className="btn btn-primary">Neue Daten hinzufügen</Link>
+            <Link to={ROUTES.training.path} className="btn btn-primary">Neue Daten hinzufügen</Link>
 
             {trainingEntriesByDiscipline && trainingEntriesByDiscipline.map(({group, values}) =>
                 <Fragment key={group}>

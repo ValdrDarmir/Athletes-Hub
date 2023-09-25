@@ -1,35 +1,37 @@
-import React from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
 import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 import SelectObject from "../../shared/components/SelectObject";
 import OptionObject from "../../shared/components/OptionObject";
 import {disciplineNames} from "../../User/models/Disciplines";
-import useInvitation from "../hooks/invitation";
+import useCompetitionInvitation from "../hooks/competitionInvitation";
+import {useState} from "react";
+import {ROUTES} from "../../index";
+import {useTypedParams} from "react-router-typesafe-routes/dom";
 
 interface Props {
     user: UserModel
 }
 
 function Invitation({user}: Props) {
-    const {entityId} = useParams()
+    const {competitionId} = useTypedParams(ROUTES.playCompetition)
     const {
-        entity,
+        competition,
         isUserAlreadyAttending,
         validUserClubDisciplines,
         loading,
         error,
         addPlayer,
-    } = useInvitation(entityId, user);
+    } = useCompetitionInvitation(competitionId, user);
 
     const navigate = useNavigate()
 
-    const [selectedClubDiscipline, setSelectedClubDiscipline] = React.useState<ClubDisciplineModel | null>(null)
+    const [selectedClubDiscipline, setSelectedClubDiscipline] = useState<ClubDisciplineModel | null>(null)
 
 
     if (loading) {
-        return <p>{loading}</p>
+        return <p>loading...</p>
     }
 
     if (error) {
@@ -41,7 +43,7 @@ function Invitation({user}: Props) {
             return
         }
         await addPlayer(selectedClubDiscipline.id);
-        navigate(`/game/${entityId}`)
+        navigate(ROUTES.playCompetition.buildPath({competitionId: competitionId}))
     }
 
     if (isUserAlreadyAttending) {
@@ -55,7 +57,7 @@ function Invitation({user}: Props) {
     return (
         <div>
             <div className="flex flex-col gap-2">
-                <p>Willst du mitmachen? Die Disziplin ist {disciplineNames[entity.discipline]}</p>
+                <p>Willst du mitmachen? Die Disziplin ist {disciplineNames[competition.discipline]}</p>
                 <p>Mit welchem Verein trittst du an?</p>
 
                 <SelectObject className="input input-bordered select" value={selectedClubDiscipline}

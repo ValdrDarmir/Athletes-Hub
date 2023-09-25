@@ -4,7 +4,7 @@ export enum StepGoals {
     A, B, C, D, E, F, G, H
 }
 
-interface StepGoalInfo {
+export interface StepGoalInfo {
     stepGoal: StepGoals
     name: string
     description: string

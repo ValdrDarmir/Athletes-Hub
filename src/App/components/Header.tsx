@@ -1,11 +1,12 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import logo from "../assets/logo.png";
+import {ROUTES} from "../../index";
 
 function Header() {
     return (
         <div className="flex items-center justify-between m-2">
-            <Link to="/" className="w-1/6">
+            <Link to={ROUTES.root.path} className="w-1/6">
                 <img src={logo} alt="Logo"/>
             </Link>
             <label htmlFor="my-drawer" className="btn btn-sm btn-circle btn-ghost">

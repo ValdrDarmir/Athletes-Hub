@@ -1,4 +1,3 @@
-import {useParams} from "react-router-dom";
 import usePlayCompetition, {AdditionalHookStates} from "../hooks/playCompetition";
 import React from "react";
 import UserModel from "../../User/models/User.model";
@@ -9,18 +8,16 @@ import TimeRunning from "../components/TimeRunning";
 import {CompetitionStates} from "../models/Competition.model";
 import TurnIn from "../components/TurnIn";
 import PreStartCountdown from "../components/PreStartCountdown";
+import {useTypedParams} from "react-router-typesafe-routes/dom";
+import {ROUTES} from "../../index";
 
 interface Params {
     user: UserModel
 }
 
 function Competition({user}: Params) {
-    const {competitionId} = useParams()
+    const {competitionId} = useTypedParams(ROUTES.playCompetition)
     const game = usePlayCompetition(competitionId)
-
-    if (!competitionId) {
-        return <ErrorDisplay error={new Error("No competitionId provided")}/>
-    }
 
     switch (game.state) {
         case AdditionalHookStates.Loading:

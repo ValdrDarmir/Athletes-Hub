@@ -8,12 +8,13 @@ import useTimeNowSeconds from "../../shared/hooks/timeNowSeconds";
 import {firestore} from "../../shared/utils/firebase";
 import useDebounceHook from "../../shared/hooks/debounceHook";
 import {
+    findPlayerStepForUserId, getCurrentStepGoalInfosForPlayer,
     getState, getTimeBeforeFinishSeconds,
-    getTimeBeforeStartSeconds,
-    ParticipantStepModel, sortAfterRanking,
+    getTimeBeforeStartSeconds, JoinedPlayerStepModel,
+    PlayerStepModel, sortAfterRanking,
     StairClimbingStates
 } from "../models/StairClimbing.model";
-import {StepGoals} from "../models/StepGoals";
+import {StepGoalInfo, StepGoals} from "../models/StepGoals";
 
 export enum AdditionalHookStates {
     Loading = "loading",
@@ -35,9 +36,10 @@ export interface ErrorStateHook {
 export interface BeforeStartStateHook {
     state: StairClimbingStates.BeforeStart
     data: {
+        id: string
         creator: UserModel
         stepGoals: StepGoals[]
-        participantSteps: ParticipantStepModel[]
+        playerSteps: JoinedPlayerStepModel[]
     }
     actions: {
         startGame(): Promise<Error | void>
@@ -47,9 +49,10 @@ export interface BeforeStartStateHook {
 export interface PreStartCountDownStateHook {
     state: StairClimbingStates.PreStartCountDown
     data: {
+        id: string
         creator: UserModel
         stepGoals: StepGoals[]
-        participantSteps: ParticipantStepModel[]
+        playerSteps: JoinedPlayerStepModel[]
         timeBeforeStartSeconds: number
     }
     actions: null
@@ -58,9 +61,11 @@ export interface PreStartCountDownStateHook {
 export interface RunningStateHook {
     state: StairClimbingStates.Running
     data: {
+        id: string
         creator: UserModel
         stepGoals: StepGoals[]
-        participantSteps: ParticipantStepModel[]
+        playerSteps: JoinedPlayerStepModel[]
+        currentStepGoalInfo: StepGoalInfo,
         timeBeforeFinishSeconds: number
     }
     actions: {
@@ -71,15 +76,16 @@ export interface RunningStateHook {
 export interface FinishedStateHook {
     state: StairClimbingStates.Finished
     data: {
+        id: string
         creator: UserModel
         stepGoals: StepGoals[]
-        participantSteps: ParticipantStepModel[]
-        winner: ParticipantStepModel
+        playerSteps: JoinedPlayerStepModel[]
+        winner: JoinedPlayerStepModel
     }
     actions: null
 }
 
-type AllStairClimbingStatesHook =
+export type AllStairClimbingStatesHook =
     LoadingStateHook
     | ErrorStateHook
     | BeforeStartStateHook
@@ -87,10 +93,10 @@ type AllStairClimbingStatesHook =
     | RunningStateHook
     | FinishedStateHook
 
-function usePlayStairClimbing(gameId: string | undefined): AllStairClimbingStatesHook {
+function usePlayStairClimbing(gameId: string | undefined, user: UserModel): AllStairClimbingStatesHook {
     const [game, gameLoading, gameError] = useDocumentData(gameId ? doc(db.stairClimbing, gameId) : null)
 
-    const participantIds = game && game.participantIds
+    const participantIds = game && game.playerIds
         .concat("") // to prevent an empty array (firebase doesn't allow that)
 
     const [participants, participantsLoading, participantsError] = useDebounceHook(useCollectionData(game &&
@@ -120,33 +126,33 @@ function usePlayStairClimbing(gameId: string | undefined): AllStairClimbingState
     }
 
     // Join data
-    const [joinedParticipantSteps, joinErrors] = separateErrors(game.participantSteps.map(participantSteps => {
-            const user = participants.find(user => user.id === participantSteps.participant.userId)
+    const [joinedPlayerSteps, joinErrors] = separateErrors(game.playerSteps.map(playerSteps => {
+            const user = participants.find(user => user.id === playerSteps.userId)
             if (!user) {
-                return new Error(`User ${participantSteps.participant.userId} not found`)
+                return new Error(`User ${playerSteps.userId} not found`)
             }
 
             return {
-                ...participantSteps,
-                user: user,
-            }
+                ...playerSteps,
+                user: user
+            } as JoinedPlayerStepModel
         }
     ))
 
-    const sortedParticipantSeries = joinedParticipantSteps.sort(sortAfterRanking)
+    const sortedPlayerSteps = joinedPlayerSteps.sort(sortAfterRanking)
 
     if (joinErrors.length > 0) {
         return {state: AdditionalHookStates.Error, data: joinErrors[0], actions: null}
     }
 
     const climbStep = async (userId: string) => {
-        const oldParticipantSeries = game.participantSteps.find(ps => ps.participant.userId === userId)
+        const oldParticipantSeries = game.playerSteps.find(ps => ps.userId === userId)
 
         if (!oldParticipantSeries) {
             return new Error("No participant series found")
         }
 
-        const newParticipantSeries: ParticipantStepModel = {
+        const newParticipantSeries: PlayerStepModel = {
             ...oldParticipantSeries,
             stepIndex: oldParticipantSeries.stepIndex + 1,
         }
@@ -156,11 +162,11 @@ function usePlayStairClimbing(gameId: string | undefined): AllStairClimbingState
 
         await runTransaction(firestore, async (transaction) => {
             transaction.set(docRef, {
-                participantSteps: arrayRemove(oldParticipantSeries),
+                playerSteps: arrayRemove(oldParticipantSeries),
             }, {merge: true})
 
             transaction.set(docRef, {
-                participantSteps: arrayUnion(newParticipantSeries),
+                playerSteps: arrayUnion(newParticipantSeries),
             }, {merge: true})
         })
     }
@@ -171,9 +177,10 @@ function usePlayStairClimbing(gameId: string | undefined): AllStairClimbingState
             return {
                 state: StairClimbingStates.BeforeStart,
                 data: {
+                    id: game.id,
                     creator: creator,
                     stepGoals: game.stepGoals,
-                    participantSteps: sortedParticipantSeries,
+                    playerSteps: sortedPlayerSteps,
                 },
                 actions: {
                     async startGame() {
@@ -202,9 +209,10 @@ function usePlayStairClimbing(gameId: string | undefined): AllStairClimbingState
             return {
                 state: StairClimbingStates.PreStartCountDown,
                 data: {
+                    id: game.id,
                     creator: creator,
                     stepGoals: game.stepGoals,
-                    participantSteps: sortedParticipantSeries,
+                    playerSteps: sortedPlayerSteps,
                     timeBeforeStartSeconds: timeBeforeStartSeconds,
                 },
                 actions: null
@@ -217,12 +225,21 @@ function usePlayStairClimbing(gameId: string | undefined): AllStairClimbingState
 
             const timeBeforeFinishSeconds = getTimeBeforeFinishSeconds(game, timeNowSeconds * 1000)!
 
+            const currentPlayer = findPlayerStepForUserId(game, user.id)
+            if(!currentPlayer) {
+                return {state: AdditionalHookStates.Error, data: new Error("User not found in game"), actions: null}
+            }
+
+            const currentStepGoalInfo = getCurrentStepGoalInfosForPlayer(game, currentPlayer)
+
             return {
                 state: StairClimbingStates.Running,
                 data: {
+                    id: game.id,
                     creator: creator,
                     stepGoals: game.stepGoals,
-                    participantSteps: sortedParticipantSeries,
+                    playerSteps: sortedPlayerSteps,
+                    currentStepGoalInfo: currentStepGoalInfo,
                     timeBeforeFinishSeconds: timeBeforeFinishSeconds,
                 },
                 actions: {
@@ -235,10 +252,11 @@ function usePlayStairClimbing(gameId: string | undefined): AllStairClimbingState
             return {
                 state: StairClimbingStates.Finished,
                 data: {
+                    id: game.id,
                     creator: creator,
                     stepGoals: game.stepGoals,
-                    participantSteps: sortedParticipantSeries,
-                    winner: sortedParticipantSeries[0],
+                    playerSteps: sortedPlayerSteps,
+                    winner: sortedPlayerSteps[0],
                 },
                 actions: null
             }
