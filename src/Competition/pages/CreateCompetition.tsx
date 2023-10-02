@@ -2,11 +2,11 @@ import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
 import useCreateNewCompetition from "../../Competition/hooks/createNewCompetition";
-import Games, {gameNames} from "../models/Games";
 import SelectObject from "../../shared/components/SelectObject";
 import Disciplines, {disciplineNames} from "../../User/models/Disciplines";
 import OptionObject from "../../shared/components/OptionObject";
 import {toast} from "react-toastify";
+import {routes} from "../../routes";
 
 interface Props {
     user: UserModel
@@ -16,19 +16,14 @@ function CreateGame({user}: Props) {
 
     const [createNewCompetition, creationCompetitionLoading, creationCompetitionError] = useCreateNewCompetition()
     const navigate = useNavigate()
-    const [selectedGame, setSelectedGame] = useState<Games>(Games.StairClimbing)
     const [discipline, setDiscipline] = useState<Disciplines>(Disciplines.AirRifle)
 
     const startGameClicked = async () => {
         const newGameDoc = await createNewCompetition(user, discipline)
         if (newGameDoc) {
             toast.success("Spiel erstellt 👍")
-            navigate(`/game/${newGameDoc.id}`)
+            navigate(routes.playCompetition.buildPath({competitionId: newGameDoc.id}))
         }
-    }
-
-    const gameSelectChanged = (value: Games) => {
-        setSelectedGame(value)
     }
 
     const disciplineSelectChanged = (value: Disciplines) => {
@@ -36,15 +31,8 @@ function CreateGame({user}: Props) {
     }
 
     return <div className="flex flex-col items-center m-2 gap-2">
-        <h1 className="text-2xl">Was willst du spielen?</h1>
-        <div className="w-full">
-            <SelectObject className="select select-bordered w-full" onChange={gameSelectChanged} value={selectedGame}>
-                <OptionObject value={Games.StairClimbing}>{gameNames[Games.StairClimbing]}</OptionObject>
-                <OptionObject disabled value="">Mehr kommt noch</OptionObject>
-            </SelectObject>
-        </div>
-
-        <h1 className="text-2xl">In welcher Diziplin?</h1>
+        <h1 className="text-2xl">Wettbewerb erstellen</h1>
+        <h1 className="text-xl">In welcher Diziplin?</h1>
         <div className="w-full">
             <SelectObject className="select select-bordered w-full" onChange={disciplineSelectChanged}
                           value={discipline}>
@@ -55,7 +43,7 @@ function CreateGame({user}: Props) {
         {creationCompetitionError &&
             <div className="text-error">{creationCompetitionError.message}</div>
         }
-        <button className="btn btn-primary" disabled={!selectedGame || creationCompetitionLoading}
+        <button className="btn btn-primary" disabled={creationCompetitionLoading}
                 onClick={startGameClicked}>Los geht's!
         </button>
     </div>

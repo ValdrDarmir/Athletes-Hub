@@ -9,7 +9,7 @@ interface Props {
 
 function AfterCompetition({game}: Props) {
         const winnerScore = sum(...game.data.participantSeries
-            .find(p => p.user.id === game.data.winner.id)
+            .find(p => p.participant.user.id === game.data.winner.id)
             ?.series ?? []
         )
 

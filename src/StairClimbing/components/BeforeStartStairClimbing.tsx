@@ -1,20 +1,21 @@
 import React, {useEffect} from 'react';
-import {BeforeStartStateHook} from "../hooks/playCompetition";
 import {toast} from "react-toastify";
 import {useHref} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
 import CreatorJoin from "./CreatorJoin";
 import {toDataURL} from "qrcode";
+import {BeforeStartStateHook} from "../hooks/playStairClimbing";
 import {routes} from "../../routes";
 
 interface Props {
     user: UserModel
-    competitionId: string
+    gameId: string
     game: BeforeStartStateHook
 }
 
-function BeforeStartCompetition({user, game, competitionId}: Props) {
-    const invitePath = useHref(routes.inviteCompetition.buildPath({competitionId}))
+function BeforeStartStairClimbing({user, game, gameId}: Props) {
+    const invitePath = useHref(routes.inviteStairClimbing.buildPath({gameId}))
+
     const urlHost = window.location.host
 
     // TODO this is a workaround fix this
@@ -36,18 +37,18 @@ function BeforeStartCompetition({user, game, competitionId}: Props) {
     }
 
     const startGameClicked = async () => {
-        const result = await game.actions.startCompetition()
+        const result = await game.actions.startGame()
         if (result instanceof Error) {
             toast.error(result.message)
         }
     }
 
     return <div>
-        <p>Der Wettbewerb hat noch nicht begonnen.</p>
+        <p>Das Spiel hat noch nicht begonnen.</p>
         <p>Bisher angemeldet sind:</p>
         <ul>
-            {game.data.participantSeries.map(p =>
-                <li key={p.participant.user.id}>{p.participant.user.displayName}</li>)
+            {game.data.playerSteps.map(p =>
+                <li key={p.user.id}>{p.user.displayName}</li>)
             }
         </ul>
         {(game.data.creator.id === user.id) &&
@@ -71,7 +72,7 @@ function BeforeStartCompetition({user, game, competitionId}: Props) {
 
                     <div className="divider"></div>
 
-                    <CreatorJoin competitionId={competitionId} user={user}/>
+                    <CreatorJoin gameId={gameId} user={user}/>
                 </div>
             </>
         }
@@ -79,4 +80,4 @@ function BeforeStartCompetition({user, game, competitionId}: Props) {
 
 }
 
-export default BeforeStartCompetition;
+export default BeforeStartStairClimbing;

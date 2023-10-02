@@ -1,17 +1,17 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import {CompetitionOverview} from "../hooks/userCompetitionsOverview";
+import {StairClimbingOverview} from "../hooks/userStairClimbingOverview";
 import {routes} from "../../routes";
 import {disciplineNames} from "../../User/models/Disciplines";
 
 interface Props {
-    overview: CompetitionOverview
+    overview: StairClimbingOverview
 }
 
-function CompetitionOverviewButton({overview}: Props) {
+function StairClimbingOverviewButton({overview}: Props) {
 
     return (
-        <Link to={routes.playCompetition.buildPath({competitionId: overview.id})} className="btn content-center grid grid-cols-[1fr,7rem]">
+        <Link to={routes.playStairClimbing.buildPath({gameId: overview.id})} className="btn content-center grid grid-cols-[1fr,7rem]">
             <span>
                 <span>vs </span>
                 {overview.opponents.length > 0 ?
@@ -27,4 +27,4 @@ function CompetitionOverviewButton({overview}: Props) {
     )
 }
 
-export default CompetitionOverviewButton;
+export default StairClimbingOverviewButton;

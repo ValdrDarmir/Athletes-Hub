@@ -5,33 +5,31 @@ import UserModel from "../../User/models/User.model";
 import nonFalsy from "../../shared/utils/nonFalsy";
 import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
-import CompetitionModel from "../models/Competition.model";
 import useDebounceHook from "../../shared/hooks/debounceHook";
+import StairClimbingModel from "../models/StairClimbing.model";
 import Disciplines from "../../User/models/Disciplines";
 
-export interface CompetitionOverview {
+export interface StairClimbingOverview {
     id: string
     opponents: UserModel[]
     discipline: Disciplines
 }
 
-type UserCompetitionsOverviewHook =
-    [CompetitionOverview[], false, null] |
+type UserStairClimbingOverviewHook =
+    [StairClimbingOverview[], false, null] |
     [null, true, null] |
     [null, false, Error] |
     [null, false, null]
 
-export default function useUserCompetitionsOverview(userId: string): UserCompetitionsOverviewHook {
-    const [games, gamesLoading, gamesError] = useCollectionData(query(db.competition,
-            or(whereTyped<CompetitionModel>("participantIds", "array-contains", userId),
-                whereTyped<CompetitionModel>("creatorId", "==", userId))
+export default function useUserStairClimbingOverview(userId: string): UserStairClimbingOverviewHook {
+    const [games, gamesLoading, gamesError] = useCollectionData(query(db.stairClimbing,
+            or(whereTyped<StairClimbingModel>("playerIds", "array-contains", userId),
+                whereTyped<StairClimbingModel>("creatorId", "==", userId))
         )
     )
 
     const allPlayersIds = games && games
-        .map(game => game.participantSeries
-            .map(ps => ps.participant.userId)
-        )
+        .map(game => game.playerIds)
         .flat()
         .concat("") // to prevent an empty array (firebase doesn't allow that)
 
@@ -56,21 +54,16 @@ export default function useUserCompetitionsOverview(userId: string): UserCompeti
         return [null, false, error,]
     }
 
-    // TODO error is thrown too often. Initially not all players are loaded. Fix?
-    const gameOverviews: CompetitionOverview[] = games
+    const gameOverviews: StairClimbingOverview[] = games
         .map(game => {
 
-
-            const [joinedParticipantSeries, joinErrors] = separateErrors(game.participantSeries.map(participantSeries => {
-                    const user = players.find(user => user.id === participantSeries.participant.userId)
+            const [gamePlayers, joinErrors] = separateErrors(game.playerIds.map(playerId => {
+                    const user = players.find(user => user.id === playerId)
                     if (!user) {
-                        return new Error(`User ${participantSeries.participant.userId} not found`)
+                        return new Error(`User ${playerId} not found`)
                     }
 
-                    return {
-                        ...participantSeries,
-                        user: user,
-                    }
+                    return user
                 }
             ))
 
@@ -78,9 +71,8 @@ export default function useUserCompetitionsOverview(userId: string): UserCompeti
                 console.error(joinErrors)
             }
 
-            const opponents = joinedParticipantSeries
-                .filter(ps => ps.participant.userId !== userId)
-                .map(ps => ps.user)
+            const opponents = gamePlayers
+                .filter(ps => ps.id !== userId)
 
             return {
                 id: game.id,

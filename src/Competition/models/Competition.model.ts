@@ -1,12 +1,15 @@
 import BaseDBModel from "../../shared/models/BaseDB.model";
 import Disciplines from "../../User/models/Disciplines";
-import Participant from "../../GamesGeneral/models/Participant";
+import Participant, {UserJoinedParticipant} from "../../ChallengeGeneral/models/Participant";
 import sum from "../../shared/utils/sum";
+import JoinReplace from "../../shared/models/JoinReplace";
 
 export interface ParticipantSeriesModel {
     participant: Participant
     series: number[]
 }
+
+export type JoinedParticipantSeriesModel = JoinReplace<ParticipantSeriesModel, "participant", UserJoinedParticipant>
 
 export default interface CompetitionModel extends BaseDBModel {
     seriesCount: number                       // set at creation

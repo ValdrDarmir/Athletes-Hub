@@ -1,30 +1,30 @@
 import React from 'react';
-import useInvitation from "../../GamesGeneral/hooks/invitation";
 import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 import SelectObject from "../../shared/components/SelectObject";
 import OptionObject from "../../shared/components/OptionObject";
 import UserModel from "../../User/models/User.model";
+import useCompetitionInvitation from "../hooks/competitionInvitation";
 
 interface Props {
-    gameId: string
+    competitionId: string
     user: UserModel
 }
 
-function CreatorJoin({gameId, user}: Props) {
+function CreatorJoin({competitionId, user}: Props) {
     const {
         isUserAlreadyAttending,
         validUserClubDisciplines,
         loading,
         error,
         addPlayer,
-    } = useInvitation(gameId, user);
+    } = useCompetitionInvitation(competitionId, user);
 
     const [selectedClubDiscipline, setSelectedClubDiscipline] = React.useState<ClubDisciplineModel | null>(null)
 
 
     if (loading) {
-        return <p>{loading}</p>
+        return <p>loading...</p>
     }
 
     if (error) {

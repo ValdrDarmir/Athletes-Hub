@@ -4,21 +4,21 @@ import * as uuid from "uuid"
 import UserModel from "../../User/models/User.model";
 import db from "../../shared/utils/db";
 import Disciplines from "../../User/models/Disciplines";
-import CompetitionModel from "../models/CompetitionModel";
+import CompetitionModel from "../models/Competition.model";
 
 function useCreateNewCompetition() {
     const [creationLoading, setCreationLoading] = useState(false)
     const [creationError, setCreationError] = useState<Error | null>(null)
 
-    const createNewGame = async (creator: UserModel, discipline: Disciplines) => {
+    const createNewCompetition = async (creator: UserModel, discipline: Disciplines) => {
 
         setCreationLoading(true)
         setCreationError(null)
 
-        const newGameDoc = doc(db.competition, uuid.v4())
+        const newCompetitionDoc = doc(db.competition, uuid.v4())
 
-        const newGameData: CompetitionModel = {
-            id: newGameDoc.id,
+        const newCompetitionData: CompetitionModel = {
+            id: newCompetitionDoc.id,
             participantIds: [],
             participantSeries: [],
             creatorId: creator.id,
@@ -30,14 +30,14 @@ function useCreateNewCompetition() {
             updatedAt: new Date(),
         }
 
-        await setDoc(newGameDoc, newGameData)
+        await setDoc(newCompetitionDoc, newCompetitionData)
 
         setCreationLoading(false)
 
-        return newGameData;
+        return newCompetitionData;
     }
 
-    return [createNewGame, creationLoading, creationError] as const
+    return [createNewCompetition, creationLoading, creationError] as const
 }
 
 export default useCreateNewCompetition

@@ -1,9 +1,9 @@
 import React from 'react';
 import sum from "../../shared/utils/sum";
-import {ParticipantSeriesJoined} from "../hooks/playCompetition";
+import {JoinedParticipantSeriesModel} from "../models/Competition.model";
 
 interface Props {
-    participantSeries: ParticipantSeriesJoined[]
+    participantSeries: JoinedParticipantSeriesModel[]
     seriesCount: number
 }
 
@@ -11,9 +11,9 @@ function Scoreboard({participantSeries, seriesCount}: Props) {
     return (
         <div className="grid grid-cols-2 divide-x-2 divide-base-300">
             {participantSeries.map((p) => (
-                <div key={p.user.id} >
+                <div key={p.participant.user.id} >
                     <div className="flex flex-col items-center">
-                        <p>{p.user.displayName}</p>
+                        <p>{p.participant.user.displayName}</p>
                         <p>Punkte: {sum(...p.series)}</p>
                     </div>
                     <table className="table">
@@ -25,13 +25,13 @@ function Scoreboard({participantSeries, seriesCount}: Props) {
                         </thead>
                         <tbody>
                         {p.series.map((score, round) => (
-                            <tr key={`${p.user.id}-${round}`}>
+                            <tr key={`${p.participant.user.id}-${round}`}>
                                 <td>{round + 1}</td>
                                 <td>{score}</td>
                             </tr>
                         ))}
                         {[...Array(seriesCount - p.series.length)].map((_, index) => (
-                            <tr key={`${p.user.id}-${index + p.series.length + 1}`}>
+                            <tr key={`${p.participant.user.id}-${index + p.series.length + 1}`}>
                                 <td>{index + p.series.length + 1}</td>
                                 <td></td>
                             </tr>
