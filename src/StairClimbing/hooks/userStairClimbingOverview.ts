@@ -7,10 +7,12 @@ import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
 import useDebounceHook from "../../shared/hooks/debounceHook";
 import StairClimbingModel from "../models/StairClimbing.model";
+import Disciplines from "../../User/models/Disciplines";
 
 export interface StairClimbingOverview {
     id: string
     opponents: UserModel[]
+    discipline: Disciplines
 }
 
 type UserStairClimbingOverviewHook =
@@ -52,7 +54,6 @@ export default function useUserStairClimbingOverview(userId: string): UserStairC
         return [null, false, error,]
     }
 
-    // TODO error is thrown too often. Initially not all players are loaded. Fix?
     const gameOverviews: StairClimbingOverview[] = games
         .map(game => {
 
@@ -76,6 +77,7 @@ export default function useUserStairClimbingOverview(userId: string): UserStairC
             return {
                 id: game.id,
                 opponents: opponents,
+                discipline: game.discipline,
             }
         })
         .filter(nonFalsy)

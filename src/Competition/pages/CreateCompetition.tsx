@@ -6,7 +6,7 @@ import SelectObject from "../../shared/components/SelectObject";
 import Disciplines, {disciplineNames} from "../../User/models/Disciplines";
 import OptionObject from "../../shared/components/OptionObject";
 import {toast} from "react-toastify";
-import {ROUTES} from "../../index";
+import {routes} from "../../routes";
 
 interface Props {
     user: UserModel
@@ -22,7 +22,7 @@ function CreateGame({user}: Props) {
         const newGameDoc = await createNewCompetition(user, discipline)
         if (newGameDoc) {
             toast.success("Spiel erstellt 👍")
-            navigate(ROUTES.playCompetition.buildPath({competitionId: newGameDoc.id}))
+            navigate(routes.playCompetition.buildPath({competitionId: newGameDoc.id}))
         }
     }
 

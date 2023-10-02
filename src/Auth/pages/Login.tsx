@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 import gewehrMann from "../assets/gewehr_mann.png"
 import { auth } from "../../shared/utils/firebase";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
-import { ROUTES } from "../..";
+import {routes} from "../../routes";
 
 interface LoginFieldValues {
     email: string,
@@ -51,7 +51,7 @@ function Login() {
 
             <div className="divider">oder</div>
 
-            <Link to={ROUTES.register.path} className="btn w-full">Account erstellen</Link>
+            <Link to={routes.register.path} className="btn w-full">Account erstellen</Link>
         </form>
     </div>
 }

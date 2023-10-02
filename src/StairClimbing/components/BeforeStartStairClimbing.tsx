@@ -5,6 +5,7 @@ import UserModel from "../../User/models/User.model";
 import CreatorJoin from "./CreatorJoin";
 import {toDataURL} from "qrcode";
 import {BeforeStartStateHook} from "../hooks/playStairClimbing";
+import {routes} from "../../routes";
 
 interface Props {
     user: UserModel
@@ -13,7 +14,8 @@ interface Props {
 }
 
 function BeforeStartStairClimbing({user, game, gameId}: Props) {
-    const invitePath = useHref(`/invite/${gameId}`)
+    const invitePath = useHref(routes.inviteStairClimbing.buildPath({gameId}))
+
     const urlHost = window.location.host
 
     // TODO this is a workaround fix this

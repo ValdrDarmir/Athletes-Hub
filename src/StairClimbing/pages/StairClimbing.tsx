@@ -8,14 +8,14 @@ import RunningStairClimbing from "../components/RunningStairClimbing";
 import PreStartCountdownStairClimbing from "../components/PreStartCountdownStairClimbing";
 import BeforeStartStairClimbing from "../components/BeforeStartStairClimbing";
 import {useTypedParams} from "react-router-typesafe-routes/dom";
-import {ROUTES} from "../../index";
+import {routes} from "../../routes";
 
 interface Params {
     user: UserModel
 }
 
 function StairClimbing({user}: Params) {
-    const {gameId} = useTypedParams(ROUTES.playStairClimbing)
+    const {gameId} = useTypedParams(routes.playStairClimbing)
     const game = usePlayStairClimbing(gameId, user)
 
     switch (game.state) {

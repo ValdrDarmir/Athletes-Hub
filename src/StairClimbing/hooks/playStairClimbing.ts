@@ -14,7 +14,7 @@ import {
     PlayerStepModel, sortAfterRanking,
     StairClimbingStates
 } from "../models/StairClimbing.model";
-import {StepGoalInfo, StepGoals} from "../models/StepGoals";
+import {StepGoal} from "../models/StepGoals";
 
 export enum AdditionalHookStates {
     Loading = "loading",
@@ -38,7 +38,7 @@ export interface BeforeStartStateHook {
     data: {
         id: string
         creator: UserModel
-        stepGoals: StepGoals[]
+        stepGoals: StepGoal[]
         playerSteps: JoinedPlayerStepModel[]
     }
     actions: {
@@ -51,7 +51,7 @@ export interface PreStartCountDownStateHook {
     data: {
         id: string
         creator: UserModel
-        stepGoals: StepGoals[]
+        stepGoals: StepGoal[]
         playerSteps: JoinedPlayerStepModel[]
         timeBeforeStartSeconds: number
     }
@@ -63,9 +63,9 @@ export interface RunningStateHook {
     data: {
         id: string
         creator: UserModel
-        stepGoals: StepGoals[]
+        stepGoals: StepGoal[]
         playerSteps: JoinedPlayerStepModel[]
-        currentStepGoalInfo: StepGoalInfo,
+        currentStepGoalInfo: StepGoal,
         timeBeforeFinishSeconds: number
     }
     actions: {
@@ -78,7 +78,7 @@ export interface FinishedStateHook {
     data: {
         id: string
         creator: UserModel
-        stepGoals: StepGoals[]
+        stepGoals: StepGoal[]
         playerSteps: JoinedPlayerStepModel[]
         winner: JoinedPlayerStepModel
     }
@@ -191,7 +191,7 @@ function usePlayStairClimbing(gameId: string | undefined, user: UserModel): AllS
                         const nowMillis = (new Date()).getTime()
                         const startTimeMillis = nowMillis + (30 * 1000)
 
-                        const docRef = doc(db.competition, game.id)
+                        const docRef = doc(db.stairClimbing, game.id)
                         await setDoc(docRef, {
                             startTimeMillis: startTimeMillis,
                         }, {merge: true})

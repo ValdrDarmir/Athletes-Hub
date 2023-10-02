@@ -7,15 +7,15 @@ import OptionObject from "../../shared/components/OptionObject";
 import {disciplineNames} from "../../User/models/Disciplines";
 import useCompetitionInvitation from "../hooks/competitionInvitation";
 import {useState} from "react";
-import {ROUTES} from "../../index";
 import {useTypedParams} from "react-router-typesafe-routes/dom";
+import {routes} from "../../routes";
 
 interface Props {
     user: UserModel
 }
 
 function Invitation({user}: Props) {
-    const {competitionId} = useTypedParams(ROUTES.playCompetition)
+    const {competitionId} = useTypedParams(routes.playCompetition)
     const {
         competition,
         isUserAlreadyAttending,
@@ -43,7 +43,7 @@ function Invitation({user}: Props) {
             return
         }
         await addPlayer(selectedClubDiscipline.id);
-        navigate(ROUTES.playCompetition.buildPath({competitionId: competitionId}))
+        navigate(routes.playCompetition.buildPath({competitionId: competitionId}))
     }
 
     if (isUserAlreadyAttending) {

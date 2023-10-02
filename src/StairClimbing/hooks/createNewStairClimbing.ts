@@ -5,9 +5,10 @@ import UserModel from "../../User/models/User.model";
 import db from "../../shared/utils/db";
 import StairClimbingModel from "../models/StairClimbing.model";
 import {getRandomStepGoals} from "../models/StepGoals";
+import Disciplines from "../../User/models/Disciplines";
 
 export type CreateNewStairClimbingHook = [
-    (creator: UserModel) => Promise<StairClimbingModel>,
+    (creator: UserModel, discipline: Disciplines, stepGoalAmount: number) => Promise<StairClimbingModel>,
     boolean,
         Error | null,
 ]
@@ -16,13 +17,12 @@ function useCreateNewStairClimbing(): CreateNewStairClimbingHook {
     const [creationLoading, setCreationLoading] = useState(false)
     const [creationError, setCreationError] = useState<Error | null>(null)
 
-    const createNewGame = async (creator: UserModel) => {
+    const createNewGame = async (creator: UserModel, discipline: Disciplines, stepGoalAmount: number) => {
 
         setCreationLoading(true)
         setCreationError(null)
 
-        // TODO: change fixed amount of goals
-        const randomStepGoals = getRandomStepGoals(5)
+        const randomStepGoals = getRandomStepGoals(discipline, stepGoalAmount)
 
         const newGameDoc = doc(db.stairClimbing, uuid.v4())
 
@@ -32,6 +32,7 @@ function useCreateNewStairClimbing(): CreateNewStairClimbingHook {
             creatorId: creator.id,
             shootingTimeLimitMillis: 15 * 60 * 1000,    // 15 minutes
             startTimeMillis: null,
+            discipline: discipline,
             playerSteps: [],
             stepGoals: randomStepGoals,
             createdAt: new Date(),

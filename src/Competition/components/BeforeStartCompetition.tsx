@@ -5,6 +5,7 @@ import {useHref} from "react-router-dom";
 import UserModel from "../../User/models/User.model";
 import CreatorJoin from "./CreatorJoin";
 import {toDataURL} from "qrcode";
+import {routes} from "../../routes";
 
 interface Props {
     user: UserModel
@@ -13,7 +14,7 @@ interface Props {
 }
 
 function BeforeStartCompetition({user, game, competitionId}: Props) {
-    const invitePath = useHref(`/invite/${competitionId}`)
+    const invitePath = useHref(routes.inviteCompetition.buildPath({competitionId}))
     const urlHost = window.location.host
 
     // TODO this is a workaround fix this

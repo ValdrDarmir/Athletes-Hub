@@ -34,14 +34,15 @@ function RunningStairClimbing({user, game}: Props) {
         <p>{formatSecondsMMSS(game.data.timeBeforeFinishSeconds)}</p>
 
         <div className="card bg-base-100/90">
-            <h1>{game.data.currentStepGoalInfo.name}</h1>
+            <p>Schusszahl: {game.data.currentStepGoalInfo.shots}</p>
+            <p>{game.data.currentStepGoalInfo.scoreRange}</p>
             <p>{game.data.currentStepGoalInfo.description}</p>
         </div>
 
 
         <button className="btn" onClick={climbStepClicked}>Nächste Stufe</button>
 
-        <Scoreboard playerSteps={game.data.playerSteps}/>
+        <Scoreboard playerSteps={game.data.playerSteps} stepGoals={game.data.stepGoals}/>
     </div>
 }
 

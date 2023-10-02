@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {CompetitionOverview} from "../hooks/userCompetitionsOverview";
-import {ROUTES} from "../../index";
+import {routes} from "../../routes";
+import {disciplineNames} from "../../User/models/Disciplines";
 
 interface Props {
     overview: CompetitionOverview
@@ -10,9 +11,9 @@ interface Props {
 function CompetitionOverviewButton({overview}: Props) {
 
     return (
-        <Link to={ROUTES.playCompetition.buildPath({competitionId: overview.id})} className="btn flex content-center justify-between">
+        <Link to={routes.playCompetition.buildPath({competitionId: overview.id})} className="btn content-center grid grid-cols-[1fr,7rem]">
             <span>
-                <span>gegen </span>
+                <span>vs </span>
                 {overview.opponents.length > 0 ?
                     overview.opponents.map(op =>
                         <span className="font-bold">{op.displayName}</span>
@@ -21,6 +22,7 @@ function CompetitionOverviewButton({overview}: Props) {
                     <span className="font-bold">bisher niemanden 😥</span>
                 }
             </span>
+            <span className="flex justify-end">{disciplineNames[overview.discipline]}</span>
         </Link>
     )
 }

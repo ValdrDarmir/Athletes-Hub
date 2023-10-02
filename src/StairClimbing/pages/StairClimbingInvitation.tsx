@@ -3,15 +3,15 @@ import UserModel from "../../User/models/User.model";
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 import useStairClimbingInvitation from "../hooks/stairClimbingInvitation";
 import Games, {gameNames} from "../../ChallengeGeneral/models/Games";
-import {ROUTES} from "../../index";
 import {useTypedParams} from "react-router-typesafe-routes/dom";
+import {routes} from "../../routes";
 
 interface Props {
     user: UserModel
 }
 
 function Invitation({user}: Props) {
-    const {gameId} = useTypedParams(ROUTES.inviteStairClimbing)
+    const {gameId} = useTypedParams(routes.inviteStairClimbing)
     const {
         game,
         isUserAlreadyAttending,
@@ -33,7 +33,7 @@ function Invitation({user}: Props) {
 
     const onJoinButtonClicked = async () => {
         await addPlayer();
-        navigate(ROUTES.playStairClimbing.buildPath({gameId: gameId}))
+        navigate(routes.playStairClimbing.buildPath({gameId: gameId}))
     }
 
     if (isUserAlreadyAttending) {

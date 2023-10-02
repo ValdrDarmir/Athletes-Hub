@@ -7,10 +7,12 @@ import separateErrors from "../../shared/utils/separateErrors";
 import whereTyped from "../../shared/utils/whereTyped";
 import CompetitionModel from "../models/Competition.model";
 import useDebounceHook from "../../shared/hooks/debounceHook";
+import Disciplines from "../../User/models/Disciplines";
 
 export interface CompetitionOverview {
     id: string
     opponents: UserModel[]
+    discipline: Disciplines
 }
 
 type UserCompetitionsOverviewHook =
@@ -83,6 +85,7 @@ export default function useUserCompetitionsOverview(userId: string): UserCompeti
             return {
                 id: game.id,
                 opponents: opponents,
+                discipline: game.discipline,
             }
         })
         .filter(nonFalsy)

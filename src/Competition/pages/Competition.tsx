@@ -9,14 +9,14 @@ import {CompetitionStates} from "../models/Competition.model";
 import TurnIn from "../components/TurnIn";
 import PreStartCountdown from "../components/PreStartCountdown";
 import {useTypedParams} from "react-router-typesafe-routes/dom";
-import {ROUTES} from "../../index";
+import {routes} from "../../routes";
 
 interface Params {
     user: UserModel
 }
 
 function Competition({user}: Params) {
-    const {competitionId} = useTypedParams(ROUTES.playCompetition)
+    const {competitionId} = useTypedParams(routes.playCompetition)
     const game = usePlayCompetition(competitionId)
 
     switch (game.state) {

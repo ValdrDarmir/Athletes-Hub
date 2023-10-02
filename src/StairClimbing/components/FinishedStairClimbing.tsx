@@ -11,7 +11,7 @@ function FinishedStairClimbing({game}: Props) {
         <p>Das Spiel ist beendet.</p>
         <p>Der Gewinner ist <span className="font-bold">{game.data.winner.user.displayName}</span>!!!</p>
 
-        <Scoreboard playerSteps={game.data.playerSteps}/>
+        <Scoreboard playerSteps={game.data.playerSteps} stepGoals={game.data.stepGoals}/>
     </div>
 }
 

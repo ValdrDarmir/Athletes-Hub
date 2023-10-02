@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import useCreateUser from "../hooks/createUser";
 import gewehrMann from "../assets/gewehr_mann.png"
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
-import {ROUTES} from "../../index";
+import {routes} from "../../routes";
 
 interface RegisterFieldValues {
     username: string,
@@ -59,7 +59,7 @@ function Register() {
 
             <div className="divider">oder</div>
 
-            <Link to={ROUTES.login.path} className="btn w-full">Einloggen</Link>
+            <Link to={routes.login.path} className="btn w-full">Einloggen</Link>
         </form>
     </div>
 }

@@ -22,7 +22,7 @@ function PreStartCountdownStairClimbing({game}: Props) {
         <p>{formatSecondsMMSS(game.data.timeBeforeStartSeconds)}</p>
 
 
-        <Scoreboard playerSteps={game.data.playerSteps}/>
+        <Scoreboard playerSteps={game.data.playerSteps} stepGoals={game.data.stepGoals}/>
     </div>
 }
 

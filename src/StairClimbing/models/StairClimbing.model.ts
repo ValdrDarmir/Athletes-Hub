@@ -1,7 +1,8 @@
 import BaseDBModel from "../../shared/models/BaseDB.model";
-import {getStepGoalInfos, StepGoals} from "./StepGoals";
+import {StepGoal} from "./StepGoals";
 import JoinReplace from "../../shared/models/JoinReplace";
 import UserModel from "../../User/models/User.model";
+import Disciplines from "../../User/models/Disciplines";
 
 export type JoinedPlayerStepModel = JoinReplace<PlayerStepModel, "userId", UserModel>
 
@@ -11,12 +12,13 @@ export interface PlayerStepModel {
 }
 
 export default interface StairClimbingModel extends BaseDBModel {
-    stepGoals: StepGoals[]                       // set at creation
+    stepGoals: StepGoal[]                        // set at creation
     shootingTimeLimitMillis: number              // set at creation
     creatorId: string                            // set at creation
-    playerIds: string[]                     // filled, before game starts
+    discipline: Disciplines                      // set at creation
+    playerIds: string[]                          // filled, before game starts
     startTimeMillis: number | null               // set, when the creator starts the game
-    playerSteps: PlayerStepModel[]     // created before game starts, updated during game
+    playerSteps: PlayerStepModel[]               // created before game starts, updated during game
 }
 
 export enum StairClimbingStates {
@@ -50,7 +52,7 @@ export function getState(game: StairClimbingModel, nowMillis: number) {
 
     const isTimeBeforeStart = getTimeBeforeStartSeconds(game, nowMillis)! > 0
     const isTimeBeforeFinish = getTimeBeforeFinishSeconds(game, nowMillis)! > 0
-    const participantFinished = game.playerSteps.some(participantStep => participantStep.stepIndex === game.stepGoals.length - 1)
+    const participantFinished = game.playerSteps.some(participantStep => participantStep.stepIndex >= game.stepGoals.length)
 
     if (isTimeBeforeStart) {
         return StairClimbingStates.PreStartCountDown
@@ -72,7 +74,6 @@ export function findPlayerStepForUserId(game: StairClimbingModel, userId: string
 }
 
 export function getCurrentStepGoalInfosForPlayer(game: StairClimbingModel, player: PlayerStepModel) {
-    const stepGoal = game.stepGoals[player.stepIndex]
-    return getStepGoalInfos(stepGoal)
+    return game.stepGoals[player.stepIndex]
 }
 

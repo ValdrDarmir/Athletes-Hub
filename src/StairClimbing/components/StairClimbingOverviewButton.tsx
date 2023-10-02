@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import Games, {gameNames} from "../../ChallengeGeneral/models/Games";
 import {StairClimbingOverview} from "../hooks/userStairClimbingOverview";
-import {ROUTES} from "../../index";
+import {routes} from "../../routes";
+import {disciplineNames} from "../../User/models/Disciplines";
 
 interface Props {
     overview: StairClimbingOverview
@@ -11,10 +11,9 @@ interface Props {
 function StairClimbingOverviewButton({overview}: Props) {
 
     return (
-        <Link to={ROUTES.playStairClimbing.buildPath({gameId: overview.id})} className="btn flex content-center justify-between">
+        <Link to={routes.playStairClimbing.buildPath({gameId: overview.id})} className="btn content-center grid grid-cols-[1fr,7rem]">
             <span>
-                {gameNames[Games.StairClimbing]}
-                <span> gegen </span>
+                <span>vs </span>
                 {overview.opponents.length > 0 ?
                     overview.opponents.map(op =>
                         <span className="font-bold">{op.displayName}</span>
@@ -23,6 +22,7 @@ function StairClimbingOverviewButton({overview}: Props) {
                     <span className="font-bold">bisher niemanden 😥</span>
                 }
             </span>
+            <span className="flex justify-end">{disciplineNames[overview.discipline]}</span>
         </Link>
     )
 }
