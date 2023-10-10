@@ -67,7 +67,7 @@ export interface TimeRunningStateHook {
         timeUpCountdownSeconds: number
     }
     actions: {
-        newHit(userId: string, score: number): Promise<Error | void>
+        newSeries(userId: string, score: number): Promise<Error | void>
     }
 }
 
@@ -81,7 +81,7 @@ export interface TurnInStateHook {
         turnInCountdownSeconds: number
     }
     actions: {
-        newHit(userId: string, score: number): Promise<Error | void>
+        newSeries(userId: string, score: number): Promise<Error | void>
     }
 }
 
@@ -257,7 +257,7 @@ function usePlayCompetition(competitionId: string | undefined): AllCompetitionSt
                     timeUpCountdownSeconds: timeUpCountdownSeconds,
                 },
                 actions: {
-                    newHit: newHit,
+                    newSeries: newHit,
                 }
             }
 
@@ -280,7 +280,7 @@ function usePlayCompetition(competitionId: string | undefined): AllCompetitionSt
                     turnInCountdownSeconds: turnInCountdownSeconds,
                 },
                 actions: {
-                    newHit: newHit,
+                    newSeries: newHit,
                 }
             }
 

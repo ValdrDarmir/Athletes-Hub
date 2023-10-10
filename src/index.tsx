@@ -4,9 +4,7 @@ import './index.css';
 import {RouterProvider} from "react-router-dom";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {router, routes} from "./routes";
-
-console.log(routes.root.path)
+import {router} from "./routes";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
