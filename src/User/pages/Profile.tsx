@@ -11,12 +11,15 @@ import {query} from 'firebase/firestore';
 import ErrorDisplay from "../../shared/components/ErrorDisplay";
 import whereTyped from "../../shared/utils/whereTyped";
 import ClubDisciplineModel from "../models/ClubDiscipline.model";
+import {useSignOut} from "react-firebase-hooks/auth";
+import {auth} from "../../shared/utils/firebase";
 
 interface Props {
     user: UserModel
 }
 
 function Profile({user}: Props) {
+    const [signOut, signOutLoading, signOutError] = useSignOut(auth);
     const [clubDisciplines, clubDisciplinesLoading, clubDisciplinesError] = useCollectionData(query(db.clubDisciplines, whereTyped<ClubDisciplineModel>("userId", "==", user.id)))
 
     if (clubDisciplinesLoading) return <div>Loading...</div>
@@ -63,6 +66,9 @@ function Profile({user}: Props) {
                     <ChangePasswordForm/>
                 </div>
             </div>
+
+            <button className="btn btn-error mb-2" onClick={signOut} disabled={signOutLoading}>Logout</button>
+            {signOutError && <ErrorDisplay error={signOutError}/>}
         </div>
     );
 }

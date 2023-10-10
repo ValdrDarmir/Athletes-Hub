@@ -1,8 +1,5 @@
 import React from 'react';
-import {useSignOut} from "react-firebase-hooks/auth";
 import {Link} from "react-router-dom";
-import {auth} from '../../shared/utils/firebase';
-import ErrorDisplay from "../../shared/components/ErrorDisplay";
 import UserModel from "../../User/models/User.model";
 import {query} from "firebase/firestore";
 import {useCollectionData} from "react-firebase-hooks/firestore";
@@ -16,7 +13,6 @@ interface Props {
 }
 
 function App({user}: Props) {
-    const [signOut, signOutLoading, signOutError] = useSignOut(auth);
     const [clubDisciplines, clubDisciplinesLoading,] = useCollectionData(query(db.clubDisciplines, whereTyped<ClubDisciplineModel>("userId", "==", user.id)))
 
     const userHasNoDisciplines = !clubDisciplinesLoading &&
@@ -39,8 +35,7 @@ function App({user}: Props) {
                  data-tip="Trage deinen Verein und Disziplin ein">
                 <Link to={routes.profile.path} className="btn mb-2">Profil bearbeiten</Link>
             </div>
-            <button className="btn btn-outline mb-2" onClick={signOut} disabled={signOutLoading}>Logout</button>
-            {signOutError && <ErrorDisplay error={signOutError}/>}
+
         </div>
     );
 }

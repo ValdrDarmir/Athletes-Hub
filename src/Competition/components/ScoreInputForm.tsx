@@ -11,10 +11,15 @@ export interface ScoreFormFieldsValues {
 }
 
 function ScoreInputForm({onSubmit}: Props) {
-    const {register, handleSubmit} = useForm<ScoreFormFieldsValues>()
+    const {register, handleSubmit, reset} = useForm<ScoreFormFieldsValues>()
+
+    const submitScore = (data: ScoreFormFieldsValues) => {
+        reset()
+        void onSubmit(data)
+    }
 
     return (
-        <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit(submitScore)}>
             <div className="form-control">
                 <label className="label"><span className="label-text">Serien Punkte</span></label>
                 <input className="input input-bordered" type="number" step="0.1" {...register("score", {
