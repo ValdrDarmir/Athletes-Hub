@@ -3,23 +3,17 @@ import {TimeRunningStateHook} from "../hooks/playCompetition";
 import UserModel from "../../User/models/User.model";
 import {formatSecondsMMSS} from "../../shared/utils/formatSeconds";
 import Scoreboard from "./Scoreboard";
-import {useForm} from "react-hook-form";
+import ScoreInputForm, {ScoreFormFieldsValues} from "./ScoreInputForm";
 
 interface Props {
     user: UserModel
     game: TimeRunningStateHook
 }
 
-interface ScoreFormFieldsValues {
-    score: number
-}
-
 function TimeRunning({user, game}: Props) {
 
-    const {register, handleSubmit} = useForm<ScoreFormFieldsValues>()
-
     const submitScore = (data: ScoreFormFieldsValues) => {
-        void game.actions.newHit(user.id, data.score)
+        void game.actions.newSeries(user.id, data.score)
     }
 
     const participantFinished = game.data.participantSeries
@@ -41,16 +35,7 @@ function TimeRunning({user, game}: Props) {
 
         {participantFinished ?
             <p>Du bist fertig. Warten wir auf die anderen.</p> :
-            <form className="flex flex-col gap-2" onSubmit={handleSubmit(submitScore)}>
-                <div className="form-control">
-                    <label className="label"><span className="label-text">Serien Punkte</span></label>
-                    <input className="input input-bordered" type="number" step="0.1" {...register("score", {
-                        min: 0,
-                        valueAsNumber: true
-                    })}/>
-                </div>
-                <button className="btn btn-primary" type="submit">Serie eintragen</button>
-            </form>
+            <ScoreInputForm onSubmit={submitScore} />
         }
 
         <div className="divider"></div>
