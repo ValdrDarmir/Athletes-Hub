@@ -20,7 +20,7 @@ function Training({user}: Props) {
         <div className="m-2 flex flex-col items-center">
             <h1 className="text-3xl mb-2">Trainingsdaten</h1>
 
-            <Link to={routes.training.path} className="btn btn-primary">Neue Daten hinzufügen</Link>
+            <Link to={routes.newTrainingEntry.path} className="btn btn-primary">Neue Daten hinzufügen</Link>
 
             {trainingEntriesByDiscipline && trainingEntriesByDiscipline.map(({group, values}) =>
                 <Fragment key={group}>

@@ -42,6 +42,8 @@ function RunningStairClimbing({user, game}: Props) {
 
         <button className="btn" onClick={climbStepClicked}>Nächste Stufe</button>
 
+        <div className="divider"></div>
+
         <Scoreboard playerSteps={game.data.playerSteps} stepGoals={game.data.stepGoals}/>
     </div>
 }
