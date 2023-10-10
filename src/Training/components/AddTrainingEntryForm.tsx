@@ -4,8 +4,9 @@ import {useFieldArray, useForm} from "react-hook-form";
 import setTimeOfDate from "../../shared/utils/setTimeOfDate";
 import {toast} from "react-toastify";
 import {TrainingEntriesHook} from "../hooks/trainingEntries";
-import X from '../../shared/components/icons/X';
 import isNumber from "../../shared/utils/isNumber";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
     addTrainingEntry: TrainingEntriesHook["addTrainingEntry"]
@@ -17,7 +18,7 @@ interface TrainingEntryFieldValues {
     startTime: string
     endTime: string
     notes: string | null
-    series: (number | null)[]
+    series: { score: number | null }[]
 }
 
 function AddTrainingEntryForm({addTrainingEntry}: Props) {
@@ -28,7 +29,7 @@ function AddTrainingEntryForm({addTrainingEntry}: Props) {
         date: new Date().toISOString().substring(0, 10) as unknown as Date,
         startTime: `${currentHour}:00`,
         endTime: `${currentHour + 2}:00`,
-        series: [null],
+        series: [{score: null}],
     }
 
     const {
@@ -38,13 +39,23 @@ function AddTrainingEntryForm({addTrainingEntry}: Props) {
         handleSubmit,
         formState: {errors, isSubmitting}
     } = useForm<TrainingEntryFieldValues>({
-        defaultValues: defaultValues
+        defaultValues: defaultValues,
     })
-    // @ts-ignore a bug in the library?
-    const {fields, append, remove} = useFieldArray({name: "series", control})
+    const {fields, append, remove} = useFieldArray({
+        control: control,
+        name: "series",
+        rules: {
+            required: {
+                value: true,
+                message: "Es muss mindestens eine Serie angegeben werden",
+            },
+        }
+    })
 
     const onSubmit = async (data: TrainingEntryFieldValues) => {
-        const series = data.series.filter(isNumber)
+        const series = data.series
+            .map(series => series.score)
+            .filter(isNumber)
 
         const startDate = new Date(data.date)
         setTimeOfDate(startDate, data.startTime)
@@ -110,27 +121,28 @@ function AddTrainingEntryForm({addTrainingEntry}: Props) {
                 <div className="form-control w-full">
                     <label className="label"><span className="label-text">Serien</span></label>
                     <div className="w-full grid grid-cols-3 gap-2">
-                              {fields.map((field, index) =>
-                                  <div key={field.id} className="flex flex-col">
-                                      <div className="mb-2 indicator">
-                                          <button className="indicator-item bg-error mask mask-circle w-6 min-h-2 h-6"
-                                                  type="button" onClick={() => remove(index)}>
-                                              <X className="w-4 m-auto"/>
-                                          </button>
-                                          <input className="input input-bordered w-24"
-                                                 type="number" step="0.1" {...register(`series.${index}`, {
-                                              valueAsNumber: true,
-                                              min: 0,
-                                              required: true,
-                                          })} />
-                                      </div>
-                                      {errors.series?.[index] &&
-                                          <span className="text-error">Dieses Feld ist erforderlich</span>}
-                                  </div>
-                              )}
+                        {fields.map((field, index) =>
+                            <div key={field.id} className="flex flex-col">
+                                <div className="mb-2 indicator">
+                                    <button className="indicator-item bg-base-200 hover:bg-base-300 mask mask-circle w-6 min-h-2 h-6 flex items-center justify-center"
+                                            type="button" onClick={() => remove(index)}>
+                                        <FontAwesomeIcon icon={faXmark} className="" />
+                                    </button>
+                                    <input className="input input-bordered w-24"
+                                           type="number" step="0.1" {...register(`series.${index}`, {
+                                        valueAsNumber: true,
+                                        min: 0,
+                                        required: true,
+                                    })} />
+                                </div>
+                            </div>
+                        )}
                     </div>
+                    {errors.series?.root &&
+                        <span className="text-error">{errors.series.root.message}</span>}
                 </div>
-                <button className="btn btn-outline mb-2" type="button" onClick={() => append(null)}>Serie hinzufügen
+                <button className="btn btn-outline mb-2" type="button" onClick={() => append({score: null})}>
+                    Serie hinzufügen
                 </button>
 
                 <div className="form-control">
