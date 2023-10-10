@@ -1,6 +1,6 @@
 import TrainingEntryModel from "../models/TrainingEntry.model";
 import db from "../../shared/utils/db";
-import {doc, query, setDoc} from "firebase/firestore";
+import {deleteDoc, doc, query, setDoc} from "firebase/firestore";
 import * as uuid from "uuid";
 import Disciplines from "../../User/models/Disciplines";
 import {useCollectionData} from "react-firebase-hooks/firestore";
@@ -20,6 +20,7 @@ export interface TrainingEntriesHook {
     error: Error | null,
 
     addTrainingEntry(data: TrainingEntryInputData): void,
+    deleteTrainingEntry(id: string): void,
 }
 
 
@@ -31,7 +32,7 @@ function useTrainingEntries(userId: string): TrainingEntriesHook {
     )
 
     const trainingEntriesSorted = trainingEntries && trainingEntries.sort((a, b) => {
-        return a.startDate.getTime() - b.startDate.getTime()
+        return a.startDate > b.startDate ? -1 : 1
     })
 
     const addTrainingEntry = async (data: TrainingEntryInputData) => {
@@ -50,11 +51,17 @@ function useTrainingEntries(userId: string): TrainingEntriesHook {
         })
     }
 
+    const deleteTrainingEntry = async (id: string) => {
+        const docRef = doc(db.training, id)
+        return deleteDoc(docRef)
+    }
+
     return {
         trainingEntries: trainingEntriesSorted,
         loading: trainingEntriesLoading,
         error: trainingEntriesError || null,
         addTrainingEntry: addTrainingEntry,
+        deleteTrainingEntry: deleteTrainingEntry,
     }
 }
 

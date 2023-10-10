@@ -12,7 +12,7 @@ interface Props {
 }
 
 function Training({user}: Props) {
-    const {trainingEntries} = useTrainingEntries(user.id)
+    const {trainingEntries, deleteTrainingEntry} = useTrainingEntries(user.id)
 
     const trainingEntriesByDiscipline = trainingEntries && groupObjects("discipline", ...trainingEntries)
 
@@ -27,18 +27,20 @@ function Training({user}: Props) {
                     <div className="divider divide-"></div>
                     <div className="mb-2 flex flex-col items-center">
                         <h2 className="text-2xl">{disciplineNames[group]}</h2>
-                        <table className="table table-fixed table-sm table-pin-rows">
+                        <table className="table table-fixed table-xs table-pin-rows">
                             <thead>
                             <tr>
-                                <th className="w-32">Datum</th>
+                                <th className="w-24">Datum</th>
                                 <th className="w-20">Serien</th>
                                 <th className="w-16">Summe</th>
                                 <th>Notizen</th>
+                                <th className="w-12"></th>
                             </tr>
                             </thead>
                             <tbody>
                             {values.map(entry =>
-                                <TrainingEntryRow key={entry.id} entry={entry}/>
+                                <TrainingEntryRow key={entry.id} entry={entry}
+                                                  deleteTrainingEntry={deleteTrainingEntry}/>
                             )}
                             </tbody>
                         </table>
