@@ -29,7 +29,7 @@ function Statistics({user}: Props) {
         }
         for (let i = 0; i < data.trainingsNotes.length; i++) {
             notes.push(
-                <tr>
+                <tr key={`note-${i}`}>
                 <td>{data.trainingsNotes[i][0]}: </td><td>{data.trainingsNotes[i][1]}</td>
                 </tr>
             );
@@ -70,12 +70,12 @@ function Statistics({user}: Props) {
     const disciplineChanged = useCallback((newDiscipline: string) => {
         setSelectedDiscipline(newDiscipline);
     }, [setSelectedDiscipline])
-    
+
     const notesTable = createTrainingsNotes(data);
     const competitionPlot = getCompetitionPlot(data);
     const trainingsPlot = getTrainingsPlot(data);
-    
-    
+
+
     if (statsLoading) {
         return <p>Loading...</p>
     }

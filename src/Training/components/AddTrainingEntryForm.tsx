@@ -53,9 +53,10 @@ function AddTrainingEntryForm({addTrainingEntry}: Props) {
     })
 
     const onSubmit = async (data: TrainingEntryFieldValues) => {
+        // TODO fix this typing
         const series = data.series
-            .map(series => series.score)
-            .filter(isNumber)
+            // .map(series => series.score)
+            .filter(isNumber) as unknown as number[]
 
         const startDate = new Date(data.date)
         setTimeOfDate(startDate, data.startTime)

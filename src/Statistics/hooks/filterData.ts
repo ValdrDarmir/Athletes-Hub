@@ -49,14 +49,15 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
         setFilterDateEnd(date)
     }
 
-    function getFilteredData(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date){
-        var competitionDataHits = getCompetitionData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
-        var trainingDataHits = getTrainingData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
-        var averageCompetition = getAverageCompetition(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
-        var averageTraining = getAverageTraining(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
-        var gameResults = getGameResults(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
-        var averageTrainingTime = getAverageTrainingTime(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
-        var trainingsNotes = getTrainingNotes(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
+    const getFilteredData = (competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date) => {
+        const competitionDataHits = getCompetitionData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd);
+        const trainingDataHits = getTrainingData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd);
+        const averageCompetition = getAverageCompetition(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd);
+        const averageTraining = getAverageTraining(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd);
+        const gameResults = getGameResults(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd);
+        const averageTrainingTime = getAverageTrainingTime(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd);
+        const trainingsNotes = getTrainingNotes(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd);
+
         return {
             averageCompetition: averageCompetition,
             averageTraining: averageTraining,
@@ -189,7 +190,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
             if(index > 10){
                 break;
             }
-            if(getDateWithoutTime(trainingData[index].date) < getDateWithoutTime(filterDateStart) || trainingData[index].discipline !== discipline || getDateWithoutTime(trainingData[index].date) > getDateWithoutTime(filterDateEnd)){
+            if(getDateWithoutTime(trainingData[index].date) < getDateWithoutTime(filterDateStart) || trainingData[index].discipline !== selectedDiscipline || getDateWithoutTime(trainingData[index].date) > getDateWithoutTime(filterDateEnd)){
                 continue;
             }
             trainingsNotes.push(
