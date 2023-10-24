@@ -16,9 +16,12 @@ function CreateGame({user}: Props) {
 
     const [createNewCompetition, creationCompetitionLoading, creationCompetitionError] = useCreateNewCompetition()
     const navigate = useNavigate()
-    const [discipline, setDiscipline] = useState<Disciplines>(Disciplines.AirRifle)
+    const [discipline, setDiscipline] = useState<Disciplines | null>(null)
 
     const startGameClicked = async () => {
+        if (!discipline) {
+            return;
+        }
         const newGameDoc = await createNewCompetition(user, discipline)
         if (newGameDoc) {
             toast.success("Spiel erstellt 👍")
@@ -30,12 +33,16 @@ function CreateGame({user}: Props) {
         setDiscipline(value)
     }
 
-    return <div className="flex flex-col items-center m-2 gap-2">
-        <h1 className="text-2xl">Wettbewerb erstellen</h1>
-        <h1 className="text-xl">In welcher Diziplin?</h1>
+    return <div className="flex flex-col items-center m-4 gap-8">
+
+        <h1 className="text-3xl text-primary mt-5 uppercase">Wettbewerb</h1>
+
+        <h1 className="">Erstelle einen neuen Wettbewerb:</h1>
+
         <div className="w-full">
             <SelectObject className="select select-bordered w-full" onChange={disciplineSelectChanged}
                           value={discipline}>
+                <OptionObject value={null} disabled>Diszipin</OptionObject>
                 <OptionObject value={Disciplines.AirRifle}>{disciplineNames[Disciplines.AirRifle]}</OptionObject>
                 <OptionObject value={Disciplines.Pistol}>{disciplineNames[Disciplines.Pistol]}</OptionObject>
             </SelectObject>
@@ -43,7 +50,7 @@ function CreateGame({user}: Props) {
         {creationCompetitionError &&
             <div className="text-error">{creationCompetitionError.message}</div>
         }
-        <button className="btn btn-primary" disabled={creationCompetitionLoading}
+        <button className="btn btn-secondary w-full" disabled={creationCompetitionLoading || !discipline}
                 onClick={startGameClicked}>Los geht's!
         </button>
     </div>

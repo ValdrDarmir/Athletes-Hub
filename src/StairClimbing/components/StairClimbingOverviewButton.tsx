@@ -11,19 +11,25 @@ interface Props {
 function StairClimbingOverviewButton({overview}: Props) {
 
     return (
-        <Link to={routes.playStairClimbing.buildPath({gameId: overview.id})} className="btn content-center grid grid-cols-[1fr,7rem]">
-            <span>
-                <span>vs </span>
+        <Link to={routes.playStairClimbing.buildPath({gameId: overview.id})}
+              className="btn btn-neutral leading-6 h-fit content-center grid grid-cols-[1fr,7rem]">
+            <p className="text-sm">
                 {overview.opponents.length > 0 ?
-                    overview.opponents.map(op =>
-                        <span className="font-bold">{op.displayName}</span>
-                    )
-                        .reduce((prev, curr) => <>{prev}, {curr}</>) :
-                    <span className="font-bold">bisher niemanden 😥</span>
+                    "vs " +
+                    overview.opponents
+                        .map(op => op.displayName)
+                        .join(", ") :
+                    "bisher niemanden 😥"
                 }
-            </span>
-            <span className="flex justify-end">{disciplineNames[overview.discipline]}</span>
+            </p>
+            <p className="flex justify-end text-sm">
+                {disciplineNames[overview.discipline]}
+                <br/>
+                {overview.startDate.toLocaleDateString()}
+            </p>
         </Link>
+
+
     )
 }
 

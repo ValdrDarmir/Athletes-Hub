@@ -21,9 +21,11 @@ function MyGamesAndCompetitions({user}: Props) {
         {competitionOverviewsError && <ErrorDisplay error={competitionOverviewsError}/>}
         {competitionOverviews && competitionOverviews.length > 0 &&
             <>
-                <h1 className="text-2xl">Wettbewerbe</h1>
+                <div className="divider uppercase">Wettbewerbe</div>
                 <ul className="menu">
-                    {competitionOverviews.map(overview =>
+                    {competitionOverviews
+                        .sort((a, b) => a.startDate.getTime() < b.startDate.getTime() ? 1 : -1)
+                        .map(overview =>
                         <li key={overview.id} className="mb-2"><CompetitionOverviewButton overview={overview}/></li>
                     )}
                 </ul>
@@ -35,9 +37,11 @@ function MyGamesAndCompetitions({user}: Props) {
         {stairClimbingOverviewsError && <ErrorDisplay error={stairClimbingOverviewsError}/>}
         {stairClimbingOverviews && stairClimbingOverviews.length > 0 &&
             <>
-                <h1 className="text-2xl">{gameNames[Games.StairClimbing]}</h1>
+                <h1 className="divider uppercase">{gameNames[Games.StairClimbing]}</h1>
                 <ul className="menu">
-                    {stairClimbingOverviews.map(overview =>
+                    {stairClimbingOverviews
+                        .sort((a, b) => a.startDate.getTime() < b.startDate.getTime() ? 1 : -1)
+                        .map(overview =>
                         <li key={overview.id} className="mb-2"><StairClimbingOverviewButton overview={overview}/></li>
                     )}
                 </ul>

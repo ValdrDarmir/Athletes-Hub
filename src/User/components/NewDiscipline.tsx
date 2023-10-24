@@ -25,15 +25,15 @@ function NewDiscipline({user}: Props) {
     }
 
     return <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="join">
-            <input className="input input-bordered join-item"
+        <div className="join w-full">
+            <input className="input input-bordered join-item w-1/2"
                    placeholder="Vereinsname" {...register("club", {required: true})}/>
             <select className="select select-bordered join-item" defaultValue={""} {...register("discipline", {required: true})}>
                 <option value={""} disabled>Disziplin</option>
                 <option value={Disciplines.AirRifle}>{disciplineNames[Disciplines.AirRifle]}</option>
                 <option value={Disciplines.Pistol}>{disciplineNames[Disciplines.Pistol]}</option>
             </select>
-            <button className="btn join-item" type="submit">➕</button>
+            <button className="btn btn-neutral join-item" type="submit">➕</button>
         </div>
         {errors.club && <label className={"label"}><span
             className={"label-text-alt text-error"}>Vereinsname is required</span></label>}

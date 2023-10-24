@@ -82,10 +82,13 @@ function AddTrainingEntryForm({addTrainingEntry}: Props) {
 
     return (
         <div className="flex flex-col items-stretch">
-            <h1 className="text-2xl self-center">Neue Session</h1>
-            <form className="flex flex-col items-stretch gap-2" onSubmit={handleSubmit(onSubmit)}>
+            <h1 className="self-center text-3xl text-primary my-4 uppercase">Trainingsdoku</h1>
+
+            <div className="divider uppercase">Neue Session</div>
+
+            <form className="m-4 flex flex-col items-stretch gap-2" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-control">
-                    <label className="label"><span className="label-text">Disziplin</span></label>
+                    <label className="label"><span className="label-text text-xl">Disziplin</span></label>
                     <select className="select select-bordered" {...register("discipline", {required: true})}>
                         <option value={Disciplines.AirRifle}>{disciplineNames[Disciplines.AirRifle]}</option>
                         <option value={Disciplines.Pistol}>{disciplineNames[Disciplines.Pistol]}</option>
@@ -94,7 +97,7 @@ function AddTrainingEntryForm({addTrainingEntry}: Props) {
                 </div>
 
                 <div className="form-control">
-                    <label className="label"><span className="label-text">Datum</span></label>
+                    <label className="label"><span className="label-text text-xl">Datum</span></label>
                     <input className="input input-bordered" {...register("date", {
                         required: true,
                         valueAsDate: true
@@ -103,24 +106,24 @@ function AddTrainingEntryForm({addTrainingEntry}: Props) {
                     {errors.date && <span className="text-error">Dieses Feld ist erforderlich</span>}
                 </div>
 
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-8">
                     <div className="form-control">
-                        <label className="label"><span className="label-text">Startzeit</span></label>
+                        <label className="label"><span className="label-text text-xl">Startzeit</span></label>
                         <input className="input input-bordered" {...register("startTime", {required: true})}
                                type="time"/>
                         {errors.startTime && <span className="text-error">Dieses Feld ist erforderlich</span>}
                     </div>
 
                     <div className="form-control">
-                        <label className="label"><span className="label-text">Endzeit</span></label>
+                        <label className="label"><span className="label-text text-xl">Endzeit</span></label>
                         <input className="input input-bordered" {...register("endTime", {required: true})} type="time"/>
                         {errors.endTime && <span className="text-error">Dieses Feld ist erforderlich</span>}
                     </div>
                 </div>
 
                 <div className="form-control w-full">
-                    <label className="label"><span className="label-text">Serien</span></label>
-                    <div className="w-full grid grid-cols-3 gap-2">
+                    <label className="label"><span className="label-text text-xl">Serien</span></label>
+                    <div className="w-full grid grid-cols-3 gap-8">
                         {fields.map((field, index) =>
                             <div key={field.id} className="flex flex-col">
                                 <div className="mb-2 indicator">
@@ -146,11 +149,11 @@ function AddTrainingEntryForm({addTrainingEntry}: Props) {
                 </button>
 
                 <div className="form-control">
-                    <label className="label"><span className="label-text">Notizen</span></label>
+                    <label className="label"><span className="label-text text-xl">Notizen</span></label>
                     <textarea className="textarea textarea-bordered" {...register("notes", {required: false})} />
                 </div>
 
-                <button className="btn btn-primary" type="submit" disabled={isSubmitting}>Speichern</button>
+                <button className="btn btn-secondary" type="submit" disabled={isSubmitting}>Speichern</button>
             </form>
         </div>
     );

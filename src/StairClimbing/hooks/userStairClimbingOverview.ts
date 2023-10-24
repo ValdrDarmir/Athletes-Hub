@@ -13,6 +13,7 @@ export interface StairClimbingOverview {
     id: string
     opponents: UserModel[]
     discipline: Disciplines
+    startDate: Date
 }
 
 type UserStairClimbingOverviewHook =
@@ -78,6 +79,7 @@ export default function useUserStairClimbingOverview(userId: string): UserStairC
                 id: game.id,
                 opponents: opponents,
                 discipline: game.discipline,
+                startDate: game.createdAt,
             }
         })
         .filter(nonFalsy)

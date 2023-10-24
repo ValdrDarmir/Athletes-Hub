@@ -7,6 +7,7 @@ import db from "../../shared/utils/db";
 import whereTyped from "../../shared/utils/whereTyped";
 import ClubDisciplineModel from "../../User/models/ClubDiscipline.model";
 import {routes} from "../../routes";
+import logo from "../assets/logo.png";
 
 interface Props {
     user: UserModel
@@ -21,20 +22,23 @@ function App({user}: Props) {
 
     return (
         <div className="flex flex-col items-stretch p-2">
-            <h1 className="self-center text-2xl mb-2">Hallo {user.displayName}</h1>
+            <img src={logo} className="w-1/2 self-center" />
 
-            <Link to={routes.games.path} className="btn mb-2">Meine Spiele und Wettbewerbe</Link>
-            <Link to={routes.createStairClimbing.path} className="btn mb-2">Neues Spiel starten</Link>
-            <Link to={routes.createCompetition.path} className="btn mb-2">Neuen Wettbewerb starten</Link>
-            <Link to={routes.training.path} className="btn mb-2">Trainingsdaten</Link>
-            <Link to={routes.stats.path} className="btn mb-2">Statistiken</Link>
+            <h1 className="self-center text-3xl text-primary mb-5 mt-5 uppercase">Hallo {user.displayName}</h1>
 
-            <div className="divider"></div>
+            <ul className="menu [&_li>*]:rounded-none divide-y m-4 text-lg uppercase">
+                <li><Link to={routes.games.path} className="border-t p-6">Wettbewerbe & Spiele</Link></li>
+                <li><Link to={routes.createStairClimbing.path} className="p-6">Neues Schiessspiel</Link></li>
+                <li><Link to={routes.createCompetition.path} className="p-6">Neuer Wettbewerb</Link></li>
+                <li><Link to={routes.training.path} className="p-6">Trainingsdoku</Link></li>
+                <li><Link to={routes.stats.path} className="p-6">Statistiken</Link></li>
 
-            <div className={`${userHasNoDisciplines && "tooltip tooltip-open tooltip-info"}`}
-                 data-tip="Trage deinen Verein und Disziplin ein">
-                <Link to={routes.profile.path} className="btn mb-2">Profil bearbeiten</Link>
-            </div>
+                <li
+                    className={`flex flex-col items-stretch ${userHasNoDisciplines && "tooltip tooltip-open tooltip-info tooltip-bottom"}`}
+                    data-tip="Trage deinen Verein und Disziplin ein">
+                    <Link to={routes.profile.path} className="border-b p-6">Mein Profil</Link>
+                </li>
+            </ul>
 
         </div>
     );

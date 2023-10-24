@@ -21,14 +21,16 @@ function TrainingEntryRow({entry, deleteTrainingEntry}: Props) {
     }
 
     return <tr className="hover:bg-base-200">
-        <td>{date}<br/>{startTime} - {endTime}</td>
+        <td><span>{date}<br/>{startTime} - {endTime}</span></td>
         <td>
+            <div className="flex flex-wrap gap-2">
             {entry.series.map((s, i) =>
-                <span key={`${entry.id}-${i}`} className="badge badge-ghost badge-sm">{s}</span>
+                <span key={`${entry.id}-${i}`}>{s}</span>
             )}
+            </div>
         </td>
-        <td><span className="badge badge-ghost badge-sm">{seriesSum}</span></td>
-        <td>{entry.notes}</td>
+        <td><span>{seriesSum}</span></td>
+        <td><span>{entry.notes}</span></td>
         <td>
             <button className="btn btn-square btn-sm text-error"
                     onClick={deleteEntryClicked}><FontAwesomeIcon icon={faTrashCan}/></button>

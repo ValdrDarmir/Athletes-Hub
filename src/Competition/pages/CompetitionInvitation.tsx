@@ -6,7 +6,7 @@ import SelectObject from "../../shared/components/SelectObject";
 import OptionObject from "../../shared/components/OptionObject";
 import {disciplineNames} from "../../User/models/Disciplines";
 import useCompetitionInvitation from "../hooks/competitionInvitation";
-import {useState} from "react";
+import React, {useState} from "react";
 import {useTypedParams} from "react-router-typesafe-routes/dom";
 import {routes} from "../../routes";
 
@@ -55,23 +55,30 @@ function Invitation({user}: Props) {
     }
 
     return (
-        <div>
-            <div className="flex flex-col gap-2">
-                <p>Willst du mitmachen? Die Disziplin ist {disciplineNames[competition.discipline]}</p>
-                <p>Mit welchem Verein trittst du an?</p>
+        <div className="flex flex-col items-center m-4 gap-8">
+            <h1 className="text-3xl text-primary mt-5 uppercase">Wettbewerb</h1>
 
-                <SelectObject className="input input-bordered select" value={selectedClubDiscipline}
-                              onChange={setSelectedClubDiscipline}>
-                    <OptionObject value={null} disabled>Wähle deinen Verein</OptionObject>
-                    {validUserClubDisciplines.map((clubDiscipline, i) =>
-                        <OptionObject key={i} value={clubDiscipline}>{clubDiscipline.club}</OptionObject>
-                    )}
-                </SelectObject>
+            <p className="text-center">
+                Willst du mitmachen?
+                <br/>
+                Die Disziplin ist {disciplineNames[competition.discipline]}
+            </p>
 
-                <button className="btn" onClick={onJoinButtonClicked} disabled={selectedClubDiscipline === null}>
-                    Bin dabei!
-                </button>
-            </div>
+            <div className="divider"></div>
+
+            <p>Mit welchem Verein trittst du an?</p>
+
+            <SelectObject className="input input-bordered select w-full" value={selectedClubDiscipline}
+                          onChange={setSelectedClubDiscipline}>
+                <OptionObject value={null} disabled>Wähle deinen Verein</OptionObject>
+                {validUserClubDisciplines.map((clubDiscipline, i) =>
+                    <OptionObject key={i} value={clubDiscipline}>{clubDiscipline.club}</OptionObject>
+                )}
+            </SelectObject>
+
+            <button className="btn btn-secondary w-full" onClick={onJoinButtonClicked} disabled={selectedClubDiscipline === null}>
+                Bin dabei!
+            </button>
         </div>
     );
 }

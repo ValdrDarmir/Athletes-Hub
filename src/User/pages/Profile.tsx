@@ -31,19 +31,20 @@ function Profile({user}: Props) {
         return <ErrorDisplay error={error}/>
     }
 
+    // TODO: Change clubs into grid
     return (
-        <div className="m-2 flex flex-col gap-2">
-            <h1 className="text-2xl self-center">Mein Profil</h1>
+        <div className="m-4 flex flex-col justify-stretch gap-4">
+            <h1 className="text-3xl text-primary self-center uppercase">Profil</h1>
 
-            <div className="divider">Meine Disziplinen</div>
+            <div className="divider uppercase">Meine Disziplinen</div>
             {clubDisciplines.map((discipline, i) =>
                 <DisciplineItem key={i} clubDiscipline={discipline}/>
             )}
             <NewDiscipline user={user}/>
 
-            <div className="divider">Account</div>
+            <div className="divider uppercase">Account</div>
 
-            <div className="collapse collapse-arrow border border-base-300">
+            <div className="collapse collapse-arrow btn-neutral text-neutral-content/50">
                 <input type="checkbox"/>
                 <summary className="collapse-title">Nutzername ändern</summary>
                 <div className="collapse-content">
@@ -51,7 +52,7 @@ function Profile({user}: Props) {
                 </div>
             </div>
 
-            <div className="collapse collapse-arrow border border-base-300">
+            <div className="collapse collapse-arrow btn-neutral text-neutral-content/50">
                 <input type="checkbox"/>
                 <summary className="collapse-title">Email Adresse ändern</summary>
                 <div className="collapse-content">
@@ -59,7 +60,7 @@ function Profile({user}: Props) {
                 </div>
             </div>
 
-            <div className="collapse collapse-arrow border border-base-300">
+            <div className="collapse collapse-arrow btn-neutral text-neutral-content/50">
                 <input type="checkbox"/>
                 <summary className="collapse-title">Passwort ändern</summary>
                 <div className="collapse-content">
@@ -67,7 +68,7 @@ function Profile({user}: Props) {
                 </div>
             </div>
 
-            <button className="btn btn-error mb-2" onClick={signOut} disabled={signOutLoading}>Logout</button>
+            <button className="btn btn-error mb-2 uppercase" onClick={signOut} disabled={signOutLoading}>Logout</button>
             {signOutError && <ErrorDisplay error={signOutError}/>}
         </div>
     );

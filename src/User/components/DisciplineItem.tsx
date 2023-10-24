@@ -7,14 +7,12 @@ interface PropsDisciplineItem {
 }
 
 function DisciplineItem({clubDiscipline}: PropsDisciplineItem) {
-    return <div>
-        <div className="join">
-            <input className="input input-bordered join-item" disabled
-                   value={clubDiscipline.club}></input>
-            <select className="select select-bordered join-item" disabled>
-                <option>{disciplineNames[clubDiscipline.discipline]}</option>
-            </select>
-        </div>
+    return <div className="join">
+        <input className="input input-bordered join-item w-1/2" disabled
+               value={clubDiscipline.club}></input>
+        <select className="select select-bordered join-item" disabled>
+            <option>{disciplineNames[clubDiscipline.discipline]}</option>
+        </select>
     </div>
 }
 

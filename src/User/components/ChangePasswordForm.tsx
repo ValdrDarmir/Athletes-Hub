@@ -39,7 +39,7 @@ function ChangePasswordForm() {
             <div className="join">
                 <input className="input input-bordered join-item" type="password"
                        placeholder="Neues Passwort" {...register("newPassword", {required: true})}/>
-                <button className="btn join-item" type="submit" disabled={changePasswordLoading}>Passwort ändern
+                <button className="btn btn-neutral join-item" type="submit" disabled={changePasswordLoading}>Passwort ändern
                 </button>
             </div>
             {errors.newPassword &&
