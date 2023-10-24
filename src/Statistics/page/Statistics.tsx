@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import UserModel from "../../User/models/User.model";
 import LinePlotWithErrorBars from "../components/LinePlotWithErrorBars";
 import useStatisticsData from "../hooks/statisticsData";
@@ -17,22 +17,11 @@ const START_DATE = new Date(CURRENT_DATE.getFullYear(), CURRENT_DATE.getMonth() 
 
 function Statistics({user}: Props) {
     const [statsLoading, statsError, statsData] = useStatisticsData(user.id);
-    const [data, setDate, setDateEnd, setSelectedDiscipline] = useFilterData(START_DATE, CURRENT_DATE, INITIAL_DISCIPLINE, statsData?.data[0], statsData?.data[1])
-    const [notesTable, setNotesTable] = useState(createTrainingsNotes())
-    const [competitionPlot, setCompetitionPlot] = useState(getCompetitionPlot())
-    const [trainingsPlot, setTrainingsPlot] = useState(getTrainingsPlot())
-    useEffect(() => {updateElements()}, [data]);
-    //useEffect(() => {console.log('test')}, [data])
+    const [, setDate, setDateEnd, setSelectedDiscipline, getFilteredData] = useFilterData(START_DATE, CURRENT_DATE, INITIAL_DISCIPLINE);//, statsData?.data[0], statsData?.data[1])
 
-    if (statsLoading) {
-        return <p>Loading...</p>
-    }
+    const data = getFilteredData(statsData?.data[0], statsData?.data[1])
 
-    if (statsError || !statsData) {
-        return <ErrorDisplay error={statsError}/>
-    }
-
-    function createTrainingsNotes(){
+    const createTrainingsNotes = useCallback((data: any) => {
         var constructNotesTable = [<h1 className='text-2xl'>Training notes:</h1>];
         var notes = []
         if(data.trainingsNotes === null){
@@ -53,39 +42,46 @@ function Statistics({user}: Props) {
             </table>
         )
         return constructNotesTable
-    }
+    }, [])
 
-    function getCompetitionPlot(){
+    const getCompetitionPlot = useCallback((data: any) => {
         if(data.competitionData === undefined){
             return null
         }
         return <LinePlotWithErrorBars yTitle={"Treffer"} xTitle={"Datum"} dataPoints={data.competitionData}/>
-    }
+    }, [])
 
-    function getTrainingsPlot(){
+    const getTrainingsPlot = useCallback((data: any) =>{
         if(data.trainingData === undefined){
             return null
         }
         return <LinePlotWithErrorBars yTitle={"Treffer"} xTitle={"Datum"} dataPoints= {data.trainingData}/>
-    }
+    }, [])
 
 
-    function setStartDate(date : Date | null){
+    const setStartDate = useCallback((date : Date | null) => {
         setDate(date)
-    }
+    }, [setDate])
 
-    function setEndDate(date: Date | null){
+    const setEndDate = useCallback((date: Date | null) => {
         setDateEnd(date)
-    }
+    }, [setDateEnd])
 
-    function disciplineChanged(newDiscipline: string){
+    const disciplineChanged = useCallback((newDiscipline: string) => {
         setSelectedDiscipline(newDiscipline);
+    }, [setSelectedDiscipline])
+    
+    const notesTable = createTrainingsNotes(data);
+    const competitionPlot = getCompetitionPlot(data);
+    const trainingsPlot = getTrainingsPlot(data);
+    
+    
+    if (statsLoading) {
+        return <p>Loading...</p>
     }
 
-    function updateElements(){
-        setNotesTable(createTrainingsNotes());
-        setCompetitionPlot(getCompetitionPlot());
-        setTrainingsPlot(getTrainingsPlot());
+    if (statsError || !statsData) {
+        return <ErrorDisplay error={statsError}/>
     }
 
     return (

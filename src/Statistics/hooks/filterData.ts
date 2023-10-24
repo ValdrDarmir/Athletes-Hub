@@ -4,7 +4,7 @@ import { DataPoint } from "../components/LinePlotWithErrorBars"
 import { DataCompetition, DataTraining } from "./statisticsData"
 
 
-type FilterHook = [FilteredData, Function, Function, Function]
+type FilterHook = [FilteredData, Function, Function, Function, Function]
 
 export interface FilteredData{
     averageCompetition: number,
@@ -16,21 +16,26 @@ export interface FilteredData{
     trainingData: DataPoint[] | undefined
 }
 
-function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, hookCompetitionData: DataCompetition[] | undefined, hookTrainingData: DataTraining[] | undefined): FilterHook{
+function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){ //, hookCompetitionData: DataCompetition[] | undefined, hookTrainingData: DataTraining[] | undefined): FilterHook{
     
     //const [competitionData, setCompetitionData] = useState(hookCompetitionData)
     //const [trainingData, setTrainingData] = useState(hookTrainingData)
 
-    const competitionData = hookCompetitionData
-    const trainingData = hookTrainingData
+    //const competitionData = hookCompetitionData
+    //const trainingData = hookTrainingData
     
     const [filterDateStart, setFilterDateStart] = useState(startDate)
     const [filterDateEnd, setFilterDateEnd] = useState(endDate)
     const [selectedDiscipline, setSelectedDiscipline] = useState(discipline)
-    const [filteredData, setFilteredData] = useState(getFilteredData())
+    //const [filteredData, setFilteredData] = useState(getFilteredData(undefined, undefined, selectedDiscipline, filterDateStart, filterDateEnd))
 
-    useEffect(() => {setFilteredData(getFilteredData())}, [selectedDiscipline, filterDateStart, filterDateEnd]);
-    //useEffect(() => {console.log(competitionData)}, [competitionData]);
+    /*useEffect(() => {
+        setFilteredData(getFilteredData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd))
+    }, [getFilteredData, selectedDiscipline, filterDateStart, filterDateEnd]);*/
+
+    /*useEffect(() => {
+        setTimeout(() => setFilteredData(getFilteredData()), 3000)
+    }, []);*/
 
     const setGetDataDate = (date: Date) => {
         setFilterDateStart(date)
@@ -44,14 +49,14 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         setFilterDateEnd(date)
     }
 
-    function getFilteredData(){
-        var competitionDataHits = getCompetitionData()
-        var trainingDataHits = getTrainingData()
-        var averageCompetition = getAverageCompetition()
-        var averageTraining = getAverageTraining()
-        var gameResults = getGameResults()
-        var averageTrainingTime = getAverageTrainingTime()
-        var trainingsNotes = getTrainingNotes()
+    function getFilteredData(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date){
+        var competitionDataHits = getCompetitionData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
+        var trainingDataHits = getTrainingData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
+        var averageCompetition = getAverageCompetition(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
+        var averageTraining = getAverageTraining(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
+        var gameResults = getGameResults(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
+        var averageTrainingTime = getAverageTrainingTime(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
+        var trainingsNotes = getTrainingNotes(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd)
         return {
             averageCompetition: averageCompetition,
             averageTraining: averageTraining,
@@ -63,7 +68,11 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         }
     }
 
-    function getCompetitionData(){
+    function getFilteredDataWithFilters(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined){
+        return getFilteredData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd);
+    }
+
+    function getCompetitionData(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, discipline: Disciplines, dateStart: Date, dateEnd: Date){
         if(competitionData === undefined){
             return
         }
@@ -75,7 +84,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         return dataPoints
     }
     
-    function getTrainingData(){
+    function getTrainingData(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date){
         if(trainingData === undefined){
             return
         }
@@ -87,7 +96,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         return dataPoints
     }
 
-    function getAverageCompetition(){
+    function getAverageCompetition(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date){
         if(competitionData === undefined){
             return 0
         }
@@ -103,7 +112,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         return calcAverageCompetition;
     }
 
-    function getAverageTraining(){
+    function getAverageTraining(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date){
         if(trainingData === undefined){
             return 0
         }
@@ -120,7 +129,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         return calcAverageTraining;
     }
 
-    function getAverageTrainingTime(){
+    function getAverageTrainingTime(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date){
         if(trainingData === undefined){
             return 0
         }
@@ -139,7 +148,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         return calcAverageTrainingTime;
     }
 
-    function getGameResults(){
+    function getGameResults(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date){
         if(competitionData === undefined){
             return [0, 0, 0]
         }
@@ -171,7 +180,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         return [gamesWonPercentage, gamesLostPercentage, gamesDrawPercentage]
     }
 
-    function getTrainingNotes(){
+    function getTrainingNotes(competitionData: DataCompetition[] | undefined, trainingData: DataTraining[] | undefined, selectedDiscipline: Disciplines, filterDateStart: Date, filterDateEnd: Date){
         if(trainingData === undefined){
             return null
         }
@@ -180,7 +189,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
             if(index > 10){
                 break;
             }
-            if(getDateWithoutTime(trainingData[index].date) < getDateWithoutTime(filterDateStart) || trainingData[index].discipline !== selectedDiscipline || getDateWithoutTime(trainingData[index].date) > getDateWithoutTime(filterDateEnd)){
+            if(getDateWithoutTime(trainingData[index].date) < getDateWithoutTime(filterDateStart) || trainingData[index].discipline !== discipline || getDateWithoutTime(trainingData[index].date) > getDateWithoutTime(filterDateEnd)){
                 continue;
             }
             trainingsNotes.push(
@@ -208,7 +217,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines, 
         return new Date(date.getFullYear(), date.getMonth(), date.getDate())
     }
 
-    return [filteredData, setGetDataDate, setGetDataEndDate, setGetDataDiscipline]
+    return [undefined as any, setGetDataDate, setGetDataEndDate, setGetDataDiscipline, getFilteredDataWithFilters]
 }
 
 export default useFilterData
