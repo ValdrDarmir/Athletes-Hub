@@ -189,7 +189,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
             if(index > 10){
                 break;
             }
-            if(getDateWithoutTime(trainingData[index].date) < getDateWithoutTime(filterDateStart) || trainingData[index].discipline !== discipline || getDateWithoutTime(trainingData[index].date) > getDateWithoutTime(filterDateEnd)){
+            if(getDateWithoutTime(trainingData[index].date) < getDateWithoutTime(filterDateStart) || trainingData[index].discipline !== selectedDiscipline || getDateWithoutTime(trainingData[index].date) > getDateWithoutTime(filterDateEnd)){
                 continue;
             }
             trainingsNotes.push(
