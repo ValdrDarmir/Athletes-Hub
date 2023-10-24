@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback} from 'react';
 import UserModel from "../../User/models/User.model";
 import LinePlotWithErrorBars from "../components/LinePlotWithErrorBars";
 import useStatisticsData from "../hooks/statisticsData";
