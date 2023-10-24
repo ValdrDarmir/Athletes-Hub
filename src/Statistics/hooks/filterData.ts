@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Disciplines from "../../User/models/Disciplines"
 import { DataPoint } from "../components/LinePlotWithErrorBars"
 import { DataCompetition, DataTraining } from "./statisticsData"
 
 
-type FilterHook = [FilteredData, Function, Function, Function, Function]
+//type FilterHook = [FilteredData, Function, Function, Function, Function]
 
 export interface FilteredData{
     averageCompetition: number,
