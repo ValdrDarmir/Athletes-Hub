@@ -101,13 +101,15 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
             return 0
         }
         var calcAverageCompetition = 0;
+        var counter = 0
         for (let i = 0; i < competitionData.length; i++) {
             if(getDateWithoutTime(competitionData[i].date) < getDateWithoutTime(filterDateStart) || competitionData[i].discipline !== selectedDiscipline || getDateWithoutTime(competitionData[i].date) > getDateWithoutTime(filterDateEnd)){
                 continue;
             }
             calcAverageCompetition += competitionData[i].competitionHits.y;
+            counter++
         }
-        calcAverageCompetition /= competitionData.length;
+        calcAverageCompetition /= counter;
         calcAverageCompetition = Math.round(calcAverageCompetition * 100) / 100;
         return calcAverageCompetition;
     }
@@ -117,13 +119,15 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
             return 0
         }
         var calcAverageTraining = 0;
+        var counter = 0
         for (let i = 0; i < trainingData.length; i++) {
             if(getDateWithoutTime(trainingData[i].date) < getDateWithoutTime(filterDateStart) || trainingData[i].discipline !== selectedDiscipline || getDateWithoutTime(trainingData[i].date) > getDateWithoutTime(filterDateEnd)){
                 continue;
             }
             calcAverageTraining += trainingData[i].trainingHits.y;
+            counter++
         }
-        calcAverageTraining /= trainingData.length;
+        calcAverageTraining /= counter;
     
         calcAverageTraining = Math.round(calcAverageTraining * 100) / 100;
         return calcAverageTraining;
@@ -134,6 +138,7 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
             return 0
         }
         var calcAverageTrainingTime = 0;
+        var counter = 0
         for (let i = 0; i < trainingData.length; i++) {
             if(getDateWithoutTime(trainingData[i].date) < getDateWithoutTime(filterDateStart) || trainingData[i].discipline !== selectedDiscipline || getDateWithoutTime(trainingData[i].date) > getDateWithoutTime(filterDateEnd)){
                 continue;
@@ -143,8 +148,10 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
                 continue;
             }
             calcAverageTrainingTime += trainingTime / 1000 / 60;
+            counter++
         }
-        calcAverageTrainingTime /= trainingData.length;
+        calcAverageTrainingTime /= counter;
+        calcAverageTrainingTime = Math.round(calcAverageTrainingTime * 100) / 100
         return calcAverageTrainingTime;
     }
 
@@ -191,6 +198,9 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
             }
             if(getDateWithoutTime(trainingData[index].date) < getDateWithoutTime(filterDateStart) || trainingData[index].discipline !== selectedDiscipline || getDateWithoutTime(trainingData[index].date) > getDateWithoutTime(filterDateEnd)){
                 continue;
+            }
+            if(trainingData[index].note === ''){
+                continue
             }
             trainingsNotes.push(
                 [trainingData[index].date.toDateString(), trainingData[index].note]
