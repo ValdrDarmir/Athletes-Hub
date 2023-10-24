@@ -111,6 +111,9 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
         }
         calcAverageCompetition /= counter;
         calcAverageCompetition = Math.round(calcAverageCompetition * 100) / 100;
+        if(Number.isNaN(calcAverageCompetition)){
+            calcAverageCompetition = 0
+        }
         return calcAverageCompetition;
     }
 
@@ -130,6 +133,9 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
         calcAverageTraining /= counter;
     
         calcAverageTraining = Math.round(calcAverageTraining * 100) / 100;
+        if(Number.isNaN(calcAverageTraining)){
+            calcAverageTraining = 0
+        }
         return calcAverageTraining;
     }
 
@@ -152,6 +158,9 @@ function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines){
         }
         calcAverageTrainingTime /= counter;
         calcAverageTrainingTime = Math.round(calcAverageTrainingTime * 100) / 100
+        if(Number.isNaN(calcAverageTrainingTime)){
+            calcAverageTrainingTime = 0
+        }
         return calcAverageTrainingTime;
     }
 
