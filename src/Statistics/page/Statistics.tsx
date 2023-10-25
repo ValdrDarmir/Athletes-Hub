@@ -131,9 +131,9 @@ function Statistics({user}: Props) {
             <p className='text-xl'>{data.averageTrainingTime} Minuten</p>
 
             <div className="divider divider-sm">Schießspiel-Statistiken</div>
-            <p className='text-xl'>Gewonnene Spiele: {data.gameResults[0]}%</p>
-            <p className='text-xl'>Verlorene Spiele: {data.gameResults[1]}%</p>
-            <p className='text-xl'>Unentschieden: {data.gameResults[2]}%</p>
+            <p className='text-xl'>Gewonnene Spiele: {Math.round(data.gameResults[0])}%</p>
+            <p className='text-xl'>Verlorene Spiele: {Math.round(data.gameResults[1])}%</p>
+            <p className='text-xl'>Unentschieden: {Math.round(data.gameResults[2])}%</p>
         </div>
     );
 }
