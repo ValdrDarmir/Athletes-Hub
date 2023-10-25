@@ -1,8 +1,7 @@
 import React from 'react';
 import TrainingEntryModel from "../models/TrainingEntry.model";
 import sum from "../../shared/utils/sum";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import Icon from "../../shared/components/Icon";
 
 interface Props {
     entry: TrainingEntryModel
@@ -31,7 +30,7 @@ function TrainingEntryRow({entry, deleteTrainingEntry}: Props) {
         <td>{entry.notes}</td>
         <td>
             <button className="btn btn-square btn-sm text-error"
-                    onClick={deleteEntryClicked}><FontAwesomeIcon icon={faTrashCan}/></button>
+                    onClick={deleteEntryClicked}><Icon code={"delete"}/></button>
         </td>
     </tr>
 }

@@ -10,7 +10,8 @@ function PlayerList({players}: Props) {
         <div className="flex flex-col align-middle self-center w-2/3">
             <p className="border-b text-center">Bisher angemeldet sind:</p>
             <div className="flex flex-wrap justify-around gap-4">
-                {players.map(p => <p key={p.id}>{p.displayName}</p>
+                {players.map(p =>
+                    <span key={p.id}>{p.displayName}</span>
                 )}
             </div>
         </div>
