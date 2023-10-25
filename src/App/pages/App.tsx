@@ -23,19 +23,22 @@ function App({user}: Props) {
 
     return (
         <div className="flex flex-col items-stretch p-2">
-            <img src={logo} className="w-1/2 self-center"  alt="Logo"/>
+            <img src={logo} className="w-1/2 self-center" alt="Logo"/>
 
-            <h1 className="self-center text-3xl text-primary mb-5 mt-5 uppercase">Hallo {user.displayName}</h1>
+            <h1 className="self-center text-3xl text-primary mb-5 mt-5 uppercase text-center">Hallo {user.displayName}</h1>
 
             <ul className="menu [&_li>*]:rounded-none divide-y m-4 text-md uppercase">
-                <li><Link to={routes.games.path} className="border-t p-6"><Icon code={"view_list"}/> Wettbewerbe & Spiele</Link></li>
-                <li><Link to={routes.createStairClimbing.path} className="p-6"><Icon code={"add_circle"}/> Neues Schiessspiel</Link></li>
-                <li><Link to={routes.createCompetition.path} className="p-6"><Icon code={"add_circle"}/> Neuer Wettbewerb</Link></li>
+                <li><Link to={routes.games.path} className="border-t p-6"><Icon code={"view_list"}/> Wettbewerbe &
+                    Spiele</Link></li>
+                <li><Link to={routes.createStairClimbing.path} className="p-6"><Icon code={"add_circle"}/> Neues
+                    Schiessspiel</Link></li>
+                <li><Link to={routes.createCompetition.path} className="p-6"><Icon code={"add_circle"}/> Neuer
+                    Wettbewerb</Link></li>
                 <li><Link to={routes.training.path} className="p-6"><Icon code={"book"}/> Trainingsdoku</Link></li>
                 <li><Link to={routes.stats.path} className="p-6"><Icon code={"barChart"}/> Statistiken</Link></li>
 
                 <li
-                    className={`flex flex-col items-stretch ${userHasNoDisciplines && "tooltip tooltip-open tooltip-info tooltip-bottom"}`}
+                    className={`flex flex-col items-stretch ${userHasNoDisciplines && "tooltip tooltip-open tooltip-info tooltip-top"}`}
                     data-tip="Trage deinen Verein und Disziplin ein">
                     <Link to={routes.profile.path} className="border-b p-6"><Icon code={"person"}/> Mein Profil</Link>
                 </li>
