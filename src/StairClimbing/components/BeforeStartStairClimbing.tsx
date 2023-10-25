@@ -6,6 +6,7 @@ import CreatorJoin from "./CreatorJoin";
 import {toDataURL} from "qrcode";
 import {BeforeStartStateHook} from "../hooks/playStairClimbing";
 import {routes} from "../../routes";
+import PlayerList from "../../ChallengeGeneral/components/PlayerList";
 
 interface Props {
     user: UserModel
@@ -43,41 +44,42 @@ function BeforeStartStairClimbing({user, game, gameId}: Props) {
         }
     }
 
-    return <div>
-        <p>Das Spiel hat noch nicht begonnen.</p>
-        <p>Bisher angemeldet sind:</p>
-        <ul>
-            {game.data.playerSteps.map(p =>
-                <li key={p.user.id}>{p.user.displayName}</li>)
-            }
-        </ul>
-        {(game.data.creator.id === user.id) &&
+    return <div className="flex flex-col items-center m-4 gap-8">
+        <h1 className="text-3xl text-primary mt-5 uppercase">Schiessspiel</h1>
+
+        {(game.data.creator.id === user.id) ?
             <>
-                <div className="divider"></div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col align-middle gap-8">
                     <p className="text-center font-bold">Du bist der Spielleiter.</p>
+
+                    <CreatorJoin gameId={gameId} user={user}/>
+
+                    <PlayerList players={game.data.playerSteps.map(p => p.user)}/>
 
                     <p className="text-center">Teile diesen Link mit deinen Freunden, damit sie mitspielen
                         können:</p>
 
-                    <div className="flex justify-center">
+                    <div className="flex flex-col self-center w-2/3 gap-2">
                         <img src={qrDataURL || ""} alt="QR Code"/>
+
+                        <button className="btn btn-sm btn-secondary" onClick={copyInviteLinkClicked}>
+                            Link kopieren
+                        </button>
                     </div>
 
-                    <button className="btn btn-secondary" onClick={copyInviteLinkClicked}>
-                        Link kopieren
+                    <button className="btn btn-primary" onClick={startGameClicked}
+                            disabled={game.data.playerSteps.length < 2}>Spiel starten
                     </button>
 
-                    <button className="btn btn-primary" onClick={startGameClicked}>Spiel starten</button>
-
-                    <div className="divider"></div>
-
-                    <CreatorJoin gameId={gameId} user={user}/>
                 </div>
+            </> :
+            <>
+                <p className="text-center">Der Spielleiter hat den Wettbewerb noch nicht gestartet.</p>
+                <PlayerList players={game.data.playerSteps.map(p => p.user)}/>
+
             </>
         }
     </div>
-
 }
 
 export default BeforeStartStairClimbing;

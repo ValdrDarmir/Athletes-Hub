@@ -17,12 +17,16 @@ function CreateStairClimbing({user}: Props) {
 
     const [createNewStairClimbing, creationStairClimbingLoading, creationStairClimbingError] = useCreateNewStairClimbing()
     const navigate = useNavigate()
-    const [selectedGame, setSelectedGame] = useState<Games>(Games.StairClimbing)
-    const [discipline, setDiscipline] = useState<Disciplines>(Disciplines.AirRifle)
+    const [selectedGame, setSelectedGame] = useState<Games | null>(null)
+    const [discipline, setDiscipline] = useState<Disciplines | null>(null)
 
     const [stepGoalAmount, setStepGoalAmount] = useState<number>(5)
 
     const startGameClicked = async () => {
+        if (!selectedGame || !discipline) {
+            return;
+        }
+
         const newGameDoc = await createNewStairClimbing(user, discipline, stepGoalAmount)
         if (newGameDoc) {
             toast.success("Spiel erstellt 👍")
@@ -30,13 +34,15 @@ function CreateStairClimbing({user}: Props) {
         }
     }
 
-    return <div className="flex flex-col items-center m-2 gap-2">
+    return <div className="flex flex-col items-center m-8 gap-4">
         <h1 className="text-2xl">Spiel erstellen</h1>
         <h1 className="text-xl">Was willst du spielen?</h1>
+
         <div className="w-full">
             <SelectObject className="select select-bordered w-full" onChange={setSelectedGame} value={selectedGame}>
+                <OptionObject value={null} disabled>Schiessspiel</OptionObject>
                 <OptionObject value={Games.StairClimbing}>{gameNames[Games.StairClimbing]}</OptionObject>
-                <OptionObject disabled value="">Mehr kommt noch</OptionObject>
+                <OptionObject disabled value={null}>Mehr kommt noch</OptionObject>
             </SelectObject>
         </div>
 
@@ -50,7 +56,9 @@ function CreateStairClimbing({user}: Props) {
                 <div className="w-full">
                     <SelectObject className="select select-bordered w-full" onChange={setDiscipline}
                                   value={discipline}>
-                        <OptionObject value={Disciplines.AirRifle}>{disciplineNames[Disciplines.AirRifle]}</OptionObject>
+                        <OptionObject value={null} disabled>Disziplin</OptionObject>
+                        <OptionObject
+                            value={Disciplines.AirRifle}>{disciplineNames[Disciplines.AirRifle]}</OptionObject>
                         <OptionObject value={Disciplines.Pistol}>{disciplineNames[Disciplines.Pistol]}</OptionObject>
                     </SelectObject>
                 </div>
@@ -64,7 +72,7 @@ function CreateStairClimbing({user}: Props) {
             </>
         }
 
-        <button className="btn btn-primary" disabled={!selectedGame || creationStairClimbingLoading}
+        <button className="btn btn-secondary mt-4" disabled={!selectedGame || !discipline || creationStairClimbingLoading}
                 onClick={startGameClicked}>Los geht's!
         </button>
     </div>

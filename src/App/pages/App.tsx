@@ -22,7 +22,7 @@ function App({user}: Props) {
 
     return (
         <div className="flex flex-col items-stretch p-2">
-            <img src={logo} className="w-1/2 self-center" />
+            <img src={logo} className="w-1/2 self-center"  alt="Logo"/>
 
             <h1 className="self-center text-3xl text-primary mb-5 mt-5 uppercase">Hallo {user.displayName}</h1>
 

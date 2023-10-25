@@ -14,6 +14,10 @@ function ScoreInputForm({onSubmit}: Props) {
     const {register, handleSubmit, reset} = useForm<ScoreFormFieldsValues>()
 
     const submitScore = (data: ScoreFormFieldsValues) => {
+        if (!data.score) {
+            return;
+        }
+
         reset()
         void onSubmit(data)
     }

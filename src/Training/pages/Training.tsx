@@ -27,7 +27,7 @@ function Training({user}: Props) {
                     <div className="divider uppercase">{disciplineNames[group]}</div>
                     <table className=" table table-fixed table-zebra table-xs table-pin-rows">
                         <colgroup>
-                            <col className="w-1/5"/>
+                            <col className="w-1/4"/>
                             <col className="w-1/5"/>
                             <col className="w-1/5"/>
                             <col className=""/>

@@ -10,7 +10,7 @@ interface Props {
 function Layout({user, children}: Props) {
 
     return (
-        <div className="w-screen">
+        <div className="w-screen h-screen">
             <SidebarWrapper user={user}>
                 {children}
             </SidebarWrapper>

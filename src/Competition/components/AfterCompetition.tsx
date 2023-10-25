@@ -26,10 +26,16 @@ function AfterCompetition({game}: Props) {
         <p className="text-center">
             {game.data.participantSeries
                 .sort((a, b) => sum(...b.series) > sum(...a.series) ? 1 : -1)
-                .map((p, index) => <Fragment key={`names-${p.participant.user.id}`}>
-                        {index + 1}. {p.participant.user.displayName} | {sum(...p.series)}
-                        <br/>
-                    </Fragment>
+                .map((p, index) =>
+                    index === 0 ?
+                        <div key={`names-${p.participant.user.id}`} className="mb-4">
+                            Gewinner<br/><b>{p.participant.user.displayName}</b>
+                            <br/>
+                        </div> :
+                        <span key={`names-${p.participant.user.id}`}>
+                            {index + 1}. {p.participant.user.displayName}
+                            <br/>
+                        </span>
                 )}
         </p>
         <div className="divider uppercase">Details</div>

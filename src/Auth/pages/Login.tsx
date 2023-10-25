@@ -25,7 +25,6 @@ function Login() {
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content m-10 text-center text-neutral-content flex-col">
                 <h1 className="text-5xl font-bold">Login</h1>
-                <p>Log dich ein, dann kannst du dich ausloggen.</p>
             </div>
         </div>
         <form className="card-body flex-col " onSubmit={handleSubmit(onSubmit)}>

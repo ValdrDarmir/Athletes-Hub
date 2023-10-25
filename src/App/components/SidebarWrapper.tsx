@@ -18,7 +18,7 @@ function SidebarWrapper({user, children}: Props) {
     return (
         <div className="drawer drawer-end">
             <input id="my-drawer" type="checkbox" className="drawer-toggle" checked={open} onChange={toggleSidebar}/>
-            <div className="drawer-content overflow-x-hidden">
+            <div className="drawer-content overflow-x-hidden h-screen">
                 <Header />
                 {children}
             </div>

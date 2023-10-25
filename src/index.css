@@ -18,8 +18,16 @@ p, span, .select, .input, .textarea {
     font-size: 1.2rem;
 }
 
+td {
+    font-family: 'Anek Latin', sans-serif;
+}
+
 .select, .input, .textarea {
     font-weight: normal;
+}
+
+.divider {
+    text-transform: uppercase;
 }
 
 /* Labels still need to be fat */

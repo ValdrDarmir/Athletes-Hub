@@ -22,7 +22,7 @@ function PreStartCountdown({game}: Props) {
             )}
         </h1>
 
-        <p>Das Spiel beginnt bald. Mach dich bereit.</p>
+        <p>Der Wettbewerb beginnt bald. Mach dich bereit.</p>
 
         <p>{formatSecondsMMSS(game.data.startTimeCountdownSeconds)}</p>
 
