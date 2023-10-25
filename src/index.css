@@ -30,6 +30,23 @@ td {
     text-transform: uppercase;
 }
 
+.divider.divider-sm {
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    height: 0.5rem;
+    padding: 0 2rem;
+    font-size: 0.75rem/* 12px */;
+    line-height: 1rem/* 16px */;
+}
+
+.divider.divider-xs {
+    margin: 0.2rem 0;
+    height: 0.2rem;
+    padding: 0 4rem;
+    font-size: 0.75rem/* 12px */;
+    line-height: 1rem/* 16px */;
+}
+
 /* Labels still need to be fat */
 label > span {
     font-family: 'Audiowide', sans-serif;
