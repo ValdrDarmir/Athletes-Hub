@@ -23,7 +23,7 @@ function useCreateNewCompetition() {
             participantSeries: [],
             creatorId: creator.id,
             seriesCount: 4,                             // == 40 shots
-            shootingTimeLimitMillis: 15 * 60 * 1000,    // 15 minutes
+            shootingTimeLimitMillis: 30 * 60 * 1000,    // 30 minutes
             startTimeMillis: null,
             discipline: discipline,
             createdAt: new Date(),
