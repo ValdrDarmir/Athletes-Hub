@@ -2,6 +2,7 @@ import React, {Fragment} from 'react';
 import {AfterCompetitionStateHook} from "../hooks/playCompetition";
 import sum from "../../shared/utils/sum";
 import Scoreboard from "./Scoreboard";
+import Icon from "../../shared/components/Icon";
 
 interface Props {
     game: AfterCompetitionStateHook
@@ -29,7 +30,7 @@ function AfterCompetition({game}: Props) {
                 .map((p, index) =>
                     index === 0 ?
                         <div key={`names-${p.participant.user.id}`} className="mb-4">
-                            Gewinner<br/><b>{p.participant.user.displayName}</b>
+                            <Icon code="trophy" size={64}/><br/><b>{p.participant.user.displayName}</b>
                             <br/>
                         </div> :
                         <span key={`names-${p.participant.user.id}`}>

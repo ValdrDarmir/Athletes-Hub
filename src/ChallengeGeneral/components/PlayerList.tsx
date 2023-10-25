@@ -1,5 +1,6 @@
 import React from 'react';
 import UserModel from "../../User/models/User.model";
+import Icon from "../../shared/components/Icon";
 
 interface Props {
     players: UserModel[]
@@ -11,7 +12,7 @@ function PlayerList({players}: Props) {
             <p className="border-b text-center">Bisher angemeldet sind:</p>
             <div className="flex flex-wrap justify-around gap-4">
                 {players.map(p =>
-                    <span key={p.id}>{p.displayName}</span>
+                    <span key={p.id}><Icon code="person"/> {p.displayName}</span>
                 )}
             </div>
         </div>

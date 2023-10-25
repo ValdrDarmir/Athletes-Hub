@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 import Scoreboard from "./Scoreboard";
 import {FinishedStateHook} from "../hooks/playStairClimbing";
+import Icon from "../../shared/components/Icon";
 
 interface Props {
     game: FinishedStateHook
@@ -26,7 +27,7 @@ function FinishedStairClimbing({game}: Props) {
                 .map((p, index) =>
                     index === 0 ?
                         <div key={`names-${p.user.id}`} className="mb-4">
-                            Gewinner<br/><b>{p.user.displayName}</b>
+                            <Icon code="trophy" size={64}/><br/><b>{p.user.displayName}</b>
                             <br/>
                         </div> :
                         <span key={`names-${p.user.id}`}>

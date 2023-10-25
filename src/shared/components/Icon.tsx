@@ -32,10 +32,10 @@ interface Props {
 function Icon({code, size}: Props) {
     if (AssetIcons[code]) {
         const IconComponent = AssetIcons[code] as FunctionComponent<SVGProps<any>>
-        return <span><IconComponent height={size || 20} width="auto"/></span>
+        return <span className="inline-block"><IconComponent height={size || 20} width="auto"/></span>
     }
 
-    return <span className="material-symbols-outlined">{code}</span>
+    return <span style={{fontSize: size || 20}} className="material-symbols-outlined">{code}</span>
 }
 
 export default Icon;
