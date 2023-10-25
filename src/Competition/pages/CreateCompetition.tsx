@@ -33,7 +33,7 @@ function CreateGame({user}: Props) {
         setDiscipline(value)
     }
 
-    return <div className="flex flex-col items-center m-4 gap-8">
+    return <div className="flex flex-col items-center m-8 gap-8">
 
         <h1 className="text-3xl text-primary mt-5 uppercase">Wettbewerb</h1>
 
@@ -53,6 +53,8 @@ function CreateGame({user}: Props) {
         <button className="btn btn-secondary w-full" disabled={creationCompetitionLoading || !discipline}
                 onClick={startGameClicked}>Los geht's!
         </button>
+
+        <p className="text-center">Fordere deine Freunde mit einem Wettkampf nach Liga-Modus (40 Schuss) heraus. Trage nach jeder Serie deine erreichte Punktzahl ein und siehe in Echtzeit den Stand der Teilnehmenden!</p>
     </div>
 
 }

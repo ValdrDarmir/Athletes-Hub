@@ -72,9 +72,15 @@ function CreateStairClimbing({user}: Props) {
             </>
         }
 
-        <button className="btn btn-secondary mt-4" disabled={!selectedGame || !discipline || creationStairClimbingLoading}
+        <button className="btn btn-secondary mt-4"
+                disabled={!selectedGame || !discipline || creationStairClimbingLoading}
                 onClick={startGameClicked}>Los geht's!
         </button>
+
+        {selectedGame === Games.StairClimbing &&
+            <p className="text-center">Fordere deine Freunde mit dem beliebten Schießspiel Treppensteigen heraus! Wer
+                schafft die meisten Stufen und wird das Spiel gewinnen?</p>
+        }
     </div>
 
 }

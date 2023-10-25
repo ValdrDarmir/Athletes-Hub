@@ -55,7 +55,7 @@ function Invitation({user}: Props) {
     }
 
     return (
-        <div className="flex flex-col items-center m-4 gap-8">
+        <div className="flex flex-col items-center m-8 gap-8">
             <h1 className="text-3xl text-primary mt-5 uppercase">Wettbewerb</h1>
 
             <p className="text-center">
@@ -79,6 +79,8 @@ function Invitation({user}: Props) {
             <button className="btn btn-secondary w-full" onClick={onJoinButtonClicked} disabled={selectedClubDiscipline === null}>
                 Bin dabei!
             </button>
+
+            <p className="text-center">Fordere deine Freunde mit einem Wettkampf nach Liga-Modus (40 Schuss) heraus. Trage nach jeder Serie deine erreichte Punktzahl ein und siehe in Echtzeit den Stand der Teilnehmenden!</p>
         </div>
     );
 }

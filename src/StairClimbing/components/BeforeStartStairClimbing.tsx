@@ -74,9 +74,8 @@ function BeforeStartStairClimbing({user, game, gameId}: Props) {
                 </div>
             </> :
             <>
-                <p className="text-center">Der Spielleiter hat den Wettbewerb noch nicht gestartet.</p>
+                <p className="text-center">Der Spielleiter hat das Spiel noch nicht gestartet.</p>
                 <PlayerList players={game.data.playerSteps.map(p => p.user)}/>
-
             </>
         }
     </div>
