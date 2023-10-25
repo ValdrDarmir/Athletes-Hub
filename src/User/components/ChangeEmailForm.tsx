@@ -44,7 +44,7 @@ function ChangeEmailForm({user}: Props) {
             <div className="join">
                 <input className="input input-bordered join-item"
                        placeholder="Email" {...register("email", {required: true})}/>
-                <button className="btn join-item" type="submit" disabled={changeEmailLoading}>Email ändern</button>
+                <button className="btn btn-neutral join-item" type="submit" disabled={changeEmailLoading}>Email ändern</button>
             </div>
             {errors.email &&
                 <label className={"label"}><span

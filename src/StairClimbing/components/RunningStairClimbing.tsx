@@ -20,8 +20,10 @@ function RunningStairClimbing({user, game}: Props) {
     }
 
 
-    return <div className="flex items-center flex-col p-2">
-        <h1 className="text-2xl">
+    return <div className="flex flex-col items-center m-4 gap-4">
+        <h1 className="text-3xl text-primary mt-5 uppercase">Schiessspiel</h1>
+
+        <h1 className="text-2xl border-b">
             {game.data.playerSteps.map((p, index) => <Fragment key={`names-${p.user.id}`}>
                     {(index > 0) && <span> vs </span>}
                     <span className="font-bold">{p.user.displayName}</span>
@@ -29,20 +31,21 @@ function RunningStairClimbing({user, game}: Props) {
             )}
         </h1>
 
-        <p>Los gehts. Schieß, was das Zeug hält!</p>
+        <div className="divider">Schießzeit</div>
+        <p className="text-center">{formatSecondsMMSS(game.data.timeBeforeFinishSeconds)}</p>
 
-        <p>{formatSecondsMMSS(game.data.timeBeforeFinishSeconds)}</p>
+        <div className="divider">Aktuelle Stufe</div>
 
-        <div className="card bg-base-100/90">
-            <p>Schusszahl: {game.data.currentStepGoalInfo.shots}</p>
-            <p>{game.data.currentStepGoalInfo.scoreRange}</p>
-            <p>{game.data.currentStepGoalInfo.description}</p>
-        </div>
+        <p className="text-center">
+            Schussanzahl: {game.data.currentStepGoalInfo.shots} <br/>
+            Ziel: {game.data.currentStepGoalInfo.scoreRange} <br/>
+            <br/>
+            {game.data.currentStepGoalInfo.description} <br/>
+        </p>
 
-        <button className="btn" onClick={climbStepClicked}>Nächste Stufe</button>
+        <button className="btn btn-secondary" onClick={climbStepClicked}>Ziel erreicht</button>
 
-        <div className="divider"></div>
-
+        <div className="divider">Aktuelles Ranking</div>
         <Scoreboard playerSteps={game.data.playerSteps} stepGoals={game.data.stepGoals}/>
     </div>
 }

@@ -18,33 +18,37 @@ function Training({user}: Props) {
 
     return (
         <div className="m-2 flex flex-col items-center">
-            <h1 className="text-3xl mb-2">Trainingsdaten</h1>
+            <h1 className="text-3xl text-primary my-4 uppercase">Trainingsdoku</h1>
 
-            <Link to={routes.newTrainingEntry.path} className="btn btn-primary">Neue Daten hinzufügen</Link>
+            <Link to={routes.newTrainingEntry.path} className="btn btn-secondary uppercase mb-4">Neue Session</Link>
 
             {trainingEntriesByDiscipline && trainingEntriesByDiscipline.map(({group, values}) =>
                 <Fragment key={group}>
-                    <div className="divider divide-"></div>
-                    <div className="mb-2 flex flex-col items-center">
-                        <h2 className="text-2xl">{disciplineNames[group]}</h2>
-                        <table className="table table-fixed table-xs table-pin-rows">
-                            <thead>
-                            <tr>
-                                <th className="w-24">Datum</th>
-                                <th className="w-20">Serien</th>
-                                <th className="w-16">Summe</th>
-                                <th>Notizen</th>
-                                <th className="w-12"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {values.map(entry =>
-                                <TrainingEntryRow key={entry.id} entry={entry}
-                                                  deleteTrainingEntry={deleteTrainingEntry}/>
-                            )}
-                            </tbody>
-                        </table>
-                    </div>
+                    <div className="divider uppercase">{disciplineNames[group]}</div>
+                    <table className=" table table-fixed table-zebra table-xs table-pin-rows">
+                        <colgroup>
+                            <col className="w-1/4"/>
+                            <col className="w-1/5"/>
+                            <col className="w-1/5"/>
+                            <col className=""/>
+                            <col className="w-12"/>
+                        </colgroup>
+                        <thead>
+                        <tr className="border-b border-white">
+                            <th>Datum</th>
+                            <th>Serien</th>
+                            <th>Summe</th>
+                            <th>Notizen</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {values.map(entry =>
+                            <TrainingEntryRow key={entry.id} entry={entry}
+                                              deleteTrainingEntry={deleteTrainingEntry}/>
+                        )}
+                        </tbody>
+                    </table>
                 </Fragment>
             )}
         </div>

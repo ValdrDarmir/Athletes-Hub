@@ -30,15 +30,15 @@ function CreatorJoin({gameId, user}: Props) {
     }
 
     if (isUserAlreadyAttending) {
-        return <p>Du bist dabei!</p>
+        return <p className="text-center">Du bist dabei!</p>
     }
 
     return (
         <div>
             <div className="flex flex-col gap-2">
-                <p>Willst du auch mitmachen?</p>
+                <p className="text-center">Möchtest du selbst teilnehmen?</p>
 
-                <button className="btn" onClick={onJoinButtonClicked}>
+                <button className="btn btn-secondary" onClick={onJoinButtonClicked}>
                     Bin dabei!
                 </button>
             </div>

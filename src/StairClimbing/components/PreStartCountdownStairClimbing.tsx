@@ -8,8 +8,10 @@ interface Props {
 }
 
 function PreStartCountdownStairClimbing({game}: Props) {
-    return <div className="flex items-center flex-col p-2">
-        <h1 className="text-2xl">
+    return <div className="flex flex-col items-center m-4 gap-4">
+        <h1 className="text-3xl text-primary mt-5 uppercase">Schiessspiel</h1>
+
+        <h1 className="text-2xl border-b">
             {game.data.playerSteps.map((p, index) => <Fragment key={`names-${p.user.id}`}>
                     {(index > 0) && <span> vs </span>}
                     <span className="font-bold">{p.user.displayName}</span>
@@ -17,11 +19,10 @@ function PreStartCountdownStairClimbing({game}: Props) {
             )}
         </h1>
 
-        <p>Das Spiel beginnt bald. Mach dich bereit.</p>
+        <div className="divider">Vorbereitungszeit</div>
+        <p className="text-center">{formatSecondsMMSS(game.data.timeBeforeStartSeconds)}</p>
 
-        <p>{formatSecondsMMSS(game.data.timeBeforeStartSeconds)}</p>
-
-
+        <div className="divider">Aktuelles Ranking</div>
         <Scoreboard playerSteps={game.data.playerSteps} stepGoals={game.data.stepGoals}/>
     </div>
 }

@@ -44,7 +44,7 @@ function ChangeUsernameForm({user}: Props) {
             <div className="join">
                 <input className="input input-bordered join-item"
                        placeholder="Nutzername" {...register("username", {required: true})}/>
-                <button className="btn join-item" type="submit" disabled={changeUsernameLoading}>Namen ändern</button>
+                <button className="btn btn-neutral join-item" type="submit" disabled={changeUsernameLoading}>Namen ändern</button>
             </div>
             {errors.username &&
                 <label className={"label"}><span

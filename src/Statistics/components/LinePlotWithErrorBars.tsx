@@ -33,21 +33,42 @@ function LinePlotWithErrorBars({xTitle, yTitle, dataPoints}: Props) {
         plugins: {
             legend: {
                 display: false,
-            }
+            },
         },
         scales: {
             y: {
                 title: {
                     display: true,
                     text: yTitle,
-                }
+                    color: theme.baseContent,
+                },
+                border: {
+                    color: theme.baseContent,
+                },
+                ticks: {
+                    color: theme.baseContent,
+                },
+                grid: {
+                    color: theme.baseContent,
+                },
             },
             x: {
                 title: {
                     display: true,
                     text: xTitle,
-                }
+                    color: theme.baseContent,
+                },
+                border: {
+                    color: theme.baseContent,
+                },
+                ticks: {
+                    color: theme.baseContent,
+                },
+                grid: {
+                    color: theme.baseContent,
+                },
             },
+
         }
     };
 
@@ -60,7 +81,9 @@ function LinePlotWithErrorBars({xTitle, yTitle, dataPoints}: Props) {
             data: dataPoints,
             label: yTitle,
             borderColor: theme.primary,
-            backgroundColor: theme.accent,
+            backgroundColor: theme.primary,
+            errorBarWhiskerColor: "transparent",
+            errorBarColor: "transparent",
             tension: 0.1
         }]
     }

@@ -10,7 +10,10 @@ interface Props {
 function PreStartCountdown({game}: Props) {
 
 
-    return <div className="flex items-center flex-col p-2">
+    return <div className="flex flex-col items-center m-4 gap-8">
+
+        <h1 className="text-3xl text-primary mt-5 uppercase">Wettbewerb</h1>
+
         <h1 className="text-2xl">
             {game.data.participantSeries.map((p, index) => <Fragment key={`names-${p.participant.user.id}`}>
                     {(index > 0) && <span> vs </span>}
@@ -19,7 +22,7 @@ function PreStartCountdown({game}: Props) {
             )}
         </h1>
 
-        <p>Das Spiel beginnt bald. Mach dich bereit.</p>
+        <p>Der Wettbewerb beginnt bald. Mach dich bereit.</p>
 
         <p>{formatSecondsMMSS(game.data.startTimeCountdownSeconds)}</p>
 

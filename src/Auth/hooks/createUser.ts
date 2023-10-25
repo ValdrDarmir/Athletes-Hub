@@ -1,4 +1,4 @@
-import {setDoc, doc} from "firebase/firestore"
+import {doc, setDoc} from "firebase/firestore"
 import {auth} from "../../shared/utils/firebase";
 import db from "../../shared/utils/db";
 import {useState} from "react";
@@ -42,7 +42,7 @@ const useCreateUser = (): CreateUserHook => {
 
             setLoading(false)
         } catch (error) {
-            if(error instanceof Error) {
+            if (error instanceof Error) {
                 setError(error)
             }
             setLoading(false)

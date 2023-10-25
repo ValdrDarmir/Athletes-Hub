@@ -1,17 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anek+Latin:wght@300&family=Audiowide&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: 'Audiowide', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+p, span, .select, .input, .textarea {
+    font-family: 'Anek Latin', sans-serif;
+    font-size: 1.2rem;
+}
+
+td {
+    font-family: 'Anek Latin', sans-serif;
+}
+
+.select, .input, .textarea {
+    font-weight: normal;
+}
+
+.divider {
+    text-transform: uppercase;
+}
+
+.divider.divider-sm {
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    height: 0.5rem;
+    padding: 0 2rem;
+    font-size: 0.75rem/* 12px */;
+    line-height: 1rem/* 16px */;
+}
+
+.divider.divider-xs {
+    margin: 0.2rem 0;
+    height: 0.2rem;
+    padding: 0 4rem;
+    font-size: 0.75rem/* 12px */;
+    line-height: 1rem/* 16px */;
+}
+
+/* Labels still need to be fat */
+label > span {
+    font-family: 'Audiowide', sans-serif;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.input, .select, .textarea, .multiselect, .checkbox, .radio {
+    background-color: hsl(var(--n));
+    color: hsl(var(--nc));
+}
+
+.input:disabled, .select:disabled, .textarea:disabled, .multiselect:disabled, .checkbox:disabled, .radio:disabled {
+    background-color: hsl(var(--n) / 0.8);
+    color: hsl(var(--nc) / 0.5);
 }

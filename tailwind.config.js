@@ -10,15 +10,13 @@ module.exports = {
     daisyui: {
         themes: [{
             mytheme: {
-                "primary": "#77eac8",
-                "secondary": "#fcc48f",
+                "primary": "#D46348",
+                "secondary": "#EDFFAB",
                 "accent": "#83cad1",
-                "neutral": "#252334",
-                "base-100": "#e5e5e6",
-                "info": "#889fd7",
-                "success": "#69e2ca",
-                "warning": "#91720d",
-                "error": "#dd274e",
+                "base-100": "#313638",
+                "base-content": "#E8E9EB",
+                "neutral": "#E8E9EB",
+                "neutral-content": "#101820",
             }
         }],
     }

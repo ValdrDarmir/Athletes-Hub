@@ -25,12 +25,11 @@ function Login() {
             <div className="hero-overlay bg-opacity-60"></div>
             <div className="hero-content m-10 text-center text-neutral-content flex-col">
                 <h1 className="text-5xl font-bold">Login</h1>
-                <p>Log dich ein, dann kannst du dich ausloggen.</p>
             </div>
         </div>
         <form className="card-body flex-col " onSubmit={handleSubmit(onSubmit)}>
             <div className={"form-control"}>
-                <label className="label"><span className="label-text">Email</span></label>
+                <label className="label"><span className="label-text text-xl">Email</span></label>
                 <input className={"input input-bordered"} {...register("email", {required: true})}/>
                 {errors.email &&
 									<label className={"label"}><span className={"label-text-alt text-error"}>Email is required and must be valid</span></label>}
@@ -38,7 +37,7 @@ function Login() {
             </div>
 
             <div className={"form-control"}>
-                <label className="label"><span className="label-text">Password</span></label>
+                <label className="label"><span className="label-text text-xl">Password</span></label>
                 <input className={"input input-bordered"} type="password" {...register("password", {required: true})}/>
                 {errors.password && <label className={"label"}><span className={"label-text-alt text-error"}>Password is required</span></label>}
             </div>
@@ -47,11 +46,11 @@ function Login() {
 
             {signinError && <ErrorDisplay error={signinError}/>}
 
-            <button className={"btn btn-primary w-full"} type={"submit"} disabled={signInLoading}>Login</button>
+            <button className={"btn btn-neutral btn-primary w-full"} type={"submit"} disabled={signInLoading}>Login</button>
 
             <div className="divider">oder</div>
 
-            <Link to={routes.register.path} className="btn w-full">Account erstellen</Link>
+            <Link to={routes.register.path} className="btn btn-neutral w-full">Account erstellen</Link>
         </form>
     </div>
 }

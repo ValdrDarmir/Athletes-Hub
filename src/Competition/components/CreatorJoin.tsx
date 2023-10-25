@@ -49,20 +49,21 @@ function CreatorJoin({competitionId, user}: Props) {
     return (
         <div>
             <div className="flex flex-col gap-2">
-                <p>Willst du auch mitmachen?</p>
-                <p>Mit welchem Verein trittst du an?</p>
+                <p className="self-center">Möchtest du selbst teilnehmen?</p>
 
-                <SelectObject className="input input-bordered select" value={selectedClubDiscipline}
-                              onChange={setSelectedClubDiscipline}>
-                    <OptionObject value={null} disabled>Wähle deinen Verein</OptionObject>
-                    {validUserClubDisciplines.map((clubDiscipline, i) =>
-                        <OptionObject key={i} value={clubDiscipline}>{clubDiscipline.club}</OptionObject>
-                    )}
-                </SelectObject>
+                <div className="flex justify-between max-w-full">
+                    <SelectObject className="input input-bordered select" value={selectedClubDiscipline}
+                                  onChange={setSelectedClubDiscipline}>
+                        <OptionObject value={null} disabled>Dein Verein</OptionObject>
+                        {validUserClubDisciplines.map((clubDiscipline, i) =>
+                            <OptionObject key={i} value={clubDiscipline}>{clubDiscipline.club}</OptionObject>
+                        )}
+                    </SelectObject>
 
-                <button className="btn" onClick={onJoinButtonClicked} disabled={selectedClubDiscipline === null}>
-                    Bin dabei!
-                </button>
+                    <button className="btn btn-secondary" onClick={onJoinButtonClicked} disabled={selectedClubDiscipline === null}>
+                        Bin dabei!
+                    </button>
+                </div>
             </div>
         </div>
     );

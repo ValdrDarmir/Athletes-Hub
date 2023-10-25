@@ -1,8 +1,7 @@
 import React from 'react';
 import TrainingEntryModel from "../models/TrainingEntry.model";
 import sum from "../../shared/utils/sum";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import Icon from "../../shared/components/Icon";
 
 interface Props {
     entry: TrainingEntryModel
@@ -23,15 +22,15 @@ function TrainingEntryRow({entry, deleteTrainingEntry}: Props) {
     return <tr className="hover:bg-base-200">
         <td>{date}<br/>{startTime} - {endTime}</td>
         <td>
-            {entry.series.map((s, i) =>
-                <span key={`${entry.id}-${i}`} className="badge badge-ghost badge-sm">{s}</span>
-            )}
+            <div className="flex flex-wrap gap-2">
+                {entry.series.map((s) => <span className="text-xs">{s}</span>)}
+            </div>
         </td>
-        <td><span className="badge badge-ghost badge-sm">{seriesSum}</span></td>
+        <td>{seriesSum}</td>
         <td>{entry.notes}</td>
         <td>
             <button className="btn btn-square btn-sm text-error"
-                    onClick={deleteEntryClicked}><FontAwesomeIcon icon={faTrashCan}/></button>
+                    onClick={deleteEntryClicked}><Icon code={"delete"}/></button>
         </td>
     </tr>
 }

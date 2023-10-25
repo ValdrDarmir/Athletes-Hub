@@ -13,6 +13,7 @@ export interface CompetitionOverview {
     id: string
     opponents: UserModel[]
     discipline: Disciplines
+    startDate: Date
 }
 
 type UserCompetitionsOverviewHook =
@@ -86,6 +87,7 @@ export default function useUserCompetitionsOverview(userId: string): UserCompeti
                 id: game.id,
                 opponents: opponents,
                 discipline: game.discipline,
+                startDate: game.createdAt,
             }
         })
         .filter(nonFalsy)
