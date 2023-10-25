@@ -30,7 +30,7 @@ function useCreateNewStairClimbing(): CreateNewStairClimbingHook {
             id: newGameDoc.id,
             playerIds: [],
             creatorId: creator.id,
-            shootingTimeLimitMillis: 15 * 60 * 1000,    // 15 minutes
+            shootingTimeLimitMillis: 25 * 60 * 1000,    // 25 minutes
             startTimeMillis: null,
             discipline: discipline,
             playerSteps: [],
