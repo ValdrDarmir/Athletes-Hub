@@ -58,3 +58,7 @@ Team members:
 - Sabrina Hößl
 - Benedikt Strasser
 - Christoph Wührl
+
+# License
+
+This project is licensed under the [MIT License](LICENSE)
