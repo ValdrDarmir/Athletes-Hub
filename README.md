@@ -51,6 +51,8 @@ This project uses Github Actions for its CICD Pipelines. The following features 
 
 # Team
 
+<img align="right" style="height: 100px" src="https://www.uni-regensburg.de/typo3conf/ext/ur_template/Resources/Public/dist/Images/ur-logo-bildmarke-grau.svg"></img>    
+
 All team members are associated with the University of Regensburg.
 
 Team members:
