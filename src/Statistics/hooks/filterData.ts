@@ -4,8 +4,6 @@ import {DataPoint} from "../components/LinePlotWithErrorBars"
 import {DataCompetition, DataTraining} from "./statisticsData"
 
 
-//type FilterHook = [FilteredData, Function, Function, Function, Function]
-
 export interface FilteredData {
     averageCompetition: number,
     averageTraining: number,
@@ -26,26 +24,11 @@ export interface FilteredData {
     averageTraining: number
 }
 
-function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines) { //, hookCompetitionData: DataCompetition[] | undefined, hookTrainingData: DataTraining[] | undefined): FilterHook{
-
-    //const [competitionData, setCompetitionData] = useState(hookCompetitionData)
-    //const [trainingData, setTrainingData] = useState(hookTrainingData)
-
-    //const competitionData = hookCompetitionData
-    //const trainingData = hookTrainingData
+function useFilterData(startDate: Date, endDate: Date, discipline: Disciplines) {
 
     const [filterDateStart, setFilterDateStart] = useState(startDate)
     const [filterDateEnd, setFilterDateEnd] = useState(endDate)
     const [selectedDiscipline, setSelectedDiscipline] = useState(discipline)
-    //const [filteredData, setFilteredData] = useState(getFilteredData(undefined, undefined, selectedDiscipline, filterDateStart, filterDateEnd))
-
-    /*useEffect(() => {
-        setFilteredData(getFilteredData(competitionData, trainingData, selectedDiscipline, filterDateStart, filterDateEnd))
-    }, [getFilteredData, selectedDiscipline, filterDateStart, filterDateEnd]);*/
-
-    /*useEffect(() => {
-        setTimeout(() => setFilteredData(getFilteredData()), 3000)
-    }, []);*/
 
     const setGetDataDate = (date: Date) => {
         setFilterDateStart(date)
